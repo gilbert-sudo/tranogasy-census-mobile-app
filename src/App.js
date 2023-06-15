@@ -2,7 +2,7 @@ import { Switch, Route, Router } from "wouter";
 import { useLocationProperty, navigate } from "wouter/use-location";
 
 // all pages
-// import { PropertyListPage } from "./pages/PropertyListPage";
+import PropertyListPage from "./pages/PropertyListPage";
 
 //all components
 import Navbar from "./components/Navbar";
@@ -41,7 +41,12 @@ function App() {
                   <b>Login</b>
                 </center>
               </Route>
-        
+              <Route path="/property">
+                <div className="mt-5">
+                  <PropertyListPage />
+                </div>
+              </Route>
+
               <Route path="/:anything*">
                 <center className="mt-5">
                   <b>404:</b> Sorry, this page isn't ready yet!

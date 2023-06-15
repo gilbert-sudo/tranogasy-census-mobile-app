@@ -34,7 +34,7 @@ const Navbar = () => {
 
                 <li className="nav__item mt-3">
                   <Link
-                    to="/owner-list"
+                    to="/property"
                     className="nav__link"
                     style={ActiveLink("/owner-list")}
                   >
