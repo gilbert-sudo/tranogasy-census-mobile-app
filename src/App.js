@@ -3,6 +3,8 @@ import { useLocationProperty, navigate } from "wouter/use-location";
 
 // all pages
 import PropertyListPage from "./pages/PropertyListPage";
+import LoginPage from "./pages/LoginPage";
+import UserPage from "./pages/UserPage";
 
 //all components
 import Navbar from "./components/Navbar";
@@ -35,11 +37,12 @@ function App() {
                   <b>404:</b> PropertyListPage!
                 </center>
               </Route>
+              <Route path="/user">
+                <UserPage />
+              </Route>
               <Route path="/login">
                 {/* <PropertyListPage /> */}
-                <center className="mt-5">
-                  <b>Login</b>
-                </center>
+                <LoginPage />
               </Route>
               <Route path="/property">
                 <div className="mt-5">

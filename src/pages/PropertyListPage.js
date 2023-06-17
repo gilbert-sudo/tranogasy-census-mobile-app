@@ -1,19 +1,24 @@
 //import hooks
 import { Link } from "wouter";
 import { useProperty } from "../hooks/useProperty";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+//redux 
+import { useDispatch, useSelector } from "react-redux";
+import { setProperties } from "../redux/redux";
 
 //react icons 
 import { FaUserPlus } from "react-icons/fa";
 
 const PropertyListPage = () => {
   const { getProperties } = useProperty();
-  const [properties, setProperties] = useState(null);
+  const dispatch = useDispatch();
+  const properties = useSelector((state) => state.properties);
 
   useEffect(() => {
-    if (!properties) {
+    if (!properties.length) {
       const pageLoader = async () => {
-        setProperties(await getProperties());
+        dispatch(setProperties(await getProperties()));
       };
       pageLoader();
     }

@@ -2,6 +2,9 @@ import { Link, useRoute } from "wouter";
 import { BiHome, BiUser, BiPlusCircle } from "react-icons/bi";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { MdNotListedLocation } from "react-icons/md";
+
+//redux store
+import { useSelector } from "react-redux";
 /**
  * `Utility components
  */
@@ -13,6 +16,9 @@ const ActiveLink = (href) => {
 };
 
 const Navbar = () => {
+
+  const user = useSelector((state) => state.user);
+
   return (
     <>
       {/*=============== HEADER ===============*/}
@@ -36,7 +42,7 @@ const Navbar = () => {
                   <Link
                     to="/property"
                     className="nav__link"
-                    style={ActiveLink("/owner-list")}
+                    style={ActiveLink("/property")}
                   >
                     <HiOutlineUserGroup className="nav__icon" />
                     <span className="nav__name">Propriétaire</span>
@@ -64,14 +70,26 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className="nav__item mt-3">
-                  <Link
-                    to="/user"
-                    className="nav__link"
-                    style={ActiveLink("/user")}
-                  >
-                    <BiUser className="nav__icon" />
-                    <span className="nav__name">Profil</span>
-                  </Link>
+                  {user && (
+                    <Link
+                      to="/user"
+                      className="nav__link"
+                      style={ActiveLink("/user")}
+                    >
+                      <BiUser className="nav__icon" />
+                      <span className="nav__name">Profile</span>
+                    </Link>
+                  )}
+                  {!user && (
+                    <Link
+                      to="/login"
+                      className="nav__link"
+                      style={ActiveLink("/login")}
+                    >
+                      <BiUser className="nav__icon" />
+                      <span className="nav__name">Connexion</span>
+                    </Link>
+                  )}
                 </li>
               </ul>
             </div>
