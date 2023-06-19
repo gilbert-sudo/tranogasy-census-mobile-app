@@ -29,7 +29,7 @@ export const useLogin = () => {
       if (phoneNumber.length === 10 || phoneNumber.length === 9) {
         try {
           const response = await fetch(
-            `https://tranogasy-api.onrender.com/api/census-taker/login`,
+            `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/login`,
             {
               method: "POST",
               headers: {
@@ -62,6 +62,7 @@ export const useLogin = () => {
           setBootstrap("alert alert-danger");
           setError("Une erreur s'est produite lors de l'envoi du message.");
           setIsLoading(false);
+          setLocation("/nosignal");
         }
       }
     } else {
@@ -77,7 +78,7 @@ export const useLogin = () => {
 
     try {
       const response = await fetch(
-        `https://tranogasy-api.onrender.com/api/census-taker/connect/${facebookID}`,
+        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/connect/${facebookID}`,
         {
           method: "POST",
           headers: {
@@ -108,6 +109,7 @@ export const useLogin = () => {
       setBootstrap("alert alert-danger");
       setError("Une erreur s'est produite lors de l'envoi du message.");
       setIsLoading(false);
+      setLocation("/nosignal");
     }
   };
 

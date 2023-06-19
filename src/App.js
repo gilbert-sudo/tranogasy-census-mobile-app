@@ -2,10 +2,10 @@ import { Switch, Route, Router } from "wouter";
 import { useLocationProperty, navigate } from "wouter/use-location";
 
 // all pages
+import NoInternetPage from "./pages/NoInternet";
 import PropertyListPage from "./pages/PropertyListPage";
 import LoginPage from "./pages/LoginPage";
 import UserPage from "./pages/UserPage";
-
 //all components
 import Navbar from "./components/Navbar";
 
@@ -20,20 +20,22 @@ const useHashLocation = () => {
   return [location, hashNavigate];
 };
 
+
 function App() {
+
   return (
     <div className="App">
       <Router hook={useHashLocation}>
         <div className="App">
           <Navbar />
-          <main>
+          <main style={{marginTop:"100px"}}>
             <Switch>
               {/* <Route path="/info">
                 <Redirect to="/about" />
               </Route> */}
               <Route path="/">
                 {/* <PropertyListPage /> */}
-                <center className="mt-5">
+                <center>
                   <b>404:</b> PropertyListPage!
                 </center>
               </Route>
@@ -45,13 +47,18 @@ function App() {
                 <LoginPage />
               </Route>
               <Route path="/property">
-                <div className="mt-5">
+                <div>
                   <PropertyListPage />
+                </div>
+              </Route>
+              <Route path="/nosignal">
+                <div>
+                  <NoInternetPage />
                 </div>
               </Route>
 
               <Route path="/:anything*">
-                <center className="mt-5">
+                <center>
                   <b>404:</b> Sorry, this page isn't ready yet!
                 </center>
               </Route>
