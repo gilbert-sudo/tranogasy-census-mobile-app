@@ -6,8 +6,13 @@ import NoInternetPage from "./pages/NoInternet";
 import PropertyListPage from "./pages/PropertyListPage";
 import LoginPage from "./pages/LoginPage";
 import UserPage from "./pages/UserPage";
+import PageLoader from "./pages/PageLoader";
+
 //all components
 import Navbar from "./components/Navbar";
+
+//redux
+import { useSelector } from "react-redux";
 
 // returns the current hash location in a normalized form
 // (excluding the leading '#' symbol)
@@ -20,24 +25,31 @@ const useHashLocation = () => {
   return [location, hashNavigate];
 };
 
-
 function App() {
+  const loader = useSelector((state) => state.loader);
+
+  // Render the main content
 
   return (
     <div className="App">
       <Router hook={useHashLocation}>
         <div className="App">
-          <Navbar />
-          <main style={{marginTop:"100px"}}>
+          {loader && <Navbar />}
+          <main style={{ marginTop: "100px" }}>
             <Switch>
               {/* <Route path="/info">
                 <Redirect to="/about" />
               </Route> */}
               <Route path="/">
                 {/* <PropertyListPage /> */}
-                <center>
-                  <b>404:</b> PropertyListPage!
-                </center>
+                {loader && (
+                  <center>
+                    <b>404:</b> PropertyListPage!
+                  </center>
+                )}
+                {!loader && (
+                  <PageLoader/>
+                )}
               </Route>
               <Route path="/user">
                 <UserPage />
@@ -45,6 +57,10 @@ function App() {
               <Route path="/login">
                 {/* <PropertyListPage /> */}
                 <LoginPage />
+              </Route>
+              <Route path="/loader">
+                {/* <PropertyListPage /> */}
+                <PageLoader />
               </Route>
               <Route path="/property">
                 <div>

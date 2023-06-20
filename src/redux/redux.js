@@ -15,6 +15,20 @@ const userSlice = createSlice({
 });
 
 export const { setUser, updateOneUserById } = userSlice.actions;
+
+//loader
+const loaderSlice = createSlice({
+  name: "loader",
+  initialState: null,
+  reducers: {
+    setLoader: (state, action) => {
+      return action.payload;
+    },
+  },
+});
+
+export const { setLoader } = loaderSlice.actions;
+
 //connected user
 const googleLoginSlice = createSlice({
   name: "googleLogin",
@@ -169,7 +183,8 @@ const propertiesSlice = createSlice({
   },
 });
 
-export const { pushProperty, setProperties, updateOnePropertyById } = propertiesSlice.actions;
+export const { pushProperty, setProperties, updateOnePropertyById } =
+  propertiesSlice.actions;
 
 //liked properties
 const likedPropertiesSlice = createSlice({
@@ -243,6 +258,7 @@ export const store = configureStore({
   reducer: {
     owner: ownerSlice.reducer,
     user: userSlice.reducer,
+    loader: loaderSlice.reducer,
     pagination: paginationSlice.reducer,
     topProperties: topPropertiesSlice.reducer,
     properties: propertiesSlice.reducer,
