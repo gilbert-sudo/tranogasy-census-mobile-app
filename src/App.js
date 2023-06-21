@@ -35,7 +35,7 @@ function App() {
       <Router hook={useHashLocation}>
         <div className="App">
           {loader && <Navbar />}
-          <main style={{ marginTop: "100px" }}>
+          <main>
             <Switch>
               {/* <Route path="/info">
                 <Redirect to="/about" />
@@ -43,7 +43,7 @@ function App() {
               <Route path="/">
                 {/* <PropertyListPage /> */}
                 {loader && (
-                  <center>
+                  <center className="mt-5">
                     <b>404:</b> PropertyListPage!
                   </center>
                 )}
@@ -74,7 +74,7 @@ function App() {
               </Route>
 
               <Route path="/:anything*">
-                <center>
+                <center className="mt-5">
                   <b>404:</b> Sorry, this page isn't ready yet!
                 </center>
               </Route>

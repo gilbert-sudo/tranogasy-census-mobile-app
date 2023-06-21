@@ -24,7 +24,7 @@ const Navbar = () => {
       {/*=============== HEADER ===============*/}
       <div className="header" id="header">
         <nav>
-          <div className="navigation container mt-4 p-3">
+          <div className="navigation container p-3">
             <Link to="/" className="nav__logo">
               <trano style={{ color: "#7cbd1e" }}>Trano</trano>
               <gasy style={{ color: "#ec1c24" }}>Gasy</gasy>.

@@ -12,7 +12,7 @@ const NoInternetPage = () => {
 
   return (
     <>
-      <div className="container no-internet-connection">
+      <div className="container mt-5 no-internet-connection">
         <img src="images/no connction.jpg" alt="Pas de connexion Internet" />
         <center>
           {" "}
