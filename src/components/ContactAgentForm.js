@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useMessage } from "../hooks/useMessage";
 import { useBooking } from "../hooks/useBooking";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 
 const ContactAgentForm = ({ propertyId, imageId, cityId }) => {
   const [name, setName] = useState("");

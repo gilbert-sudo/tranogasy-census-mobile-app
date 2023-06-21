@@ -16,7 +16,6 @@ const ActiveLink = (href) => {
 };
 
 const Navbar = () => {
-
   const user = useSelector((state) => state.user);
 
   return (
@@ -32,7 +31,11 @@ const Navbar = () => {
             <div className="nav__menu" id="nav-menu">
               <ul className="nav__list">
                 <li className="nav__item mt-3">
-                  <Link to="/" className="nav__link" style={ActiveLink("/")}>
+                  <Link
+                    to="/property"
+                    className="nav__link"
+                    style={ActiveLink("/property")}
+                  >
                     <BiHome className="nav__icon" />
                     <span className="nav__name">Acceuil</span>
                   </Link>
@@ -40,9 +43,9 @@ const Navbar = () => {
 
                 <li className="nav__item mt-3">
                   <Link
-                    to="/property"
+                    to="/owner-list"
                     className="nav__link"
-                    style={ActiveLink("/property")}
+                    style={ActiveLink("/owner-list")}
                   >
                     <HiOutlineUserGroup className="nav__icon" />
                     <span className="nav__name">Propriétaire</span>

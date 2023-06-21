@@ -1,4 +1,4 @@
-import { Switch, Route, Router } from "wouter";
+import { Switch, Route, Router, Redirect } from "wouter";
 import { useLocationProperty, navigate } from "wouter/use-location";
 
 // all pages
@@ -7,6 +7,7 @@ import PropertyListPage from "./pages/PropertyListPage";
 import LoginPage from "./pages/LoginPage";
 import UserPage from "./pages/UserPage";
 import PageLoader from "./pages/PageLoader";
+import OwnerListPage from "./pages/OwnerListPage";
 
 //all components
 import Navbar from "./components/Navbar";
@@ -26,7 +27,9 @@ const useHashLocation = () => {
 };
 
 function App() {
+
   const loader = useSelector((state) => state.loader);
+  const user = useSelector((state) => state.user);
 
   // Render the main content
 
@@ -34,7 +37,7 @@ function App() {
     <div className="App">
       <Router hook={useHashLocation}>
         <div className="App">
-          {loader && <Navbar />}
+          {user && <Navbar />}
           <main>
             <Switch>
               {/* <Route path="/info">
@@ -43,9 +46,7 @@ function App() {
               <Route path="/">
                 {/* <PropertyListPage /> */}
                 {loader && (
-                  <center className="mt-5">
-                    <b>404:</b> PropertyListPage!
-                  </center>
+                  <Redirect to="/login" />
                 )}
                 {!loader && (
                   <PageLoader/>
@@ -63,9 +64,10 @@ function App() {
                 <PageLoader />
               </Route>
               <Route path="/property">
-                <div>
                   <PropertyListPage />
-                </div>
+              </Route>
+              <Route path="/owner-list">
+                  <OwnerListPage />
               </Route>
               <Route path="/nosignal">
                 <div>

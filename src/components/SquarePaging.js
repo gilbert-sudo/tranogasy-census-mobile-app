@@ -1,5 +1,5 @@
 // import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentPage } from "../redux/redux";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ const SquarePaging = (pagination) => {
            <Link
             className="page-link"
             key="leftEllipsis"
-            to={pagination.linkKey+"/#prodisplay"}
+            to={pagination.linkKey}
             onClick={() => {
               isSearch
                 ? setCurrentPage(currentPage - 2)
@@ -57,7 +57,7 @@ const SquarePaging = (pagination) => {
             <Link
               className={`page-link ${i === currentPage ? "active" : ""}`}
               key={i}
-              to={pagination.linkKey+"/#prodisplay"}
+              to={pagination.linkKey}
               onClick={() => {
                 isSearch
                   ? setCurrentPage(i)
@@ -77,7 +77,7 @@ const SquarePaging = (pagination) => {
         links.push(
           <Link
             key="rightEllipsis"
-            to={pagination.linkKey+"/#prodisplay"}
+            to={pagination.linkKey}
             onClick={() => {
               isSearch
                 ? setCurrentPage(currentPage + 2)
@@ -106,7 +106,7 @@ const SquarePaging = (pagination) => {
           <li className="page-item">
             <Link
               className="page-link"
-              to={pagination.linkKey+"/#prodisplay"}
+              to={pagination.linkKey}
               onClick={() => {
                 isSearch
                   ? setCurrentPage(currentPage - 1)
@@ -129,7 +129,7 @@ const SquarePaging = (pagination) => {
           <li className="page-item">
             <Link
               className="page-link"
-              to={pagination.linkKey+"/#prodisplay"}
+              to={pagination.linkKey}
               onClick={() => {
                
                 isSearch

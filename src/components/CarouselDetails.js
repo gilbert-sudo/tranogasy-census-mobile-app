@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "wouter";
 import { BsFillHouseAddFill } from "react-icons/bs";
 import { ImLocation } from "react-icons/im";
 import Swal from "sweetalert2";

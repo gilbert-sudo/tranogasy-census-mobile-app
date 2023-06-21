@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { FaUserEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
 const OwnerDetails = ({ owner }) => {

@@ -2,7 +2,7 @@ import { FaBed, FaBath } from "react-icons/fa";
 import { MdBedroomChild } from "react-icons/md";
 import { useLike } from "../hooks/useLike";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 
 function FavoriteDetails({ favorite }) {
   const { disLike } = useLike();

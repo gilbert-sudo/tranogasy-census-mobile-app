@@ -2,7 +2,7 @@
 // import { faLocationPen } from "@fortawesome/free-solid-svg-icons";
 import { MdEditLocationAlt } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 const LocationDetails = ({ location }) => {
   const censusTaker = useSelector((state) => state.user._id);
   return (
