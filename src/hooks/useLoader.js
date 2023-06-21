@@ -1,29 +1,44 @@
+import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
-import { setLikedPropreties, setBooking, setOwner, setLocation, setProperties } from "../redux/redux";
+import {
+  setLikedPropreties,
+  setBooking,
+  setOwner,
+  setLocation,
+  setProperties,
+} from "../redux/redux";
 
 export const useLoader = () => {
   //redux
   const dispatch = useDispatch();
+  const [location, setLocation] = useLocation();
 
   // Load liked properties
   const loadLikes = async (userId) => {
-    const response = await fetch(
-      `https://vast-erin-monkey-cape.cyclic.app/api/favorite/${userId}`,
-      {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "aplication/json",
-        },
+    try {
+      const response = await fetch(
+        `https://vast-erin-monkey-cape.cyclic.app/api/favorite/${userId}`,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "aplication/json",
+          },
+        }
+      );
+      const json = await response.json();
+      if (response.ok) {
+        dispatch(setLikedPropreties(json));
       }
-    );
-    const json = await response.json();
-    if (response.ok) {
-      dispatch(setLikedPropreties(json));
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
     }
   };
 
-    // Load liked properties
-    const loadBooking = async (userId) => {
+  // Load liked properties
+  const loadBooking = async (userId) => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/messages/${userId}`,
         {
@@ -37,9 +52,15 @@ export const useLoader = () => {
       if (response.ok) {
         dispatch(setBooking(json));
       }
-    };
-    // Load liked properties
-    const loadOwnersName = async () => {
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
+  // Load liked properties
+  const loadOwnersName = async () => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/owners/all-owners-name`,
         {
@@ -53,10 +74,15 @@ export const useLoader = () => {
       if (response.ok) {
         return json;
       }
-    };
-    
-    
-    const loadOwners = async () => {
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
+
+  const loadOwners = async () => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/owners/all-owners`,
         {
@@ -71,9 +97,15 @@ export const useLoader = () => {
         dispatch(setOwner(json));
         return json;
       }
-    };
-    
-    const loadQuartersName = async () => {
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
+
+  const loadQuartersName = async () => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/cities/all-quarter-name`,
         {
@@ -87,8 +119,14 @@ export const useLoader = () => {
       if (response.ok) {
         return json;
       }
-    };
-    const loadLocationsName = async () => {
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
+  const loadLocationsName = async () => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/location/names`,
         {
@@ -102,9 +140,15 @@ export const useLoader = () => {
       if (response.ok) {
         return json;
       }
-    };
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
 
-    const loadLocations = async () => {
+  const loadLocations = async () => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/location`,
         {
@@ -120,9 +164,15 @@ export const useLoader = () => {
         dispatch(setLocation(json));
         return json;
       }
-    };
-    
-    const loadProperties = async () => {
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
+
+  const loadProperties = async () => {
+    try {
       const response = await fetch(
         `https://vast-erin-monkey-cape.cyclic.app/api/properties`,
         {
@@ -137,9 +187,21 @@ export const useLoader = () => {
         dispatch(setProperties(json));
         return json;
       }
-    };
-    
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
 
-  return { loadLikes, loadBooking, loadOwnersName, loadLocationsName ,loadOwners, loadQuartersName, loadProperties, loadLocations };
+  return {
+    loadLikes,
+    loadBooking,
+    loadOwnersName,
+    loadLocationsName,
+    loadOwners,
+    loadQuartersName,
+    loadProperties,
+    loadLocations,
+  };
 };
-
