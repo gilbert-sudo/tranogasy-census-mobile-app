@@ -27,7 +27,6 @@ const useHashLocation = () => {
 };
 
 function App() {
-
   const loader = useSelector((state) => state.loader);
   const user = useSelector((state) => state.user);
 
@@ -37,7 +36,7 @@ function App() {
     <div className="App">
       <Router hook={useHashLocation}>
         <div className="App">
-          {user && <Navbar />}
+          {user && loader && <Navbar />}
           <main>
             <Switch>
               {/* <Route path="/info">
@@ -45,29 +44,26 @@ function App() {
               </Route> */}
               <Route path="/">
                 {/* <PropertyListPage /> */}
-                {loader && (
-                  <Redirect to="/login" />
-                )}
-                {!loader && (
-                  <PageLoader/>
-                )}
+                {loader && <Redirect to="/login" />}
+                {!loader && <PageLoader />}
               </Route>
               <Route path="/user">
                 <UserPage />
               </Route>
               <Route path="/login">
                 {/* <PropertyListPage /> */}
-                <LoginPage />
+                {user && <Redirect to="/user" />}
+                {!user && <LoginPage />}
               </Route>
               <Route path="/loader">
                 {/* <PropertyListPage /> */}
                 <PageLoader />
               </Route>
               <Route path="/property">
-                  <PropertyListPage />
+                <PropertyListPage />
               </Route>
               <Route path="/owner-list">
-                  <OwnerListPage />
+                <OwnerListPage />
               </Route>
               <Route path="/nosignal">
                 <div>

@@ -4,7 +4,6 @@ import {
   setLikedPropreties,
   setBooking,
   setOwner,
-  setLocation,
   setProperties,
 } from "../redux/redux";
 

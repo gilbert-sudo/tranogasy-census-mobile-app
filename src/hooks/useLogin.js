@@ -55,7 +55,6 @@ export const useLogin = () => {
             localStorage.setItem("user", JSON.stringify(json));
             setIsLoading(false);
             setClient(json.client);
-            setLocation("/user");
             console.log(location);
           }
         } catch (error) {

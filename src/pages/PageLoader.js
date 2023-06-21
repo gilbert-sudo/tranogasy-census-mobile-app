@@ -1,3 +1,4 @@
+import { useLocation } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setUser, setLoader } from "../redux/redux";
@@ -5,6 +6,7 @@ import { setUser, setLoader } from "../redux/redux";
 const PageLoader = () => {
   //redux
   const dispatch = useDispatch();
+  const [location, setLocation] = useLocation();
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -17,11 +19,13 @@ const PageLoader = () => {
         }
         // Delay dispatching "done" by 5 seconds
         setTimeout(() => {
+          setLocation("/user");
           dispatch(setLoader("done"));
         }, 2500);
       }
     };
     fetchLastUser();
+    console.log(location);
   }, [dispatch, user]);
 
   // Render the main content
