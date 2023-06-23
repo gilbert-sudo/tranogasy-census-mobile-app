@@ -1,22 +1,14 @@
 // import React, { useState, useEffect } from 'react';
 import { Link } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCurrentPage } from "../redux/redux";
-import { useEffect, useState } from "react";
+import { updateCurrentPage, updateSearchCurrentPage} from "../redux/redux";
 const SquarePaging = (pagination) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.pagination);
   const isSearch = state[0].isSearch[pagination.index];
   const totalPage = state[0].totalPage[pagination.index];
-  const [currentPage, setCurrentPage] = useState(null);
-  useEffect(() =>{
-    if (isSearch) {
-      setCurrentPage(1);
-    }else{
-      setCurrentPage(state[0].currentPage[pagination.index]);
-    }
-  }, [isSearch, state, pagination.index])
-
+  const currentPage = isSearch?state[0].searchCurrentPage[pagination.index]:state[0].currentPage[pagination.index];
+ 
   const generatePageLinks = () => {
     const links = [];
     if (totalPage === 1) {
@@ -33,7 +25,7 @@ const SquarePaging = (pagination) => {
             to={pagination.linkKey}
             onClick={() => {
               isSearch
-                ? setCurrentPage(currentPage - 2)
+                ? dispatch(updateSearchCurrentPage({index:pagination.index, newSearchCurrentPage: currentPage-2}))
                 : dispatch(
                     updateCurrentPage({
                       index: pagination.index,
@@ -60,7 +52,7 @@ const SquarePaging = (pagination) => {
               to={pagination.linkKey}
               onClick={() => {
                 isSearch
-                  ? setCurrentPage(i)
+                  ? dispatch(updateSearchCurrentPage({index:pagination.index, newSearchCurrentPage: i}))
                   : dispatch(
                       updateCurrentPage({ index: pagination.index, newCurrentPage: i })
                     );
@@ -80,11 +72,11 @@ const SquarePaging = (pagination) => {
             to={pagination.linkKey}
             onClick={() => {
               isSearch
-                ? setCurrentPage(currentPage + 2)
+                ? dispatch(updateSearchCurrentPage({index:pagination.index, newSearchCurrentPage: currentPage+2}))
                 : dispatch(
                     updateCurrentPage({
                       index: pagination.index,
-                      newCurrentPage: currentPage + 2,
+                      newCurrentPage: currentPage +2
                     })
                   );
               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -109,7 +101,7 @@ const SquarePaging = (pagination) => {
               to={pagination.linkKey}
               onClick={() => {
                 isSearch
-                  ? setCurrentPage(currentPage - 1)
+                  ?  dispatch(updateSearchCurrentPage({index:pagination.index, newSearchCurrentPage: currentPage-1}))
                   : dispatch(
                       updateCurrentPage({
                         index: pagination.index,
@@ -133,7 +125,7 @@ const SquarePaging = (pagination) => {
               onClick={() => {
                
                 isSearch
-                  ? setCurrentPage(currentPage + 1)
+                  ?  dispatch(updateSearchCurrentPage({index:pagination.index, newSearchCurrentPage: currentPage+1}))
                   :dispatch(
                       updateCurrentPage({
                         index: pagination.index,

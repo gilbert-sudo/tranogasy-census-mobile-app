@@ -5,6 +5,7 @@ import {
   setBooking,
   setOwner,
   setProperties,
+  setLands,
 } from "../redux/redux";
 
 export const useLoader = () => {
@@ -192,6 +193,28 @@ export const useLoader = () => {
       setLocation("/nosignal");
     }
   };
+  const loadLands = async () => {
+    try {
+      const response = await fetch(
+        `https://vast-erin-monkey-cape.cyclic.app/api/lands`,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "aplication/json",
+          },
+        }
+      );
+      const json = await response.json();
+      if (response.ok) {
+        dispatch(setLands(json));
+        return json;
+      }
+    } catch (error) {
+      console.log(error);
+      console.log(location);
+      setLocation("/nosignal");
+    }
+  };
 
   return {
     loadLikes,
@@ -201,6 +224,7 @@ export const useLoader = () => {
     loadOwners,
     loadQuartersName,
     loadProperties,
+    loadLands,
     loadLocations,
   };
 };

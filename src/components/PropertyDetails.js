@@ -2,12 +2,16 @@
 import { useSelector } from "react-redux";
 import { Link } from "wouter";
 
-function PropertyDetails({ property }) {
-  // const { cancelBooking } = useBooking();
-
-  // const cancelMessage = (messageId) => {
-  //   cancelBooking(messageId);
-  // };
+function PropertyDetails({ property, type }) {
+  const date = new Date(property.created_at);
+  const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
+    date.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}/${date.getFullYear()} ${date
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
   const censusTaker = useSelector((state) => state.user._id);
   return (
     <div className="card border-0">
@@ -22,7 +26,7 @@ function PropertyDetails({ property }) {
         <div className="col">
           <div className="row px-3 mt-2">
             <p className="rating mb-0 px-2 mr-3" style={{ fontSize: "2.5vw" }}>
-              <strong>10/10/23</strong>
+            Ajouté le: <strong>  {formattedDate}</strong>
             </p>
             <p
               className="text-success mb-0 mr-2 grade"
@@ -36,22 +40,10 @@ function PropertyDetails({ property }) {
               {property.title}
             </h3>
           </div>
-          {/* <div class="row px-3 mb-2 mt-2">
-              <span class="fa fa-star text-warning mr-1"></span>
-              <span class="fa fa-star text-warning mr-1"></span>
-              <span class="fa fa-star text-warning mr-1"></span>
-              <span class="fa fa-star text-warning mr-1"></span>
-          </div> */}
-          {/* <div class="row px-3">
-              <h5 class="mb-1">1 bedroom &middot; 1 living &middot; 2 beds</h5>
-          </div>
-          <div class="row px-3">
-              <p class="">Mitte, Berlin &middot; 2.6 km from center</p>
-          </div> */}
           <div className="line" />
           <div className="row px-3 mt-3">
             <h5 className="text-secondary mb-1" style={{ fontSize: "3vw" }}>
-              Prix du loyer
+              Prix du {property.type === "rent"?'loyer':'vente'}
             </h5>
           </div>
           <div className="row px-3">
@@ -59,12 +51,12 @@ function PropertyDetails({ property }) {
               className="text-success mb-1 font-weight-bold"
               style={{ fontSize: "4vw" }}
             >
-              {property.rent.toLocaleString("en-US")} <small>AR/mois</small>
+              {property.type === "sale"?property.price.toLocaleString("en-US"):property.rent.toLocaleString("en-US")}  <small>{property.type ==="sale"?"AR":"AR/mois"}</small>
             </h2>
           </div>
          
             <div className="row px-3 mt-2 d-flex justify-content-end">
-            {censusTaker === property.censusTaker._id?(<Link to={"/edit-property/" + property._id}>
+            {censusTaker === property.censusTaker._id?(<Link to={type === "home"?"/edit-property/" + property._id:"/edit-land/"+ property._id}>
               <p
                 className="rating mb-0 px-2"
                 style={{ fontSize: "3vw", backgroundColor: "#ec1c24" }}

@@ -8,6 +8,8 @@ import LoginPage from "./pages/LoginPage";
 import UserPage from "./pages/UserPage";
 import PageLoader from "./pages/PageLoader";
 import OwnerListPage from "./pages/OwnerListPage";
+import LandListPage from "./pages/LandListPage";
+import TestPage from "./pages/TestPage";
 
 //all components
 import Navbar from "./components/Navbar";
@@ -60,14 +62,25 @@ function App() {
                 <PageLoader />
               </Route>
               <Route path="/property">
-                <PropertyListPage />
+                {!user && <Redirect to="/login" />}
+                {user && <PropertyListPage />}
+              </Route>
+              <Route path="/land">
+                {!user && <Redirect to="/login" />}
+                {user && <LandListPage />}
               </Route>
               <Route path="/owner-list">
-                <OwnerListPage />
+                {!user && <Redirect to="/login" />}
+                {user && <OwnerListPage />}
               </Route>
               <Route path="/nosignal">
                 <div>
                   <NoInternetPage />
+                </div>
+              </Route>
+              <Route path="/test">
+                <div className="mt-5">
+                  <TestPage />
                 </div>
               </Route>
 

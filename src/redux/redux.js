@@ -29,6 +29,19 @@ const loaderSlice = createSlice({
 
 export const { setLoader } = loaderSlice.actions;
 
+//navbar
+const navbarSlice = createSlice({
+  name: "navbar",
+  initialState: true,
+  reducers: {
+    setNavbar: (state, action) => {
+      return action.payload;
+    },
+  },
+});
+
+export const { setNavbar } = navbarSlice.actions;
+
 //connected user
 const googleLoginSlice = createSlice({
   name: "googleLogin",
@@ -75,17 +88,26 @@ const paginationSlice = createSlice({
   name: "pagination",
   initialState: [
     {
-      currentPage: [1, 1, 1],
-      totalPage: [0, 0, 0],
-      isSearch: [false, false, false],
+      currentPage: [1, 1, 1, 1],
+      searchCurrentPage: [1, 1, 1, 1],
+      totalPage: [0, 0, 0, 0],
+      isSearch: [false, false, false, false],
     },
-    { itemsPerPage: [3, 3, 3], startIndex: [0, 0, 0], endIndex: [0, 0, 0] },
+    {
+      itemsPerPage: [3, 3, 3, 3],
+      startIndex: [0, 0, 0, 0],
+      endIndex: [0, 0, 0, 0],
+    },
     { activeLink: "/" },
   ],
   reducers: {
     updateCurrentPage: (state, action) => {
       state[0].currentPage[action.payload.index] =
         action.payload.newCurrentPage;
+    },
+    updateSearchCurrentPage: (state, action) => {
+      state[0].searchCurrentPage[action.payload.index] =
+        action.payload.newSearchCurrentPage;
     },
     updateIsSearch: (state, action) => {
       state[0].isSearch[action.payload.index] = action.payload.isSearch;
@@ -100,7 +122,8 @@ const paginationSlice = createSlice({
             state[1].itemsPerPage[action.payload.index]
         );
         state[1].startIndex[action.payload.index] =
-          (1 - 1) * state[1].itemsPerPage[action.payload.index];
+          (state[0].searchCurrentPage[action.payload.index] - 1) *
+          state[1].itemsPerPage[action.payload.index];
         state[1].endIndex[action.payload.index] =
           state[1].startIndex[action.payload.index] +
           state[1].itemsPerPage[action.payload.index];
@@ -121,6 +144,7 @@ const paginationSlice = createSlice({
 });
 export const {
   updateCurrentPage,
+  updateSearchCurrentPage,
   updateIsSearch,
   setTotalPage,
   setResetAgentInput,
@@ -139,6 +163,52 @@ const topPropertiesSlice = createSlice({
 });
 
 export const { setTopProperties } = topPropertiesSlice.actions;
+
+//redux lands
+
+const landSlice = createSlice({
+  name: "lands",
+  initialState: [],
+  reducers: {
+    pushLand: (state, action) => {
+      state.push(action.payload);
+    },
+    setLands: (state, action) => {
+      return action.payload;
+    },
+    updateOneLandById: (state, action) => {
+      return state.map((land) => {
+        if (land._id === action.payload._id) {
+          return {
+            ...land,
+            title: action.payload.title,
+            description: action.payload.description,
+            location: action.payload.location,
+            city: action.payload.city,
+            price: action.payload.price,
+            rent: action.payload.rent,
+            squarePerMeter: action.payload.squarePerMeter,
+            area: action.payload.area,
+            propertyNumber: action.payload.propertyNumber,
+            features: action.payload.features,
+            images: action.payload.images,
+            type: action.payload.type,
+            owner: action.payload.owner,
+            status: action.payload.status,
+            created_at: action.payload.created_at,
+            updated_at: action.payload.update_at,
+            censusTaker: action.payload.censusTaker,
+          };
+        } else {
+          return land;
+        }
+      });
+    },
+  },
+});
+
+export const { pushLand, setLands, updateOneLandById } = landSlice.actions;
+
 
 //properties
 const propertiesSlice = createSlice({
@@ -259,9 +329,11 @@ export const store = configureStore({
     owner: ownerSlice.reducer,
     user: userSlice.reducer,
     loader: loaderSlice.reducer,
+    navbar: navbarSlice.reducer,
     pagination: paginationSlice.reducer,
     topProperties: topPropertiesSlice.reducer,
     properties: propertiesSlice.reducer,
+    lands: landSlice.reducer,
     booking: bookingSlice.reducer,
     location: locationSlice.reducer,
     likedProperties: likedPropertiesSlice.reducer,

@@ -19,7 +19,7 @@ const PageLoader = () => {
         }
         // Delay dispatching "done" by 5 seconds
         setTimeout(() => {
-          setLocation("/user");
+          setLocation("/property");
           dispatch(setLoader("done"));
         }, 2500);
       }

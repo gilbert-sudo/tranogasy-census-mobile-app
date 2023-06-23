@@ -10,21 +10,19 @@ import {
   updateIsSearch,
   setTotalPage,
   updateSearchCurrentPage,
-  setNavbar,
 } from "../redux/redux";
 const PropertyListPage = () => {
   const dispatch = useDispatch();
-  const { loadProperties } = useLoader();
-  const properties = useSelector((state) => state.properties);
-  const navbar = useSelector((state) => state.navbar);
+  const { loadLands } = useLoader();
+  const lands = useSelector((state) => state.lands);
   const paginationIndex = useSelector((state) => state.pagination);
-  const [searchResult, setSearchResult] = useState(properties);
+  const [searchResult, setSearchResult] = useState(lands);
   const [isLoading, setIsLoading] = useState(null);
   //set the total of the page
   if (searchResult) {
-    dispatch(setTotalPage({ index: 0, subjectLength: searchResult.length }));
+    dispatch(setTotalPage({ index: 3, subjectLength: searchResult.length }));
   }
-  if (paginationIndex[0].currentPage[0] !== 1) {
+  if (paginationIndex[0].currentPage[3] !== 1) {
     // scroll to top of the page
     const element = document.getElementById("prodisplay");
     if (element) {
@@ -34,8 +32,7 @@ const PropertyListPage = () => {
   //search states and filter it
   const searchStates = async (searchText) => {
     //get matches to current text input
-    console.log("all properties is ", properties);
-    let matches = properties.filter((state) => {
+    let matches = lands.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
         state.owner.fullName.match(regex) ||
@@ -43,25 +40,25 @@ const PropertyListPage = () => {
         state.description.match(regex) ||
         state.censusTaker.username.match(regex) ||
         state.city.quarter.match(regex) ||
-        state.address.match(regex)
+        (state.location ? state.location.match(regex) : "")
       );
     });
     if (searchText.length !== 0) {
-      dispatch(updateSearchCurrentPage({ index: 0, newSearchCurrentPage: 1 }));
-      dispatch(updateIsSearch({ index: 0, isSearch: true }));
+      dispatch(updateSearchCurrentPage({ index: 3, newSearchCurrentPage: 1 }));
+      dispatch(updateIsSearch({ index: 3, isSearch: true }));
       setSearchResult(matches);
-      dispatch(setTotalPage({ index: 0, subjectLength: matches.length }));
+      dispatch(setTotalPage({ index: 3, subjectLength: matches.length }));
     }
     if (searchText.length === 0) {
-      dispatch(updateIsSearch({ index: 0, isSearch: false }));
-      setSearchResult(properties);
-      dispatch(setTotalPage({ index: 0, subjectLength: properties.length }));
+      dispatch(updateIsSearch({ index: 3, isSearch: false }));
+      setSearchResult(lands);
+      dispatch(setTotalPage({ index: 3, subjectLength: lands.length }));
     }
     if (matches.length === 0) {
       setSearchResult(null);
-      dispatch(updateIsSearch({ index: 0, isSearch: false }));
+      dispatch(updateIsSearch({ index: 3, isSearch: false }));
     }
-    if (paginationIndex[0].currentPage[0] !== 1) {
+    if (paginationIndex[0].currentPage[3] !== 1) {
       // scroll to top of the page
       const element = document.getElementById("prodisplay");
       if (element) {
@@ -70,35 +67,22 @@ const PropertyListPage = () => {
     }
   };
 
-  //handle the vabar visibility
-
-  const handleInputFocus = () => {
-    if (navbar) {
-      dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
-    }
-  };
-  const handleBlur = () => {
-    if (!navbar) {
-      dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
-    }
-  };
-
   useEffect(() => {
     const pageLoader = async () => {
-      const propertiesPreoad = await loadProperties();
-      if (propertiesPreoad) {
+      const landsPreload = await loadLands();
+      if (landsPreload) {
         setIsLoading(null);
       }
-      setSearchResult(propertiesPreoad);
+      setSearchResult(landsPreload);
     };
-    if (!properties.length) {
+    if (!lands.length) {
       setIsLoading(true);
       pageLoader();
     }
     if (paginationIndex[2].activeLink !== "/") {
       dispatch(updateActiveLink("/"));
     }
-  }, [loadProperties, properties, paginationIndex, dispatch]);
+  }, [loadLands, lands, paginationIndex, dispatch]);
   return (
     <>
       <style
@@ -110,11 +94,11 @@ const PropertyListPage = () => {
       <div className="container mt-5 mb-5">
         <div className="card">
           <center className="mt-2">
-            <Link className="btn btn-primary" to="/property">
+            <Link className="btn btn-outline-primary" to="/property">
               Maison
             </Link>
             {"  "}
-            <Link className="btn btn-outline-primary" to="/land">
+            <Link className="btn btn-primary" to="/land">
               Terrain
             </Link>
           </center>
@@ -126,8 +110,6 @@ const PropertyListPage = () => {
                 id="owner-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
-                onFocus={handleInputFocus}
-                onBlur={handleBlur}
               />
               <Link to="/adding">
                 <center>
@@ -141,6 +123,7 @@ const PropertyListPage = () => {
                 </center>
               </Link>
             </div>
+
             {isLoading && (
               <div className="mt-4 ml-3 d-flex justify-content-center">
                 <img
@@ -158,18 +141,18 @@ const PropertyListPage = () => {
                 {searchResult &&
                   searchResult
                     .slice(
-                      paginationIndex[1].startIndex[0],
-                      paginationIndex[1].endIndex[0]
+                      paginationIndex[1].startIndex[3],
+                      paginationIndex[1].endIndex[3]
                     )
                     .map((property) => (
                       <PropertyDetails
                         key={property._id}
                         property={property}
-                        type="home"
+                        type="land"
                       />
                     ))}
                 <hr></hr>
-                {searchResult && <SquarePaging index={0} linkKey="/property" />}
+                {searchResult && <SquarePaging index={3} linkKey="/land" />}
               </div>
             )}
           </div>

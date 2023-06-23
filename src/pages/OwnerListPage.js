@@ -5,11 +5,18 @@ import { useLoader } from "../hooks/useLoader";
 import OwnerDetails from "../components/OwnerDetails";
 import { useEffect, useState } from "react";
 import SquarePaging from "../components/SquarePaging";
-import { updateActiveLink, updateIsSearch, setTotalPage } from "../redux/redux";
+import {
+  updateActiveLink,
+  updateIsSearch,
+  setTotalPage,
+  updateSearchCurrentPage,
+  setNavbar,
+} from "../redux/redux";
 
 const OwnerListPage = () => {
   const { loadOwners } = useLoader();
   const owners = useSelector((state) => state.owner);
+  const navbar = useSelector((state) => state.navbar);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
   const [searchResult, setSearchResult] = useState(owners);
@@ -37,6 +44,7 @@ const OwnerListPage = () => {
       );
     });
     if (searchText.length !== 0) {
+      dispatch(updateSearchCurrentPage({ index: 1, newSearchCurrentPage: 1 }));
       dispatch(updateIsSearch({ index: 1, isSearch: true }));
       setSearchResult(matches);
       dispatch(setTotalPage({ index: 1, subjectLength: matches.length }));
@@ -56,6 +64,19 @@ const OwnerListPage = () => {
       if (element) {
         element.scrollIntoView();
       }
+    }
+  };
+
+  //handle the vabar visibility
+
+  const handleInputFocus = () => {
+    if (navbar) {
+      dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
+    }
+  };
+  const handleBlur = () => {
+    if (!navbar) {
+      dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
     }
   };
 
@@ -94,6 +115,8 @@ const OwnerListPage = () => {
                 id="owner-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={handleBlur}
               />
               <Link to="/create-owner">
                 <center>
