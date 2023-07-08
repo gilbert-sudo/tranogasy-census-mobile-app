@@ -143,18 +143,18 @@ const AddingLandPage = () => {
   ]);
   return (
     <>
-      <div className="d-flex border justify-content-between mt-5" style={{ backgroundColor: "#f1f1f1" }}>
-          <div className="p-2">
-            <Link to="/Adding">
-                ajouter un immobilier
+      <div className=" border justify-content-between mt-5 p-1" style={{ backgroundColor: "#f1f1f1" }}>
+      <center className="mt-2">
+            <Link className="btn btn-outline-primary" to="/adding">
+              Maison
             </Link>
-          </div>
-          <div className="p-2" style={{ backgroundColor: "rgb(124, 189, 30)" }}>
-            <Link to="/AddingLandPage" >
-                ajouter un terrain
+            {"  "}
+            <Link className="btn btn-primary" to="/addingLandPage">
+              Terrain
             </Link>
+          </center>
           </div>
-          </div>
+       
       <div
         className="widget border rounded"
         style={{ backgroundColor: "#f1f1f1" }}

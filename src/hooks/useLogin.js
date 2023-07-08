@@ -106,8 +106,6 @@ export const useLogin = () => {
         window.location.href = "/";
       }
     } catch (error) {
-      setBootstrap("alert alert-danger");
-      setError("Une erreur s'est produite lors de l'envoi du message.");
       setIsLoading(false);
       setLocation("/nosignal");
     }

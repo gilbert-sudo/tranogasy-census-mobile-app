@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addOwner , updateOneOwnerById} from "../redux/redux";
+import { useLocation } from "wouter";
 export const useOwner = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [msgError, setMsgError] = useState(null);
@@ -8,6 +9,7 @@ export const useOwner = () => {
   const [resetOwnerInput, setResetOwnerInput] = useState(false); // new state
   const censusTaker = useSelector((state) => state.user._id);
   const dispatch = useDispatch();
+  const [setLocation] =useLocation();
   //redux
 
   const createOwner = async (fullName, locationId, phoneOne, phoneTwo) => {
@@ -33,6 +35,14 @@ export const useOwner = () => {
       setIsLoading(false);
       return;
     }
+    if (fullname.length > 50) {
+      setBootstrap("alert alert-warning");
+      setMsgError(
+        "Le nom complet doit être inférieur à 50 caractères."
+      );
+      setIsLoading(false);
+      return;
+    }
     if(phoneTwo){
     var phone2 = phoneTwo.replace(/\s/g, "");
     }
@@ -52,7 +62,7 @@ export const useOwner = () => {
       ) {
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_PROXY}/api/owners`,
+            `https://vast-erin-monkey-cape.cyclic.app/api/owners`,
             {
               method: "POST",
               headers: {
@@ -70,33 +80,24 @@ export const useOwner = () => {
           );
 
           const result = await response.json();
-          console.log(result);
-          if (result.success === true) {
+          if (response.ok) {
             setBootstrap(null);
             setMsgError(null);
             setIsLoading(false);
             setResetOwnerInput(true);
             dispatch(addOwner(result.newOwner));
-          } else if (result.errors.fullname) {
-            let msg = result.errors.fullname 
+          } 
+          if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
             setBootstrap(bootstrapClass);
-            setMsgError(msg);
+            setMsgError(result.message);
             setIsLoading(false);
-          } else {
-            let msg = result.error;
-            let bootstrapClass = "alert alert-danger";
-            setBootstrap(bootstrapClass);
-            setMsgError(msg);
-            setIsLoading(false);
-          }
+          } 
         } catch (error) {
-          console.log(error);
-          let msg = "Une erreur s'est produite lors de l'envoi du message.";
-          let bootstrapClass = "alert alert-danger";
-          setBootstrap(bootstrapClass);
-          setMsgError(msg);
-          setIsLoading(false);
+         setIsLoading(false);
+         setLocation("/nosignal");
+         console.log(error);
+         return [];
         }
       } else {
         // Phone number has invalid length
@@ -132,6 +133,14 @@ export const useOwner = () => {
     const fullname = fullName.trim().replace(/\s{2,}/g, ' ').replace(/(^|\s)\S/g, function(match) {
       return match.toUpperCase(); // capitalize first letter of each word
     });
+    if (fullname.length > 50) {
+      setBootstrap("alert alert-warning");
+      setMsgError(
+        "Le nom complet doit être inférieur à 50 caractères."
+      );
+      setIsLoading(false);
+      return;
+    }
     const phone1 = phoneNumberOne.replace(/\s/g, "");
     if(phoneNumberTwo){
     var phone2 = phoneNumberTwo.replace(/\s/g, "");
@@ -151,7 +160,7 @@ export const useOwner = () => {
       ) {
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_PROXY}/api/owners/update-owner/${ownerId}`,
+            `https://vast-erin-monkey-cape.cyclic.app/api/owners/update-owner/${ownerId}`,
             {
               method: "PUT",
               headers: {
@@ -168,33 +177,25 @@ export const useOwner = () => {
           );
 
           const result = await response.json();
-          if (result.success === true) {
+          if (response.ok) {
             setBootstrap(null);
             setMsgError(null);
             setIsLoading(false);
             setResetOwnerInput(true);
             dispatch(updateOneOwnerById(result.modifiedOwner));
             return;
-          } else if (result.errors) {
-            let msg = result.errors.fullname || result.errors.existingOwner ;
+          } 
+           if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
             setBootstrap(bootstrapClass);
-            setMsgError(msg);
-            setIsLoading(false);
-          } else {
-            let msg = result.error;
-            let bootstrapClass = "alert alert-danger";
-            setBootstrap(bootstrapClass);
-            setMsgError(msg);
+            setMsgError(result.message);
             setIsLoading(false);
           }
         } catch (error) {
-          console.log(error);
-          let msg = "Une erreur s'est produite lors de l'envoi du message.";
-          let bootstrapClass = "alert alert-danger";
-          setBootstrap(bootstrapClass);
-          setMsgError(msg);
           setIsLoading(false);
+          setLocation("/nosignal");
+          console.log(error);
+          return [];
         }
       } else {
         // Phone number has invalid length

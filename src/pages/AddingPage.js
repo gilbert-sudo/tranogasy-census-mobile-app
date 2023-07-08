@@ -157,17 +157,18 @@ const AddingPage = () => {
   return (
     <>
       <div
-        className="d-flex border justify-content-between mt-5"
+        className="border justify-content-between mt-5 p-1"
         style={{ backgroundColor: "#f1f1f1" }}
       >
-        <div className="p-2" style={{ backgroundColor: "rgb(124, 189, 30)" }}>
-          <Link to="/AddingPage" className="active">
-            ajouter un immobilier
-          </Link>
-        </div>
-        <div className="p-2">
-          <Link to="/AddingLandPage">ajouter un terrain</Link>
-        </div>
+     <center className="mt-2">
+            <Link className="btn btn-primary" to="/adding">
+              Maison
+            </Link>
+            {"  "}
+            <Link className="btn btn-outline-primary" to="/addingLandPage">
+              Terrain
+            </Link>
+          </center>
       </div>
       <div
         className="widget border rounded"

@@ -30,6 +30,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+     
       if (response.ok) {
         dispatch(setLikedPropreties(json));
       }
@@ -53,6 +54,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
         dispatch(setBooking(json));
       }
@@ -75,6 +78,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
         dispatch(setOwnersName(json));
         return json;
@@ -98,6 +103,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
         dispatch(setOwner(json));
         return json;
@@ -121,6 +128,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
         dispatch(setQuartersName(json));
         return json;
@@ -143,6 +152,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
         dispatch(setLocationsName(json));
         return json;
@@ -166,6 +177,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
         dispatch(setLocationList(json));
         return json;
@@ -189,6 +202,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
         dispatch(setProperties(json));
         return json;
@@ -211,6 +226,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
         dispatch(setLands(json));
         return json;

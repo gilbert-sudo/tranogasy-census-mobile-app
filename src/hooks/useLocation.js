@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addLocation, updateOneLocationById } from "../redux/redux";
-
+import { useLocation as useLocationFromWouter} from "wouter";
 export const useLocation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [msgError, setMsgError] = useState(null);
+  const [setLocation] = useLocationFromWouter();
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetLocationInput, setResetLocationInput] = useState(false); // new state
   const censusTaker = useSelector((state) => state.user._id);
@@ -27,7 +28,7 @@ export const useLocation = () => {
     }
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_PROXY}/api/Location`,
+            "https://vast-erin-monkey-cape.cyclic.app/api/Location",
             {
               method: "POST",
               headers: {
@@ -43,7 +44,7 @@ export const useLocation = () => {
           );
 
           const result = await response.json();
-          if (result.success === true) {
+          if (response.ok) {
             setBootstrap(null);
              setMsgError(null);
             setIsLoading(false);
@@ -51,18 +52,17 @@ export const useLocation = () => {
             dispatch(addLocation(result.newLocation));
             return;
           } 
-          if (result.message) {
+          if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
             setBootstrap(bootstrapClass);
             setMsgError(result.message);
             setIsLoading(false);
           }
         } catch (error) {
-          let msg = "Une erreur s'est produite lors de l'envoi du message.";
-          let bootstrapClass = "alert alert-danger";
-          setBootstrap(bootstrapClass);
-          setMsgError(msg);
           setIsLoading(false);
+          setLocation("/nosignal");
+          console.log(error);
+          return [];
         }
   };
 
@@ -82,7 +82,7 @@ export const useLocation = () => {
     const link = locationLink.replace(/\s/g, "");
     const address = inputedAddress.trim().replace(/\s{2,}/g, ' ');
         try {  const response = await fetch(
-            `${process.env.REACT_APP_PROXY}/api/Location/${locationId}`,
+          `https://vast-erin-monkey-cape.cyclic.app/api/Location/${locationId}`,
             {
               method: "PUT",
               headers: {
@@ -99,26 +99,24 @@ export const useLocation = () => {
 
           const result = await response.json();
           console.log(result);
-          if (result.success === true) {
+          if (response.ok) {
             setBootstrap(null);
             setMsgError(null);
             setIsLoading(false);
             setResetLocationInput(true);
             dispatch(updateOneLocationById(result.modifiedLocation));
           } 
-          if (result.message) {
+          if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
             setBootstrap(bootstrapClass);
             setMsgError(result.message);
             setIsLoading(false);
           }
         } catch (error) {
-          console.log(error);
-          let msg = "Une erreur s'est produite lors de l'envoi du message.";
-          let bootstrapClass = "alert alert-danger";
-          setBootstrap(bootstrapClass);
-          setMsgError(msg);
           setIsLoading(false);
+          setLocation("/nosignal");
+          console.log(error);
+          return [];
         }
   };
   return {

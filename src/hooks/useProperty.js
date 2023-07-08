@@ -60,7 +60,7 @@ export const useProperty = () => {
       description.trim().replace(/\s+/g, " ");
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_PROXY}/api/properties`,
+          `https://vast-erin-monkey-cape.cyclic.app/api/properties`,
           {
             method: "POST",
             headers: {
@@ -99,8 +99,6 @@ export const useProperty = () => {
           setIsLoading(false);
         }
       } catch (error) {
-        setBootstrap("alert alert-danger");
-        setMsgError("Une erreur s'est produite lors de l'envoi du message.");
         setIsLoading(false);
         setLocation("/nosignal")
           console.log(error);
@@ -156,13 +154,13 @@ export const useProperty = () => {
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
-      console.log("the type is ", type);
+    
       title.trim().replace(/\s+/g, " ");
       description.trim().replace(/\s+/g, " ");
       try {
         console.log("the propertyId is ", propertyId);
         const response = await fetch(
-          `${process.env.REACT_APP_PROXY}/api/properties/`+propertyId,
+          `https://vast-erin-monkey-cape.cyclic.app/api/properties/`+propertyId,
           {
             method: "PUT",
             headers: {
@@ -201,8 +199,6 @@ export const useProperty = () => {
           setIsLoading(false);
         }
       } catch (error) {
-        setBootstrap("alert alert-danger");
-        setMsgError("Une erreur s'est produite lors de l'envoi du message.");
         setIsLoading(false);
         setLocation("/nosignal")
         console.log(error);
@@ -259,7 +255,7 @@ const addLand = async (
     description.trim().replace(/\s+/g, " ");
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PROXY}/api/lands`,
+        `https://vast-erin-monkey-cape.cyclic.app/api/lands`,
         {
           method: "POST",
           headers: {
@@ -297,8 +293,6 @@ const addLand = async (
         setIsLoading(false);
       }
     } catch (error) {
-      setBootstrap("alert alert-danger");
-      setMsgError("Une erreur s'est produite lors de l'envoi du message.");
       setIsLoading(false);
       setLocation("/nosignal")
       console.log(error);
@@ -354,7 +348,7 @@ const updateLand = async (
     description.trim().replace(/\s+/g, " ");
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PROXY}/api/lands/`+landId,
+        `https://vast-erin-monkey-cape.cyclic.app/api/lands/`+landId,
         {
           method: "PUT",
           headers: {
@@ -391,8 +385,6 @@ const updateLand = async (
         setIsLoading(false);
       }
     } catch (error) {
-      setBootstrap("alert alert-danger");
-      setMsgError("Une erreur s'est produite lors de l'envoi du message.");
       setIsLoading(false);
       setLocation("/nosignal")
       console.log(error);

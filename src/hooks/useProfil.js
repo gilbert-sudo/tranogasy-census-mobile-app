@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateOneUserById } from "../redux/redux";
+import { useLocation } from "wouter";
 export const useProfil = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [msgError, setMsgError] = useState(null);
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetProfilInput, setResetProfilInput] = useState(false); // new state
+  const [location, setLocation] = useLocation();
   const dispatch = useDispatch();
   const updateProfilFullName = async (censusTakerId, fullName) => {
     setIsLoading(true);
@@ -26,7 +28,7 @@ export const useProfil = () => {
       });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PROXY}/api/census-taker/${censusTakerId}`,
+        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
         {
           method: "PUT",
           headers: {
@@ -40,35 +42,27 @@ export const useProfil = () => {
       );
 
       const result = await response.json();
-      if (result.success === true) {
-        let msg = result.message;
+      if (response.ok) {
         let bootstrapClass = "alert alert-success";
         setBootstrap(bootstrapClass);
-        setMsgError(msg || "votre nom a changé avec succès");
+        setMsgError("votre nom a changé avec succès");
         setIsLoading(false);
         setResetProfilInput(true);
         dispatch(updateOneUserById(result.censusTaker));
         return;
-      } else if (result.success === false) {
+      } 
+      if (!response.ok) {
         let msg = result.message;
         let bootstrapClass = "alert alert-danger";
         setBootstrap(bootstrapClass);
         setMsgError(msg);
         setIsLoading(false);
-      } else {
-        let msg = result.message;
-        let bootstrapClass = "alert alert-danger";
-        setBootstrap(bootstrapClass);
-        setMsgError(msg);
-        setIsLoading(false);
-      }
+      } 
     } catch (error) {
-      console.log(error);
-      let msg = "Une erreur s'est produite lors de l'envoi du message.";
-      let bootstrapClass = "alert alert-danger";
-      setBootstrap(bootstrapClass);
-      setMsgError(msg);
       setIsLoading(false);
+      setLocation("/nosignal");
+      console.log(error);
+      return [];
     }
   };
   const updateProfilContact = async (
@@ -97,7 +91,7 @@ export const useProfil = () => {
       if (phone.length === 10 || phone.length === 9) {
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_PROXY}/api/census-taker/${censusTakerId}`,
+            `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
             {
               method: "PUT",
               headers: {
@@ -113,35 +107,26 @@ export const useProfil = () => {
 
           const result = await response.json();
           console.log(result);
-          if (result.success === true) {
-            let msg = result.message;
+          if (response.ok) {
             let bootstrapClass = "alert alert-success";
             setBootstrap(bootstrapClass);
-            setMsgError(msg || "votre numéro de téléphone a changé avec succès");
+            setMsgError( "votre numéro de téléphone a changé avec succès");
             setIsLoading(false);
             setResetProfilInput(true);
             dispatch(updateOneUserById(result.censusTaker));
             return;
-          } else if (result.success === false) {
-            let msg = result.message;
+          } 
+           if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
             setBootstrap(bootstrapClass);
-            setMsgError(msg);
+            setMsgError(result.message);
             setIsLoading(false);
-          } else {
-            let msg = result.message;
-            let bootstrapClass = "alert alert-danger";
-            setBootstrap(bootstrapClass);
-            setMsgError(msg);
-            setIsLoading(false);
-          }
+          } 
         } catch (error) {
-          console.log(error);
-          let msg = "Une erreur s'est produite lors de l'envoi du message.";
-          let bootstrapClass = "alert alert-danger";
-          setBootstrap(bootstrapClass);
-          setMsgError(msg);
           setIsLoading(false);
+         setLocation("/nosignal");
+          console.log(error);
+          return [];
         }
       }
     } else {
@@ -169,7 +154,7 @@ export const useProfil = () => {
       });
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PROXY}/api/census-taker/${censusTakerId}`,
+        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
         {
           method: "PUT",
           headers: {
@@ -183,36 +168,26 @@ export const useProfil = () => {
       );
 
       const result = await response.json();
-      console.log(result);
-      if (result.success === true) {
-        let msg = result.message;
+      if (response.ok) {
         let bootstrapClass = "alert alert-success";
         setBootstrap(bootstrapClass);
-        setMsgError(msg || "votre email a changé avec succès");
+        setMsgError("votre email a changé avec succès");
         setIsLoading(false);
         setResetProfilInput(true);
         dispatch(updateOneUserById(result.censusTaker));
         return;
-      } else if (result.success === false) {
-        let msg = result.message;
+      } 
+       if (!response.ok) {
         let bootstrapClass = "alert alert-danger";
         setBootstrap(bootstrapClass);
-        setMsgError(msg);
+        setMsgError(result.message);
         setIsLoading(false);
-      } else {
-        let msg = result.message;
-        let bootstrapClass = "alert alert-danger";
-        setBootstrap(bootstrapClass);
-        setMsgError(msg);
-        setIsLoading(false);
-      }
+      } 
     } catch (error) {
-      console.log(error);
-      let msg = "Une erreur s'est produite lors de l'envoi du message.";
-      let bootstrapClass = "alert alert-danger";
-      setBootstrap(bootstrapClass);
-      setMsgError(msg);
       setIsLoading(false);
+      setLocation("/nosignal");
+      console.log(error);
+      return [];
     }
   };
   const updateProfilPassword = async (
@@ -257,7 +232,7 @@ export const useProfil = () => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_PROXY}/api/census-taker/${censusTakerId}`,
+        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
         {
           method: "PUT",
           headers: {
@@ -272,36 +247,27 @@ export const useProfil = () => {
       );
 
       const result = await response.json();
-      console.log(result);
-      if (result.success === true) {
-        let msg = result.message;
+      if (response.ok) {
         let bootstrapClass = "alert alert-success";
         setBootstrap(bootstrapClass);
-        setMsgError(msg || "votre mot de passe a changé avec succès");
+        setMsgError("votre mot de passe a changé avec succès");
         setIsLoading(false);
         setResetProfilInput(true);
         dispatch(updateOneUserById(result.censusTaker));
         return;
-      } else if (result.success === false) {
+      } 
+       if (!response.ok) {
         let msg = result.message;
         let bootstrapClass = "alert alert-danger";
         setBootstrap(bootstrapClass);
         setMsgError(msg);
         setIsLoading(false);
-      } else {
-        let msg = result.message;
-        let bootstrapClass = "alert alert-danger";
-        setBootstrap(bootstrapClass);
-        setMsgError(msg);
-        setIsLoading(false);
-      }
+      } 
     } catch (error) {
-      console.log(error);
-      let msg = "Une erreur s'est produite lors de l'envoi du message.";
-      let bootstrapClass = "alert alert-danger";
-      setBootstrap(bootstrapClass);
-      setMsgError(msg);
       setIsLoading(false);
+      setLocation("/nosignal");
+      console.log(error);
+      return [];
     }
   };
   return {

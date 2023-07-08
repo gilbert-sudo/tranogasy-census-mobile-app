@@ -60,14 +60,14 @@ const UserPage = () => {
                 </i>
               </li>
             </Link>
-            <Link to={`/update-email/${censusTakerId}`}>
+            {/* <Link to={`/update-email/${censusTakerId}`}>
               <li>
                 <i className="fas mr-3 ml-1">
                   <FaMailBulk className="mr-2" style={{ fontSize: "20px" }} />
                   Modifier votre Adresse Email
                 </i>
               </li>
-            </Link>
+            </Link> */}
             {/* <Link to={`/update-password/${censusTakerId}`} className='disabled'>
               <li>
                 <i className="fas mr-3 ml-1">
