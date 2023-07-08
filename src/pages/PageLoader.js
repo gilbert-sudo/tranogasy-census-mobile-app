@@ -26,7 +26,7 @@ const PageLoader = () => {
     };
     fetchLastUser();
     console.log(location);
-  }, [dispatch, user]);
+  }, [dispatch, user, setLocation, location]);
 
   // Render the main content
   return (

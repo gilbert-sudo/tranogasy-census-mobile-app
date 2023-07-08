@@ -6,15 +6,17 @@ import { useEffect, useState } from "react";
 import { useLoader } from "../hooks/useLoader";
 import SquarePaging from "../components/SquarePaging";
 import {
-  updateActiveLink,
   updateIsSearch,
   setTotalPage,
   updateSearchCurrentPage,
 } from "../redux/redux";
 const PropertyListPage = () => {
   const dispatch = useDispatch();
-  const { loadLands } = useLoader();
+  const { loadLands, loadOwnersName, loadQuartersName } = useLoader();
   const lands = useSelector((state) => state.lands);
+  const locationsName = useSelector((state) =>state.location[1].locationsName);
+  const ownersName = useSelector((state)=>state.owner[1].ownersName);
+  const quartersName = useSelector((state) =>state.quarter[1].quartersName);
   const paginationIndex = useSelector((state) => state.pagination);
   const [searchResult, setSearchResult] = useState(lands);
   const [isLoading, setIsLoading] = useState(null);
@@ -74,15 +76,18 @@ const PropertyListPage = () => {
         setIsLoading(null);
       }
       setSearchResult(landsPreload);
+      if(ownersName.length <0 ){
+        await loadOwnersName();
+      }
+      if(quartersName.length <0 ){
+        await loadQuartersName();
+      }
     };
     if (!lands.length) {
       setIsLoading(true);
       pageLoader();
     }
-    if (paginationIndex[2].activeLink !== "/") {
-      dispatch(updateActiveLink("/"));
-    }
-  }, [loadLands, lands, paginationIndex, dispatch]);
+  }, [loadLands, lands, paginationIndex, dispatch, ownersName, quartersName, loadQuartersName, loadOwnersName]);
   return (
     <>
       <style
@@ -103,7 +108,7 @@ const PropertyListPage = () => {
             </Link>
           </center>
           <div className="bottom">
-            <div class="d-flex mb-2">
+            <div className="d-flex mb-2">
               <input
                 className="form-control auto-input"
                 placeholder="🔍 Entrer un mot clé"

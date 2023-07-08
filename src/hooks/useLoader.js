@@ -6,6 +6,10 @@ import {
   setOwner,
   setProperties,
   setLands,
+  setLocation as setLocationList,
+  setQuartersName,
+  setLocationsName,
+  setOwnersName
 } from "../redux/redux";
 
 export const useLoader = () => {
@@ -72,6 +76,7 @@ export const useLoader = () => {
       );
       const json = await response.json();
       if (response.ok) {
+        dispatch(setOwnersName(json));
         return json;
       }
     } catch (error) {
@@ -117,6 +122,7 @@ export const useLoader = () => {
       );
       const json = await response.json();
       if (response.ok) {
+        dispatch(setQuartersName(json));
         return json;
       }
     } catch (error) {
@@ -138,6 +144,7 @@ export const useLoader = () => {
       );
       const json = await response.json();
       if (response.ok) {
+        dispatch(setLocationsName(json));
         return json;
       }
     } catch (error) {
@@ -160,8 +167,7 @@ export const useLoader = () => {
       );
       const json = await response.json();
       if (response.ok) {
-        console.log("the result is ", json);
-        dispatch(setLocation(json));
+        dispatch(setLocationList(json));
         return json;
       }
     } catch (error) {

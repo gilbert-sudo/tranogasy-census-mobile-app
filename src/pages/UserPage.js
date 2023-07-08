@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { BiLogOutCircle } from "react-icons/bi";
-import { FaUserEdit, FaLock, FaPhoneAlt, FaMailBulk } from "react-icons/fa";
+import { FaUserEdit,FaMailBulk } from "react-icons/fa";
 import { useLogout } from "../hooks/useLogout";
 import { useSelector } from "react-redux";
 const UserPage = () => {
@@ -8,6 +8,7 @@ const UserPage = () => {
 
   //redux
   const user = useSelector((state) => state.user);
+  console.log(user);
   const censusTakerId = user._id;
   // Render the main content
 
@@ -59,22 +60,6 @@ const UserPage = () => {
                 </i>
               </li>
             </Link>
-            <Link to={`/update-password/${censusTakerId}`}>
-              <li>
-                <i className="fas mr-3 ml-1">
-                  <FaLock className="mr-2" style={{ fontSize: "20px" }} />
-                  Modifier votre mot de passe
-                </i>
-              </li>
-            </Link>
-            <Link to={`/update-contact/${censusTakerId}`}>
-              <li>
-                <i className="fas mr-3 ml-1">
-                  <FaPhoneAlt className="mr-2" style={{ fontSize: "20px" }} />
-                  Modifier votre contact
-                </i>
-              </li>
-            </Link>
             <Link to={`/update-email/${censusTakerId}`}>
               <li>
                 <i className="fas mr-3 ml-1">
@@ -83,7 +68,22 @@ const UserPage = () => {
                 </i>
               </li>
             </Link>
-
+            {/* <Link to={`/update-password/${censusTakerId}`} className='disabled'>
+              <li>
+                <i className="fas mr-3 ml-1">
+                  <FaLock className="mr-2" style={{ fontSize: "20px" }} />
+                  Modifier votre mot de passe
+                </i>
+              </li>
+            </Link>
+            <Link to={`/update-contact/${censusTakerId}`} className='disabled'>
+              <li>
+                <i className="fas mr-3 ml-1">
+                  <FaPhoneAlt className="mr-2" style={{ fontSize: "20px" }} />
+                  Modifier votre contact
+                </i>
+              </li>
+            </Link> */}
             <li onClick={logout}>
               <i className="fas mr-3 ml-1" style={{ color: "#7cbd1e" }}>
                 <BiLogOutCircle className="mr-2" style={{ fontSize: "20px" }} />

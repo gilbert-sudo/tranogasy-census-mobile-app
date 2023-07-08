@@ -6,17 +6,18 @@ import { Link } from "wouter";
 const LocationDetails = ({ location }) => {
   const censusTaker = useSelector((state) => state.user._id);
   return (
+    <div className="row">
     <div className="list-group-item list-group-item-action py-3 lh-tight">
-      <div className="d-flex w-100 align-items-center justify-content-between">
+      <div className="d-flex w-100 align-items-center justify-content-between  overflow-x-auto">
         <strong className="mb-1">{location.address}</strong>{" "}
         {censusTaker === location.censusTaker._id?(<Link to={`/edit-location/${location._id}`}>
           <MdEditLocationAlt />
         </Link>):null} 
       </div>
-      <div className="col-10 mb-1 small text-uppercase">
-        
-        <Link style={{color: "#17a2b8"}} to={location.locationLink}><u><strong>{location.locationLink}</strong></u></Link>
+      <div className="col-10 mb-1 small text-uppercase overflow-x-auto">
+      <strong><u><Link style={{color: "#17a2b8"}} to={location.locationLink}>{location.locationLink}</Link></u></strong>
          </div>
+    </div>
     </div>
   );
 };

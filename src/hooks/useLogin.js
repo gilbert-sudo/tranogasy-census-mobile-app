@@ -49,12 +49,12 @@ export const useLogin = () => {
           }
 
           if (response.ok) {
-            dispatch(setUser(json.client));
+            dispatch(setUser(json.censusTaker));
             setBootstrap("alert alert-success");
             setError("Vous vous êtes connecté(e) maintenant!");
             localStorage.setItem("user", JSON.stringify(json));
             setIsLoading(false);
-            setClient(json.client);
+            setClient(json.censusTaker);
             setLocation("/property");
             console.log(location);
           }
