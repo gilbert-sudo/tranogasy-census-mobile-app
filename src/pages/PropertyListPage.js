@@ -1,113 +1,115 @@
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "wouter";
-import { FaUserPlus } from "react-icons/fa";
+import { BsHouseAddFill } from "react-icons/bs";
 import PropertyDetails from "../components/PropertyDetails";
 import { useEffect, useState } from "react";
 import { useLoader } from "../hooks/useLoader";
 import SquarePaging from "../components/SquarePaging";
 import {
-  updateActiveLink,
   updateIsSearch,
   setTotalPage,
   updateSearchCurrentPage,
   setNavbar,
 } from "../redux/redux";
+
 const PropertyListPage = () => {
   const dispatch = useDispatch();
-  const { loadProperties } = useLoader();
-  const properties = useSelector((state) => state.properties);
+  const { loadProperties, loadLocationsName, loadOwnersName, loadQuartersName } = useLoader();
+  const globalProperties= useSelector((state) => state.properties);
+  const censusTaker = useSelector((state) => state.user._id);
+  const properties = globalProperties.filter((property)=> property.censusTaker._id === censusTaker);
+  const locationsName = useSelector((state) =>state.location[1].locationsName);
+  const ownersName = useSelector((state)=>state.owner[1].ownersName);
+  const quartersName = useSelector((state) =>state.quarter[1].quartersName);
   const navbar = useSelector((state) => state.navbar);
   const paginationIndex = useSelector((state) => state.pagination);
   const [searchResult, setSearchResult] = useState(properties);
   const [isLoading, setIsLoading] = useState(null);
-  //set the total of the page
-  if (searchResult) {
-    dispatch(setTotalPage({ index: 0, subjectLength: searchResult.length }));
-  }
-  if (paginationIndex[0].currentPage[0] !== 1) {
-    // scroll to top of the page
-    const element = document.getElementById("prodisplay");
-    if (element) {
-      element.scrollIntoView();
-    }
-  }
-  //search states and filter it
-  const searchStates = async (searchText) => {
-    //get matches to current text input
-    console.log("all properties is ", properties);
-    let matches = properties.filter((state) => {
+  const searchStates = (searchText) => {
+    const matches = properties.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
-        state.owner.fullName.match(regex) ||
-        state.title.match(regex) ||
-        state.description.match(regex) ||
-        state.censusTaker.username.match(regex) ||
-        state.city.quarter.match(regex) ||
+        state.propertyNumber.toString().match(regex)   ||
         state.address.match(regex)
       );
     });
+
     if (searchText.length !== 0) {
       dispatch(updateSearchCurrentPage({ index: 0, newSearchCurrentPage: 1 }));
       dispatch(updateIsSearch({ index: 0, isSearch: true }));
       setSearchResult(matches);
       dispatch(setTotalPage({ index: 0, subjectLength: matches.length }));
-    }
-    if (searchText.length === 0) {
+    } else {
       dispatch(updateIsSearch({ index: 0, isSearch: false }));
       setSearchResult(properties);
       dispatch(setTotalPage({ index: 0, subjectLength: properties.length }));
     }
+
     if (matches.length === 0) {
       setSearchResult(null);
       dispatch(updateIsSearch({ index: 0, isSearch: false }));
     }
+  };
+
+  const handleInputFocus = () => {
+    if (navbar) {
+      dispatch(setNavbar(false));
+    }
+  };
+
+  const handleBlur = () => {
+    if (!navbar) {
+      dispatch(setNavbar(true));
+    }
+  };
+  useEffect(() => {
+    const pageLoader = async () => {
+      const propertiesPreload = await loadProperties();
+      if (propertiesPreload) {
+        setIsLoading(null);
+      }
+      setSearchResult(propertiesPreload);
+      if(locationsName.length <0 ){
+        await loadLocationsName();
+      }
+      if(ownersName.length <0 ){
+        await loadOwnersName();
+      }
+      if(quartersName.length <0 ){
+        await loadQuartersName();
+      }
+    };
+
+    if (properties.length === 0) {
+      setIsLoading(true);
+      pageLoader();
+    }
+
+  
+  }, [ loadProperties, properties, ownersName, locationsName, quartersName, loadLocationsName, loadQuartersName, loadOwnersName]);
+
+  useEffect(() => {
+    if (searchResult) {
+      dispatch(setTotalPage({ index: 0, subjectLength: searchResult.length }));
+    }
     if (paginationIndex[0].currentPage[0] !== 1) {
-      // scroll to top of the page
       const element = document.getElementById("prodisplay");
       if (element) {
         element.scrollIntoView();
       }
     }
-  };
+  }, [dispatch, paginationIndex, searchResult]);
 
-  //handle the vabar visibility
-
-  const handleInputFocus = () => {
-    if (navbar) {
-      dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
-    }
-  };
-  const handleBlur = () => {
-    if (!navbar) {
-      dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
-    }
-  };
-
-  useEffect(() => {
-    const pageLoader = async () => {
-      const propertiesPreoad = await loadProperties();
-      if (propertiesPreoad) {
-        setIsLoading(null);
-      }
-      setSearchResult(propertiesPreoad);
-    };
-    if (!properties.length) {
-      setIsLoading(true);
-      pageLoader();
-    }
-    if (paginationIndex[2].activeLink !== "/") {
-      dispatch(updateActiveLink("/"));
-    }
-  }, [loadProperties, properties, paginationIndex, dispatch]);
   return (
     <>
-      <style
+    <style
         dangerouslySetInnerHTML={{
           __html:
             '::-webkit-scrollbar {\n                                  width: 8px;\n                                }\n                                /* Track */\n                                ::-webkit-scrollbar-track {\n                                  background: #f1f1f1; \n                                }\n                                 \n                                /* Handle */\n                                ::-webkit-scrollbar-thumb {\n                                  background: #888; \n                                }\n                                \n                                /* Handle on hover */\n                                ::-webkit-scrollbar-thumb:hover {\n                                  background: #555; \n                                } @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");\n\n\n   body{\n\n    background-color: #eeeff3;\n    font-family: "Poppins", sans-serif;\n    font-weight: 300;\n\n   }\n\n   .container{\n\n\n      display: flex;\n      align-items: center;\n      padding: 10px;\n\n   }\n\n\n   .card{\n\n      width: 100%;\n      \n      border-radius: 10px;  \n      border: none;\n\n   }\n\n   .top{\n\n      background-color: #eee;\n      padding: 10px;\n      padding-left: 20px;\n      border-top-right-radius: 10px;\n      border-top-left-radius: 10px;\n   }\n\n   .bottom{\n     \n     padding:10px;\n     background-color: #fff;\n     border-bottom-right-radius: 10px;\n      border-bottom-left-radius: 10px;\n\n   }\n\n   .image{\n      \n       position: relative;\n\n   }\n\n   .image .type{\n     \n        position: absolute;\n    left: 49px;\n    bottom: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    border-radius: 50%;\n\n   }\n\n   .line-height{\n\n        line-height: 20px;\n   }\n\n   .live{\n\n          height: 10px;\n    width: 10px;\n    border-radius: 50%;\n    background: green;\n    margin-left: 1px;\n    display: flex;\n    margin-right: 5px;\n\n\n   }\n\n   .l-now{\n\n    font-size: 12px;\n   }\n\n\n   .dots{\n     \n           height: 10px;\n   margin-left: 1px;\n    display: flex;\n    margin-right: 5px;\n\n   }',
         }}
       />
-      <div className="container mt-5 mb-5">
+  <div className="container mt-5 mb-5">
         <div className="card">
           <center className="mt-2">
             <Link className="btn btn-primary" to="/property">
@@ -119,10 +121,10 @@ const PropertyListPage = () => {
             </Link>
           </center>
           <div className="bottom">
-            <div class="d-flex mb-2">
+            <div className="d-flex mb-2">
               <input
                 className="form-control auto-input"
-                placeholder="🔍 Entrer un mot clé"
+                placeholder="🔍 addresse complète ou un numéro de maison "
                 id="owner-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
@@ -132,11 +134,11 @@ const PropertyListPage = () => {
               <Link to="/adding">
                 <center>
                   <a
-                    href="#"
+                    href="/ht"
                     style={{ height: "100%", paddingTop: "10px" }}
                     className="btn btn-primary"
                   >
-                    <FaUserPlus />
+                    <BsHouseAddFill/>
                   </a>
                 </center>
               </Link>

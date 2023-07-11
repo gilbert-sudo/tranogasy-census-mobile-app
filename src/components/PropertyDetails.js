@@ -1,5 +1,4 @@
 //import { useBooking } from "../hooks/useBooking";
-import { useSelector } from "react-redux";
 import { Link } from "wouter";
 
 function PropertyDetails({ property, type }) {
@@ -12,7 +11,7 @@ function PropertyDetails({ property, type }) {
     .getHours()
     .toString()
     .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
-  const censusTaker = useSelector((state) => state.user._id);
+
   return (
     <div className="card border-0">
       <div className="row set-p justify-content-center">
@@ -32,7 +31,7 @@ function PropertyDetails({ property, type }) {
               className="text-success mb-0 mr-2 grade"
               style={{ fontSize: "3vw" }}
             >
-              <strong>...en atente</strong>
+              <strong>{property.pending?"...en attente":""}</strong>
             </p>
           </div>
           <div className="row px-3">
@@ -56,7 +55,7 @@ function PropertyDetails({ property, type }) {
           </div>
          
             <div className="row px-3 mt-2 d-flex justify-content-end">
-            {censusTaker === property.censusTaker._id?(<Link to={type === "home"?"/edit-property/" + property._id:"/edit-land/"+ property._id}>
+           <Link to={type === "home"?"/edit-property/" + property._id:"/edit-land/"+ property._id}>
               <p
                 className="rating mb-0 px-2"
                 style={{ fontSize: "3vw", backgroundColor: "#ec1c24" }}
@@ -64,7 +63,7 @@ function PropertyDetails({ property, type }) {
               >
                 <strong>Editer</strong>
               </p>
-               </Link>):null}
+               </Link>
             </div>
          
         </div>

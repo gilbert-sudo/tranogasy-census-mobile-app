@@ -1,5 +1,5 @@
 import { Link, useRoute } from "wouter";
-import { BiHome, BiUser, BiPlusCircle } from "react-icons/bi";
+import { BiTask, BiUser, BiPlusCircle } from "react-icons/bi";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { MdNotListedLocation } from "react-icons/md";
 
@@ -9,9 +9,12 @@ import { useSelector } from "react-redux";
 /**
  * `Utility components
  */
-const ActiveLink = (href) => {
+const ActiveLink = (href, href1="", href2="", href3="") => {
   const [isActive] = useRoute(href);
-  const LinkStyle = isActive ? { color: "#7cbd1e" } : { color: "#222B2A" };
+  const [isActive1] = useRoute(href1);
+  const [isActive2] = useRoute(href2);
+  const [isActive3] = useRoute(href3);
+  const LinkStyle = isActive || isActive1 || isActive2 || isActive3? { color: "#7cbd1e" } : { color: "#222B2A" };
   return LinkStyle;
 };
 
@@ -23,7 +26,7 @@ const ShowNavbar = (isActive) => {
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   const navbar = useSelector((state) => state.navbar);
-
+  console.log(navbar);
   return (
     <>
       {/*=============== HEADER ===============*/}
@@ -40,10 +43,10 @@ const Navbar = () => {
                     <Link
                       to="/property"
                       className="nav__link"
-                      style={ActiveLink("/property")}
+                      style={ActiveLink("/property", "/land", "/edit-property/:ownerId", "/edit-land/:landId") || ActiveLink("/land")}
                     >
-                      <BiHome className="nav__icon" />
-                      <span className="nav__name">Acceuil</span>
+                      <BiTask className="nav__icon" />
+                      <span className="nav__name">Article</span>
                     </Link>
                 </li>
 
@@ -51,10 +54,10 @@ const Navbar = () => {
                   <Link
                     to="/owner-list"
                     className="nav__link"
-                    style={ActiveLink("/owner-list")}
+                    style={ActiveLink("/owner-list", "/edit-owner/:ownerId")}
                   >
                     <HiOutlineUserGroup className="nav__icon" />
-                    <span className="nav__name">Propriétaire</span>
+                    <span className="nav__name">Proprio</span>
                   </Link>
                 </li>
 
@@ -62,7 +65,7 @@ const Navbar = () => {
                   <Link
                     to="/adding"
                     className="nav__link"
-                    style={ActiveLink("/adding")}
+                    style={ActiveLink("/Adding", "/AddingLandPage", "/create-owner", "/create-location")}
                   >
                     <BiPlusCircle className="nav__icon" />
                     <span className="nav__name">Ajouter</span>
@@ -72,7 +75,7 @@ const Navbar = () => {
                   <Link
                     to="/location-list"
                     className="nav__link"
-                    style={ActiveLink("/location-list")}
+                    style={ActiveLink("/location-list", "/edit-location/:locationId")}
                   >
                     <MdNotListedLocation className="nav__icon" />
                     <span className="nav__name">Location</span>
@@ -83,7 +86,7 @@ const Navbar = () => {
                     <Link
                       to="/user"
                       className="nav__link"
-                      style={ActiveLink("/user")}
+                      style={ActiveLink("/user", "/update-fullName/:censusTakerId", "/update-email/:censusTakerId")}
                     >
                       <BiUser className="nav__icon" />
                       <span className="nav__name">Profile</span>

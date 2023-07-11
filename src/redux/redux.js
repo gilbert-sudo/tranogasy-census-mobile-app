@@ -58,22 +58,29 @@ export const { setGoogleLogin } = googleLoginSlice.actions;
 //owner slice
 const ownerSlice = createSlice({
   name: "owner",
-  initialState: [],
+  initialState: [{owners:[]}, {ownersName:[]}],
   reducers: {
     setOwner: (state, action) => {
-      return [...action.payload];
+       state[0].owners = [...action.payload];
     },
+    setOwnersName: (state, action) => {
+      state[1].ownersName = [...action.payload];
+   },
     addOwner: (state, action) => {
-      state.push(action.payload);
+      state[0].owners.push(action.payload);
+      state[1].ownersName = []
     },
     updateOneOwnerById: (state, action) => {
-      return state.map((owner) => {
+      state[0].owners = state[0].owners.map((owner) => {
         if (owner._id === action.payload._id) {
           return {
             ...owner,
             fullName: action.payload.fullName,
+            location:action.payload.location,
             phone1: action.payload.phone1,
             phone2: action.payload.phone2,
+            censusTaker:action.payload.censusTaker,
+            property:action.payload.property
           };
         } else {
           return owner;
@@ -82,7 +89,7 @@ const ownerSlice = createSlice({
     },
   },
 });
-export const { setOwner, addOwner, updateOneOwnerById } = ownerSlice.actions;
+export const { setOwner, setOwnersName, addOwner, updateOneOwnerById } = ownerSlice.actions;
 //paginnations
 const paginationSlice = createSlice({
   name: "pagination",
@@ -296,19 +303,25 @@ const bookingSlice = createSlice({
 
 export const { setBooking, addBooking, deleteBooking } = bookingSlice.actions;
 
+
 //owner slice
 const locationSlice = createSlice({
   name: "location",
-  initialState: [],
+  initialState: [{locations:[]}, {locationsName: []}],
   reducers: {
     setLocation: (state, action) => {
-      return [...action.payload];
+     state[0].locations = [...action.payload];
+    },
+    setLocationsName:(state, action) =>{
+      state[1].locationsName = [...action.payload]
     },
     addLocation: (state, action) => {
-      state.push(action.payload);
+      state[0].locations = [...state[0].locations, action.payload];
+      console.log("the update location state is", state[0].locations);
+      state[1].locationsName = [];
     },
     updateOneLocationById: (state, action) => {
-      return state.map((location) => {
+      state[0].locations = state[0].locations.map((location) => {
         if (location._id === action.payload._id) {
           return {
             ...location,
@@ -322,8 +335,42 @@ const locationSlice = createSlice({
     },
   },
 });
-export const { setLocation, addLocation, updateOneLocationById } =
+export const { setLocation, setLocationsName, addLocation, updateOneLocationById } =
   locationSlice.actions;
+
+  
+const quarterSlice = createSlice({
+  name: "quarter",
+  initialState: [{quarters:[]}, {quartersName: []}],
+  reducers: {
+    setquarter: (state, action) => {
+     state[0].quarters = [...action.payload];
+    },
+    setQuartersName:(state, action) =>{
+      state[1].quartersName = [...action.payload]
+    },
+    addQuarter: (state, action) => {
+      state[0].quarters.push(action.payload);
+      state[1].quartersName = []
+    },
+    updateOneQuarterById: (state, action) => {
+      state[0].quarters = state[0].quarters.map((quarter) => {
+        if (quarter._id === action.payload._id) {
+          return {
+            ...quarter,
+            address: action.payload.address,
+            quarterLink: action.payload.quarterLink,
+          };
+        } else {
+          return quarter;
+        }
+      });
+    },
+  },
+});
+export const { setQuarter, setQuartersName, addQuarter, updateOnequarterById } =
+  quarterSlice.actions;
+
 export const store = configureStore({
   reducer: {
     owner: ownerSlice.reducer,
@@ -338,5 +385,6 @@ export const store = configureStore({
     location: locationSlice.reducer,
     likedProperties: likedPropertiesSlice.reducer,
     googleLogin: googleLoginSlice.reducer,
+    quarter:quarterSlice.reducer
   },
 });

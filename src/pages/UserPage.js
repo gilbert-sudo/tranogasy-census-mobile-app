@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { BiLogOutCircle } from "react-icons/bi";
-import { FaUserEdit, FaLock, FaPhoneAlt, FaMailBulk } from "react-icons/fa";
+import { FaUserEdit } from "react-icons/fa";
+import { TbHelp } from "react-icons/tb";
 import { useLogout } from "../hooks/useLogout";
 import { useSelector } from "react-redux";
 const UserPage = () => {
@@ -8,6 +9,7 @@ const UserPage = () => {
 
   //redux
   const user = useSelector((state) => state.user);
+  console.log(user);
   const censusTakerId = user._id;
   // Render the main content
 
@@ -59,7 +61,15 @@ const UserPage = () => {
                 </i>
               </li>
             </Link>
-            <Link to={`/update-password/${censusTakerId}`}>
+            {/* <Link to={`/update-email/${censusTakerId}`}>
+              <li>
+                <i className="fas mr-3 ml-1">
+                  <FaMailBulk className="mr-2" style={{ fontSize: "20px" }} />
+                  Modifier votre Adresse Email
+                </i>
+              </li>
+            </Link> */}
+            {/* <Link to={`/update-password/${censusTakerId}`} className='disabled'>
               <li>
                 <i className="fas mr-3 ml-1">
                   <FaLock className="mr-2" style={{ fontSize: "20px" }} />
@@ -67,23 +77,22 @@ const UserPage = () => {
                 </i>
               </li>
             </Link>
-            <Link to={`/update-contact/${censusTakerId}`}>
+            <Link to={`/update-contact/${censusTakerId}`} className='disabled'>
               <li>
                 <i className="fas mr-3 ml-1">
                   <FaPhoneAlt className="mr-2" style={{ fontSize: "20px" }} />
                   Modifier votre contact
                 </i>
               </li>
-            </Link>
-            <Link to={`/update-email/${censusTakerId}`}>
+            </Link> */}
+             <Link to={`/aaa`}>
               <li>
                 <i className="fas mr-3 ml-1">
-                  <FaMailBulk className="mr-2" style={{ fontSize: "20px" }} />
-                  Modifier votre Adresse Email
+                  <TbHelp className="mr-2" style={{ fontSize: "20px" }} />
+                  A propos de l'application
                 </i>
               </li>
-            </Link>
-
+            </Link> 
             <li onClick={logout}>
               <i className="fas mr-3 ml-1" style={{ color: "#7cbd1e" }}>
                 <BiLogOutCircle className="mr-2" style={{ fontSize: "20px" }} />

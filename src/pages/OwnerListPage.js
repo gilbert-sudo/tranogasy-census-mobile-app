@@ -6,7 +6,6 @@ import OwnerDetails from "../components/OwnerDetails";
 import { useEffect, useState } from "react";
 import SquarePaging from "../components/SquarePaging";
 import {
-  updateActiveLink,
   updateIsSearch,
   setTotalPage,
   updateSearchCurrentPage,
@@ -14,8 +13,10 @@ import {
 } from "../redux/redux";
 
 const OwnerListPage = () => {
-  const { loadOwners } = useLoader();
-  const owners = useSelector((state) => state.owner);
+  const { loadOwners, loadOwnersName, loadLocationsName} = useLoader();
+  const locationsName = useSelector((state) =>state.location[1].locationsName);
+  const ownersName = useSelector((state)=>state.owner[1].ownersName);
+  const owners = useSelector((state) => state.owner[0].owners);
   const navbar = useSelector((state) => state.navbar);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
@@ -83,6 +84,12 @@ const OwnerListPage = () => {
   useEffect(() => {
     const pageLoader = async () => {
       const ownersPreoad = await loadOwners();
+      if(locationsName.length <0 ){
+        await loadLocationsName();
+      }
+      if(ownersName.length <0 ){
+        await loadOwnersName();
+      }
       if (ownersPreoad) {
         setIsLoading(null);
       }
@@ -92,10 +99,7 @@ const OwnerListPage = () => {
       setIsLoading(true);
       pageLoader();
     }
-    if (paginationIndex[2].activeLink !== "/owner-list") {
-      dispatch(updateActiveLink("/owner-list"));
-    }
-  }, [loadOwners, owners, paginationIndex, dispatch]);
+  }, [loadOwners, owners, paginationIndex, dispatch, ownersName, locationsName, loadLocationsName, loadOwnersName]);
 
   return (
     <>
@@ -121,7 +125,7 @@ const OwnerListPage = () => {
               <Link to="/create-owner">
                 <center>
                   <a
-                    href="#"
+                    href="/create-owner"
                     style={{ height: "100%", paddingTop: "10px" }}
                     className="btn btn-primary"
                   >

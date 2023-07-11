@@ -29,7 +29,7 @@ export const useLogin = () => {
       if (phoneNumber.length === 10 || phoneNumber.length === 9) {
         try {
           const response = await fetch(
-            `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/login`,
+            `http://localhost:3600/api/census-taker/login`,
             {
               method: "POST",
               headers: {
@@ -49,12 +49,12 @@ export const useLogin = () => {
           }
 
           if (response.ok) {
-            dispatch(setUser(json.client));
+            dispatch(setUser(json.censusTaker));
             setBootstrap("alert alert-success");
             setError("Vous vous êtes connecté(e) maintenant!");
             localStorage.setItem("user", JSON.stringify(json));
             setIsLoading(false);
-            setClient(json.client);
+            setClient(json.censusTaker);
             setLocation("/property");
             console.log(location);
           }
@@ -78,7 +78,7 @@ export const useLogin = () => {
 
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/connect/${facebookID}`,
+        `http://localhost:3600/api/census-taker/connect/${facebookID}`,
         {
           method: "POST",
           headers: {
@@ -106,8 +106,6 @@ export const useLogin = () => {
         window.location.href = "/";
       }
     } catch (error) {
-      setBootstrap("alert alert-danger");
-      setError("Une erreur s'est produite lors de l'envoi du message.");
       setIsLoading(false);
       setLocation("/nosignal");
     }

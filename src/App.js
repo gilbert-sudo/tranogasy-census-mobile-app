@@ -1,4 +1,4 @@
-import { Switch, Route, Router, Redirect } from "wouter";
+import { Switch, Route, Router,Redirect } from "wouter";
 import { useLocationProperty, navigate } from "wouter/use-location";
 
 // all pages
@@ -10,7 +10,17 @@ import PageLoader from "./pages/PageLoader";
 import OwnerListPage from "./pages/OwnerListPage";
 import LandListPage from "./pages/LandListPage";
 import TestPage from "./pages/TestPage";
-
+import AddingPage from "./pages/AddingPage";
+import AddingLandPage from "./pages/AddingLandPage";
+import OwnerCreation from "./pages/OwnerCreation";
+import OwnerEditingPage from "./pages/OwnerEditingPage";
+import LocationEditingPage from "./pages/LocationEditingPage";
+import PropertyEditingPage from "./pages/PropertyEditingPage";
+import LandEditingPage from "./pages/LandEditingPage";
+import LocationListPage from"./pages/LocationListPage";
+import LocationCreationPage from "./pages/LocationCreationPage";
+import FullNameUpdating from "./pages/FullNameUpdating";
+import EmailUpdating from "./pages/EmailUpdating";
 //all components
 import Navbar from "./components/Navbar";
 
@@ -72,6 +82,49 @@ function App() {
               <Route path="/owner-list">
                 {!user && <Redirect to="/login" />}
                 {user && <OwnerListPage />}
+              </Route>
+              <Route path="/location-list">
+                <LocationListPage />
+              </Route>
+              <Route path="/Adding">
+                {!user && <Redirect to="/login" />}
+                {user && <AddingPage />}
+              </Route>
+              <Route path="/AddingLandPage">
+                {!user && <Redirect to="/login" />}
+                {user && <AddingLandPage />}
+              </Route>
+              <Route path="/create-owner">
+                {!user && <Redirect to="/login" />}
+                {user && <OwnerCreation />}
+              </Route>
+              <Route path="/create-location">
+                {!user && <Redirect to="/login" />}
+                {user && <LocationCreationPage />}
+              </Route>
+              <Route  path="/edit-owner/:ownerId">
+                {!user && <Redirect to="/login" />}
+                {user && <OwnerEditingPage />}
+              </Route>
+              <Route  path="/edit-property/:propertyId">
+                {!user && <Redirect to="/login" />}
+                {user && <PropertyEditingPage />}
+              </Route>
+              <Route  path="/edit-land/:landId">
+                {!user && <Redirect to="/login" />}
+                {user && <LandEditingPage />}
+              </Route>
+              <Route  path="/edit-location/:ownerId">
+                {!user && <Redirect to="/login" />}
+                {user && <LocationEditingPage />}
+              </Route>
+              <Route  path="/update-fullName/:censusTakerId">
+                {!user && <Redirect to="/login" />}
+                {user && <FullNameUpdating/>}
+              </Route>
+              <Route  path="/update-email/:censusTakerId">
+                {!user && <Redirect to="/login" />}
+                {user && <EmailUpdating/>}
               </Route>
               <Route path="/nosignal">
                 <div>

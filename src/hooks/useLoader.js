@@ -6,6 +6,10 @@ import {
   setOwner,
   setProperties,
   setLands,
+  setLocation as setLocationList,
+  setQuartersName,
+  setLocationsName,
+  setOwnersName
 } from "../redux/redux";
 
 export const useLoader = () => {
@@ -17,7 +21,7 @@ export const useLoader = () => {
   const loadLikes = async (userId) => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/favorite/${userId}`,
+        `http://localhost:3600/api/favorite/${userId}`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -26,6 +30,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+     
       if (response.ok) {
         dispatch(setLikedPropreties(json));
       }
@@ -40,7 +45,7 @@ export const useLoader = () => {
   const loadBooking = async (userId) => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/messages/${userId}`,
+        `http://localhost:3600/api/messages/${userId}`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -49,6 +54,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
         dispatch(setBooking(json));
       }
@@ -62,7 +69,7 @@ export const useLoader = () => {
   const loadOwnersName = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/owners/all-owners-name`,
+        `http://localhost:3600/api/owners/all-owners-name`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -71,7 +78,10 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
+        dispatch(setOwnersName(json));
         return json;
       }
     } catch (error) {
@@ -84,7 +94,7 @@ export const useLoader = () => {
   const loadOwners = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/owners/all-owners`,
+        `http://localhost:3600/api/owners/all-owners`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -93,6 +103,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
         dispatch(setOwner(json));
         return json;
@@ -107,7 +119,7 @@ export const useLoader = () => {
   const loadQuartersName = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/cities/all-quarter-name`,
+        `http://localhost:3600/api/cities/all-quarter-name`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -116,7 +128,10 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
+        dispatch(setQuartersName(json));
         return json;
       }
     } catch (error) {
@@ -128,7 +143,7 @@ export const useLoader = () => {
   const loadLocationsName = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/location/names`,
+        `http://localhost:3600/api/location/names`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -137,7 +152,10 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
+        dispatch(setLocationsName(json));
         return json;
       }
     } catch (error) {
@@ -150,7 +168,7 @@ export const useLoader = () => {
   const loadLocations = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/location`,
+        `http://localhost:3600/api/location`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -159,9 +177,10 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+      
       if (response.ok) {
-        console.log("the result is ", json);
-        dispatch(setLocation(json));
+        dispatch(setLocationList(json));
         return json;
       }
     } catch (error) {
@@ -174,7 +193,7 @@ export const useLoader = () => {
   const loadProperties = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/properties`,
+        `http://localhost:3600/api/properties`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -183,6 +202,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
         dispatch(setProperties(json));
         return json;
@@ -196,7 +217,7 @@ export const useLoader = () => {
   const loadLands = async () => {
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/lands`,
+        `http://localhost:3600/api/lands`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -205,6 +226,8 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
+      
+     
       if (response.ok) {
         dispatch(setLands(json));
         return json;

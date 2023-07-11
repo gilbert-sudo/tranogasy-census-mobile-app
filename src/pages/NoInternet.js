@@ -20,7 +20,7 @@ const NoInternetPage = () => {
             Aucune connexion Internet détectée. Veuillez vérifier votre
             connexion Internet et réessayer.
           </p>
-          <a href="#" className="btn btn-dark" onClick={refreshPage}>
+          <a href="/#" className="btn btn-dark" onClick={refreshPage}>
             <i className="refresh-icon fas fa-sync-alt"><FiRefreshCw /></i> Réessayer
           </a>
         </center>
