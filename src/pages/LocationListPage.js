@@ -7,7 +7,9 @@ import {
   setTotalPage,
   setNavbar,
   updateIsSearch,
-  updateSearchCurrentPage, setUser, setLoader
+  updateSearchCurrentPage,
+  setUser,
+  setLoader,
 } from "../redux/redux";
 import { Link } from "wouter";
 import { MdAddLocationAlt } from "react-icons/md";
@@ -24,7 +26,7 @@ const LocationListPage = () => {
   //set the total of the page
   if (searchResult) {
     dispatch(setTotalPage({ index: 2, subjectLength: searchResult.length }));
-  }  
+  }
   if (paginationIndex[0].currentPage[2] !== 1) {
     // scroll to top of the page
     const element = document.getElementById("prodisplay");
@@ -82,7 +84,15 @@ const LocationListPage = () => {
       setIsLoading(true);
       pageLoader();
     }
-  }, [loadLocations, locations,  navbar, setIsLoading, paginationIndex, dispatch, user]);
+  }, [
+    loadLocations,
+    locations,
+    navbar,
+    setIsLoading,
+    paginationIndex,
+    dispatch,
+    user,
+  ]);
   //handle the vabar visibility
 
   const handleInputFocus = () => {
@@ -95,25 +105,22 @@ const LocationListPage = () => {
       dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
     }
   };
+  console.log(searchResult);
   return (
     <>
-      {/* <meta charSet="utf-8" /> */}
-      {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
-      {/* <title>Snippet - BBBootstrap</title> */}
-      <link href="#" rel="stylesheet" />
       <style
         dangerouslySetInnerHTML={{
           __html:
-            "::-webkit-scrollbar {\n                                  width: 8px;\n                                }\n                                /* Track */\n                                ::-webkit-scrollbar-track {\n                                  background: #f1f1f1; \n                                }\n                                 \n                                /* Handle */\n                                ::-webkit-scrollbar-thumb {\n                                  background: #888; \n                                }\n                                \n                                /* Handle on hover */\n                                ::-webkit-scrollbar-thumb:hover {\n                                  background: #555; \n                                } body{\n    display:flex;\n    justify-content:center;\n    align-items:center;\n    background-color:#fff;\n}\n\n.wrapper{\n  margin-top:20px;\n margin-bottom:50px;\n}",
+            '::-webkit-scrollbar {\n                                  width: 8px;\n                                }\n                                /* Track */\n                                ::-webkit-scrollbar-track {\n                                  background: #f1f1f1; \n                                }\n                                 \n                                /* Handle */\n                                ::-webkit-scrollbar-thumb {\n                                  background: #888; \n                                }\n                                \n                                /* Handle on hover */\n                                ::-webkit-scrollbar-thumb:hover {\n                                  background: #555; \n                                } @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");\n\n\n   body{\n\n    background-color: #eeeff3;\n    font-family: "Poppins", sans-serif;\n    font-weight: 300;\n\n   }\n\n   .container{\n\n\n      display: flex;\n      align-items: center;\n      padding: 10px;\n\n   }\n\n\n   .card{\n\n      width: 100%;\n      \n      border-radius: 10px;  \n      border: none;\n\n   }\n\n   .top{\n\n      background-color: #eee;\n      padding: 10px;\n      padding-left: 20px;\n      border-top-right-radius: 10px;\n      border-top-left-radius: 10px;\n   }\n\n   .bottom{\n     \n     padding:10px;\n     background-color: #fff;\n     border-bottom-right-radius: 10px;\n      border-bottom-left-radius: 10px;\n\n   }\n\n   .image{\n      \n       position: relative;\n\n   }\n\n   .image .type{\n     \n        position: absolute;\n    left: 49px;\n    bottom: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    border-radius: 50%;\n\n   }\n\n   .line-height{\n\n        line-height: 20px;\n   }\n\n   .live{\n\n          height: 10px;\n    width: 10px;\n    border-radius: 50%;\n    background: green;\n    margin-left: 1px;\n    display: flex;\n    margin-right: 5px;\n\n\n   }\n\n   .l-now{\n\n    font-size: 12px;\n   }\n\n\n   .dots{\n     \n           height: 10px;\n   margin-left: 1px;\n    display: flex;\n    margin-right: 5px;\n\n   }',
         }}
       />
-      <div className="container mt-5 mb-5">
+      <div className="container mt-5">
         <div className="card">
-          <div className="">
+          <div className="bottom">
             <div class="d-flex mb-2">
               <input
                 className="form-control auto-input"
-                placeholder="🔍 addresse complet"
+                placeholder="🔍 Entrer une adresse"
                 id="owner-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
@@ -145,7 +152,7 @@ const LocationListPage = () => {
                 <h6>Aucun résultat trouvé</h6>
               </div>
             ) : (
-              <div className = "mb-5">
+              <div>
                 {searchResult &&
                   searchResult
                     .slice(
@@ -153,7 +160,7 @@ const LocationListPage = () => {
                       paginationIndex[1].endIndex[2]
                     )
                     .map((location) => (
-                      <LocationDetails key={location._id} location={location} />
+                      <LocationDetails key={location._id} location={location}/>
                     ))}
                 <hr></hr>
                 {searchResult && (
