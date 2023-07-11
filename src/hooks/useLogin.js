@@ -29,7 +29,7 @@ export const useLogin = () => {
       if (phoneNumber.length === 10 || phoneNumber.length === 9) {
         try {
           const response = await fetch(
-            `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/login`,
+            `http://localhost:3600/api/census-taker/login`,
             {
               method: "POST",
               headers: {
@@ -78,7 +78,7 @@ export const useLogin = () => {
 
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/connect/${facebookID}`,
+        `http://localhost:3600/api/census-taker/connect/${facebookID}`,
         {
           method: "POST",
           headers: {

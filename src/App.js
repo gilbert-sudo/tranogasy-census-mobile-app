@@ -26,7 +26,6 @@ import Navbar from "./components/Navbar";
 
 //redux
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 
 // returns the current hash location in a normalized form
 // (excluding the leading '#' symbol)
@@ -85,8 +84,7 @@ function App() {
                 {user && <OwnerListPage />}
               </Route>
               <Route path="/location-list">
-                {!user && <Redirect to="/login" />}
-                {user && <LocationListPage />}
+                <LocationListPage />
               </Route>
               <Route path="/Adding">
                 {!user && <Redirect to="/login" />}

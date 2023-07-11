@@ -80,7 +80,6 @@ const PropertyEditingPage = () => {
       const documentId = data.filter(
         (document) => document.name === inputValue
       );
-      console.log(inputValue, documentId);
       if(documentId && documentId.length){
         setMsgError(null);
         setBootstrap(null);
@@ -105,6 +104,7 @@ const PropertyEditingPage = () => {
     const city = getDocId("quarter-input", quartersName);
     // fetch the address
     const address = getDocId("address-input", locationsName);
+    console.log("the info is ", owner, address, city);
     var type = "sale";
     //get the property type
     if (disabledPriceInput) {
@@ -300,7 +300,7 @@ const PropertyEditingPage = () => {
                 id="bedrooms"
                 className="form-control"
                 value={bedrooms}
-                onChange={(e) => setBedrooms(parseInt(e.target.value.trim().replace(/\s+/g, " ").parseInt()))}
+                onChange={(e) => setBedrooms(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}
                 required="ON"
               />
             </div>

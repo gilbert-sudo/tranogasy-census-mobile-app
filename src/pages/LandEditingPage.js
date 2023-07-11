@@ -271,7 +271,7 @@ const PropertyEditingPage = () => {
           </div>
           <div className="form-group">
             <label htmlFor="area">
-              Surface habitable
+              Superficie
               <nb style={{ color: "blue" }}>
                 &nbsp; &nbsp; <small>(en m²)</small>
               </nb>
@@ -287,7 +287,7 @@ const PropertyEditingPage = () => {
                 id="area"
                 className="form-control"
                 value={area}
-                onChange={(e) => setArea(parseInt(e.target.value.trim().replace(/\s+/g, " ").parseInt()))}
+                onChange={(e) => setArea(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}
                 required="ON"
               />
             </div>

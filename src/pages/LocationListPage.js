@@ -3,11 +3,17 @@ import { useLoader } from "../hooks/useLoader";
 import LocationDetails from "../components/LocationDetails";
 import { useEffect, useState } from "react";
 import SquarePaging from "../components/SquarePaging";
-import { setTotalPage, setNavbar,updateIsSearch, updateSearchCurrentPage } from "../redux/redux";
+import {
+  setTotalPage,
+  setNavbar,
+  updateIsSearch,
+  updateSearchCurrentPage, setUser, setLoader
+} from "../redux/redux";
 import { Link } from "wouter";
 import { MdAddLocationAlt } from "react-icons/md";
 const LocationListPage = () => {
-  const { loadLocations} = useLoader();
+  const user = useSelector((state) => state.user);
+  const { loadLocations } = useLoader();
   const locations = useSelector((state) => state.location[0].locations);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
@@ -15,11 +21,10 @@ const LocationListPage = () => {
   const [searchResult, setSearchResult] = useState(locations);
   const navbar = useSelector((state) => state.navbar);
 
- 
   //set the total of the page
   if (searchResult) {
     dispatch(setTotalPage({ index: 2, subjectLength: searchResult.length }));
-  }
+  }  
   if (paginationIndex[0].currentPage[2] !== 1) {
     // scroll to top of the page
     const element = document.getElementById("prodisplay");
@@ -35,19 +40,19 @@ const LocationListPage = () => {
       return state.address.match(regex) || state.locationLink.match(regex);
     });
     if (searchText.length !== 0) {
-      dispatch(updateSearchCurrentPage({index: 2, newSearchCurrentPage: 1}));
-      dispatch(updateIsSearch({index: 2, isSearch:true}));
+      dispatch(updateSearchCurrentPage({ index: 2, newSearchCurrentPage: 1 }));
+      dispatch(updateIsSearch({ index: 2, isSearch: true }));
       setSearchResult(matches);
       dispatch(setTotalPage({ index: 2, subjectLength: matches.length }));
     }
     if (searchText.length === 0) {
-      dispatch(updateIsSearch({index: 2, isSearch:false}));
+      dispatch(updateIsSearch({ index: 2, isSearch: false }));
       setSearchResult(locations);
       dispatch(setTotalPage({ index: 2, subjectLength: locations.length }));
     }
     if (matches.length === 0) {
       setSearchResult(null);
-      dispatch(updateIsSearch({index: 2, isSearch:false}));
+      dispatch(updateIsSearch({ index: 2, isSearch: false }));
     }
     if (paginationIndex[0].currentPage[2] !== 1) {
       // scroll to top of the page
@@ -59,6 +64,13 @@ const LocationListPage = () => {
   };
 
   useEffect(() => {
+    if (!user) {
+      const localUser = JSON.parse(localStorage.getItem("user"));
+      if (localUser) {
+        dispatch(setUser(localUser.censusTaker));
+        dispatch(setLoader("done"));
+      }
+    }
     const pageLoader = async () => {
       const locationsPreLoad = await loadLocations();
       if (locationsPreLoad) {
@@ -70,19 +82,19 @@ const LocationListPage = () => {
       setIsLoading(true);
       pageLoader();
     }
-  }, [loadLocations, locations, setIsLoading, paginationIndex, dispatch]);
-     //handle the vabar visibility
+  }, [loadLocations, locations,  navbar, setIsLoading, paginationIndex, dispatch, user]);
+  //handle the vabar visibility
 
-     const handleInputFocus = () => {
-      if (navbar) {
-        dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
-      }
-    };
-    const handleBlur = () => {
-      if (!navbar) {
-        dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
-      }
-    };
+  const handleInputFocus = () => {
+    if (navbar) {
+      dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
+    }
+  };
+  const handleBlur = () => {
+    if (!navbar) {
+      dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
+    }
+  };
   return (
     <>
       {/* <meta charSet="utf-8" /> */}
@@ -95,7 +107,7 @@ const LocationListPage = () => {
             "::-webkit-scrollbar {\n                                  width: 8px;\n                                }\n                                /* Track */\n                                ::-webkit-scrollbar-track {\n                                  background: #f1f1f1; \n                                }\n                                 \n                                /* Handle */\n                                ::-webkit-scrollbar-thumb {\n                                  background: #888; \n                                }\n                                \n                                /* Handle on hover */\n                                ::-webkit-scrollbar-thumb:hover {\n                                  background: #555; \n                                } body{\n    display:flex;\n    justify-content:center;\n    align-items:center;\n    background-color:#fff;\n}\n\n.wrapper{\n  margin-top:20px;\n margin-bottom:50px;\n}",
         }}
       />
-       <div className="container mt-5">
+      <div className="container mt-5 mb-5">
         <div className="card">
           <div className="">
             <div class="d-flex mb-2">
@@ -111,7 +123,7 @@ const LocationListPage = () => {
               <Link to="/create-location">
                 <center>
                   <a
-                    href="#"
+                    href="/create-location"
                     style={{ height: "100%", paddingTop: "10px" }}
                     className="btn btn-primary"
                   >
@@ -133,7 +145,7 @@ const LocationListPage = () => {
                 <h6>Aucun résultat trouvé</h6>
               </div>
             ) : (
-              <div>
+              <div className = "mb-5">
                 {searchResult &&
                   searchResult
                     .slice(
@@ -141,13 +153,12 @@ const LocationListPage = () => {
                       paginationIndex[1].endIndex[2]
                     )
                     .map((location) => (
-                        <LocationDetails
-                        key={location._id}
-                        location={location}
-                      />
+                      <LocationDetails key={location._id} location={location} />
                     ))}
                 <hr></hr>
-                {searchResult && <SquarePaging index={2} linkKey = "/location-list"/>}
+                {searchResult && (
+                  <SquarePaging index={2} linkKey="/location-list" />
+                )}
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "wouter";
-import { FaUserPlus } from "react-icons/fa";
+import { BsMapFill } from "react-icons/bs";
 import PropertyDetails from "../components/PropertyDetails";
 import { useEffect, useState } from "react";
 import { useLoader } from "../hooks/useLoader";
@@ -13,8 +13,9 @@ import {
 const PropertyListPage = () => {
   const dispatch = useDispatch();
   const { loadLands, loadOwnersName, loadQuartersName } = useLoader();
-  const lands = useSelector((state) => state.lands);
-  const locationsName = useSelector((state) =>state.location[1].locationsName);
+  const globalLands= useSelector((state) => state.lands);
+  const censusTaker = useSelector((state) => state.user._id);
+  const lands = globalLands.filter((land)=> land.censusTaker._id === censusTaker);
   const ownersName = useSelector((state)=>state.owner[1].ownersName);
   const quartersName = useSelector((state) =>state.quarter[1].quartersName);
   const paginationIndex = useSelector((state) => state.pagination);
@@ -37,12 +38,7 @@ const PropertyListPage = () => {
     let matches = lands.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
-        state.owner.fullName.match(regex) ||
-        state.title.match(regex) ||
-        state.description.match(regex) ||
-        state.censusTaker.username.match(regex) ||
-        state.city.quarter.match(regex) ||
-        (state.location ? state.location.match(regex) : "")
+        state.landNumber.toString().match(regex)
       );
     });
     if (searchText.length !== 0) {
@@ -68,7 +64,6 @@ const PropertyListPage = () => {
       }
     }
   };
-
   useEffect(() => {
     const pageLoader = async () => {
       const landsPreload = await loadLands();
@@ -111,24 +106,23 @@ const PropertyListPage = () => {
             <div className="d-flex mb-2">
               <input
                 className="form-control auto-input"
-                placeholder="🔍 Entrer un mot clé"
+                placeholder="🔍 Entrer un numéro de maiso"
                 id="owner-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
               />
-              <Link to="/adding">
+              <Link to="/addingLandPage">
                 <center>
                   <a
-                    href="#"
+                    href="/addingLandPage"
                     style={{ height: "100%", paddingTop: "10px" }}
                     className="btn btn-primary"
                   >
-                    <FaUserPlus />
+                    <BsMapFill />
                   </a>
                 </center>
               </Link>
             </div>
-
             {isLoading && (
               <div className="mt-4 ml-3 d-flex justify-content-center">
                 <img

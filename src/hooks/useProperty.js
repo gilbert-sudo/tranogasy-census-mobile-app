@@ -1,5 +1,5 @@
 
-import useLocation from "wouter";
+import {useLocation} from "wouter";
 import { useState } from "react";
 import { pushProperty , pushLand, updateOneLandById, updateOnePropertyById} from "../redux/redux";
 import { useDispatch } from "react-redux";
@@ -60,7 +60,7 @@ export const useProperty = () => {
       description.trim().replace(/\s+/g, " ");
       try {
         const response = await fetch(
-          `https://vast-erin-monkey-cape.cyclic.app/api/properties`,
+          `http://localhost:3600/api/properties`,
           {
             method: "POST",
             headers: {
@@ -158,9 +158,8 @@ export const useProperty = () => {
       title.trim().replace(/\s+/g, " ");
       description.trim().replace(/\s+/g, " ");
       try {
-        console.log("the propertyId is ", propertyId);
         const response = await fetch(
-          `https://vast-erin-monkey-cape.cyclic.app/api/properties/`+propertyId,
+          `http://localhost:3600/api/properties/`+propertyId,
           {
             method: "PUT",
             headers: {
@@ -255,7 +254,7 @@ const addLand = async (
     description.trim().replace(/\s+/g, " ");
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/lands`,
+        `http://localhost:3600/api/lands`,
         {
           method: "POST",
           headers: {
@@ -348,7 +347,7 @@ const updateLand = async (
     description.trim().replace(/\s+/g, " ");
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/lands/`+landId,
+        `http://localhost:3600/api/lands/`+landId,
         {
           method: "PUT",
           headers: {

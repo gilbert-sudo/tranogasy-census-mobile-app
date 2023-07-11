@@ -246,7 +246,7 @@ const AddingLandPage = () => {
 
           <div className="form-group">
             <label htmlFor="area">
-              Surface habitable
+              Superficie 
               <nb style={{ color: "blue" }}>
                 &nbsp; &nbsp; <small>(en m²)</small>
               </nb>

@@ -7,7 +7,7 @@ export const useProfil = () => {
   const [msgError, setMsgError] = useState(null);
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetProfilInput, setResetProfilInput] = useState(false); // new state
-  const [location, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
   const dispatch = useDispatch();
   const updateProfilFullName = async (censusTakerId, fullName) => {
     setIsLoading(true);
@@ -28,7 +28,7 @@ export const useProfil = () => {
       });
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
+        `http://localhost:3600/api/census-taker/${censusTakerId}`,
         {
           method: "PUT",
           headers: {
@@ -91,7 +91,7 @@ export const useProfil = () => {
       if (phone.length === 10 || phone.length === 9) {
         try {
           const response = await fetch(
-            `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
+            `http://localhost:3600/api/census-taker/${censusTakerId}`,
             {
               method: "PUT",
               headers: {
@@ -154,7 +154,7 @@ export const useProfil = () => {
       });
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
+        `http://localhost:3600/api/census-taker/${censusTakerId}`,
         {
           method: "PUT",
           headers: {
@@ -232,7 +232,7 @@ export const useProfil = () => {
 
     try {
       const response = await fetch(
-        `https://vast-erin-monkey-cape.cyclic.app/api/census-taker/${censusTakerId}`,
+        `http://localhost:3600/api/census-taker/${censusTakerId}`,
         {
           method: "PUT",
           headers: {

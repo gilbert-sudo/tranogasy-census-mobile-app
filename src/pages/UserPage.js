@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { BiLogOutCircle } from "react-icons/bi";
-import { FaUserEdit,FaMailBulk } from "react-icons/fa";
+import { FaUserEdit } from "react-icons/fa";
+import { TbHelp } from "react-icons/tb";
 import { useLogout } from "../hooks/useLogout";
 import { useSelector } from "react-redux";
 const UserPage = () => {
@@ -84,6 +85,14 @@ const UserPage = () => {
                 </i>
               </li>
             </Link> */}
+             <Link to={`/aaa`}>
+              <li>
+                <i className="fas mr-3 ml-1">
+                  <TbHelp className="mr-2" style={{ fontSize: "20px" }} />
+                  A propos de l'application
+                </i>
+              </li>
+            </Link> 
             <li onClick={logout}>
               <i className="fas mr-3 ml-1" style={{ color: "#7cbd1e" }}>
                 <BiLogOutCircle className="mr-2" style={{ fontSize: "20px" }} />

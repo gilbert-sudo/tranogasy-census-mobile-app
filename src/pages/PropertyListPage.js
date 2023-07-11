@@ -1,7 +1,7 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "wouter";
-import { FaUserPlus } from "react-icons/fa";
+import { BsHouseAddFill } from "react-icons/bs";
 import PropertyDetails from "../components/PropertyDetails";
 import { useEffect, useState } from "react";
 import { useLoader } from "../hooks/useLoader";
@@ -16,7 +16,9 @@ import {
 const PropertyListPage = () => {
   const dispatch = useDispatch();
   const { loadProperties, loadLocationsName, loadOwnersName, loadQuartersName } = useLoader();
-  const properties = useSelector((state) => state.properties);
+  const globalProperties= useSelector((state) => state.properties);
+  const censusTaker = useSelector((state) => state.user._id);
+  const properties = globalProperties.filter((property)=> property.censusTaker._id === censusTaker);
   const locationsName = useSelector((state) =>state.location[1].locationsName);
   const ownersName = useSelector((state)=>state.owner[1].ownersName);
   const quartersName = useSelector((state) =>state.quarter[1].quartersName);
@@ -28,11 +30,7 @@ const PropertyListPage = () => {
     const matches = properties.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
-        state.owner.fullName.match(regex) ||
-        state.title.match(regex) ||
-        state.description.match(regex) ||
-        state.censusTaker.username.match(regex) ||
-        state.city.quarter.match(regex) ||
+        state.propertyNumber.toString().match(regex)   ||
         state.address.match(regex)
       );
     });
@@ -95,7 +93,6 @@ const PropertyListPage = () => {
     if (searchResult) {
       dispatch(setTotalPage({ index: 0, subjectLength: searchResult.length }));
     }
-
     if (paginationIndex[0].currentPage[0] !== 1) {
       const element = document.getElementById("prodisplay");
       if (element) {
@@ -127,7 +124,7 @@ const PropertyListPage = () => {
             <div className="d-flex mb-2">
               <input
                 className="form-control auto-input"
-                placeholder="🔍 Entrer un mot clé"
+                placeholder="🔍 addresse complète ou un numéro de maison "
                 id="owner-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
@@ -141,7 +138,7 @@ const PropertyListPage = () => {
                     style={{ height: "100%", paddingTop: "10px" }}
                     className="btn btn-primary"
                   >
-                    <FaUserPlus />
+                    <BsHouseAddFill/>
                   </a>
                 </center>
               </Link>

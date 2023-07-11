@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useProfil } from "../hooks/useProfil";
-import { Link, useRoute} from "wouter";
+import {useRoute} from "wouter";
 const FullNameUpdating = () => {
   const [fullName, setFullName] = useState("");
   const [isValidReset, setIsValidReset] = useState(false);

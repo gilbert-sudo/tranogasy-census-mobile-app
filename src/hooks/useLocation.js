@@ -28,7 +28,7 @@ export const useLocation = () => {
     }
         try {
           const response = await fetch(
-            "https://vast-erin-monkey-cape.cyclic.app/api/Location",
+            "http://localhost:3600/api/Location",
             {
               method: "POST",
               headers: {
@@ -82,7 +82,7 @@ export const useLocation = () => {
     const link = locationLink.replace(/\s/g, "");
     const address = inputedAddress.trim().replace(/\s{2,}/g, ' ');
         try {  const response = await fetch(
-          `https://vast-erin-monkey-cape.cyclic.app/api/Location/${locationId}`,
+          `http://localhost:3600/api/Location/${locationId}`,
             {
               method: "PUT",
               headers: {
@@ -127,6 +127,7 @@ export const useLocation = () => {
     bootstrapClassname,
     resetLocationInput,
     setMsgError,
-    setBootstrap
+    setBootstrap,
+    setResetLocationInput
   };
 };

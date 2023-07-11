@@ -177,7 +177,7 @@ const OwnerEditingPage = () => {
               className="form-control"
               value={phone1}
               onChange={(e) => {
-                let phone1 = e.target.value.replace(/\s/g, "");
+                let phone1 = e.target.value.trim().replace(/\s/g, "");
                 setPhone1(phone1);
               }}
               // required="ON"
@@ -191,12 +191,12 @@ const OwnerEditingPage = () => {
               <span className="input-group-text">+261</span>
             </div>
             <input
-              type="text"
+              type="number"
               id="phone"
               className="form-control"
               value={phone2}
               onChange={(e) => {
-                let phone2 = e.target.value.replace(/\s/g, "");
+                let phone2 = e.target.value.trim().replace(/\s/g, "");
                 setPhone2(phone2);
               }}
             />

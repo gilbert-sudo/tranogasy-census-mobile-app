@@ -1,5 +1,5 @@
 import { Link, useRoute } from "wouter";
-import { BiHome, BiUser, BiPlusCircle } from "react-icons/bi";
+import { BiTask, BiUser, BiPlusCircle } from "react-icons/bi";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { MdNotListedLocation } from "react-icons/md";
 
@@ -26,6 +26,7 @@ const ShowNavbar = (isActive) => {
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   const navbar = useSelector((state) => state.navbar);
+  console.log(navbar);
   return (
     <>
       {/*=============== HEADER ===============*/}
@@ -44,8 +45,8 @@ const Navbar = () => {
                       className="nav__link"
                       style={ActiveLink("/property", "/land", "/edit-property/:ownerId", "/edit-land/:landId") || ActiveLink("/land")}
                     >
-                      <BiHome className="nav__icon" />
-                      <span className="nav__name">Acceuil</span>
+                      <BiTask className="nav__icon" />
+                      <span className="nav__name">Article</span>
                     </Link>
                 </li>
 
@@ -56,7 +57,7 @@ const Navbar = () => {
                     style={ActiveLink("/owner-list", "/edit-owner/:ownerId")}
                   >
                     <HiOutlineUserGroup className="nav__icon" />
-                    <span className="nav__name">Propriétaire</span>
+                    <span className="nav__name">Proprio</span>
                   </Link>
                 </li>
 

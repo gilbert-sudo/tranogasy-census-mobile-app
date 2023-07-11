@@ -316,8 +316,9 @@ const locationSlice = createSlice({
       state[1].locationsName = [...action.payload]
     },
     addLocation: (state, action) => {
-      state[0].locations.push(action.payload);
-      state[1].locationsName = []
+      state[0].locations = [...state[0].locations, action.payload];
+      console.log("the update location state is", state[0].locations);
+      state[1].locationsName = [];
     },
     updateOneLocationById: (state, action) => {
       state[0].locations = state[0].locations.map((location) => {

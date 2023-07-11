@@ -125,7 +125,7 @@ const OwnerListPage = () => {
               <Link to="/create-owner">
                 <center>
                   <a
-                    href="#"
+                    href="/create-owner"
                     style={{ height: "100%", paddingTop: "10px" }}
                     className="btn btn-primary"
                   >
