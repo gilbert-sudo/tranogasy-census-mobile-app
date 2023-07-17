@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addOwner, updateOneOwnerById } from "../redux/redux";
+import { addOwner, updateOneOwnerById, deleteOneOwnerById} from "../redux/redux";
 import { useLocation } from "wouter";
+import Swal from "sweetalert2";
 export const useOwner = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [msgError, setMsgError] = useState(null);
@@ -235,15 +236,76 @@ export const useOwner = () => {
       setIsLoading(false);
     }
   };
+
+
+  const deleteOwner= async (ownerId) => {
+    setIsLoading(true);
+    Swal.fire({
+      text: "En êtes-vous sûr?",
+      showCancelButton: true,
+      confirmButtonText: '<span class="bold-text">OK</span>',
+      cancelButtonText: 'Annuler',
+      customClass: {
+        confirmButton: 'btn btn-secondary',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false,
+      didRender: () => {
+        const confirmButton = Swal.getConfirmButton();
+        // Set styles for the buttons
+        confirmButton.style.marginRight = '100px'; // Adjust the value as per your spacing requirements
+      }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(
+            `http://localhost:3600/api/owners/${ownerId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          );
+          const json = await response.json();
+  
+          if (response.ok) {
+            setBootstrap(null);
+            setMsgError(null);
+            setIsLoading(false);
+            dispatch(deleteOneOwnerById(ownerId));
+            // Show success message after deletion
+            Swal.fire(
+              'Supprimé!',
+              'Propriétaire supprimé avec succès',
+              'success'
+            );
+          }
+          if (!response.ok) {
+            setBootstrap("alert alert-danger");
+            setMsgError(json.message);
+            setIsLoading(false);
+          }
+        } catch (error) {
+          setIsLoading(false);
+          setLocation("/nosignal");
+          console.log(error);
+          return [];
+        }
+      }
+    })
+  };
+  
   return {
     createOwner,
     updateOwner,
+    deleteOwner,
     isLoading,
     msgError,
     bootstrapClassname,
     resetOwnerInput,
     setResetOwnerInput,
     setMsgError,
-    setBootstrap,
-  };
+    setBootstrap,}
 };

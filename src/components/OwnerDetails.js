@@ -1,9 +1,12 @@
 import { Link } from "wouter";
-import { FaUserEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
-const OwnerDetails = ({ owner }) => {
-  const date = new Date(owner.created_at);
+import { useOwner } from "../hooks/useOwner";
+
+const OwnerDetails = ({owner }) => {
   const censusTaker = useSelector((state) => state.user._id);
+  const {deleteOwner} = useOwner();
+  const date = new Date(owner.created_at);
   const formattedDate = `${date.getDate().toString().padStart(2, "0")}/${(
     date.getMonth() + 1
   )
@@ -12,9 +15,15 @@ const OwnerDetails = ({ owner }) => {
     .getHours()
     .toString()
     .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+    const handleClick = async () =>{
+      deleteOwner(owner._id)
+      }
   return (
-    <div id={owner._id} className="d-flex justify-content-between align-items-center border border-secondary py-2 border-right-0 border-bottom-0  border-left-0">
-      <div className="d-flex flex-row align-items-center">
+    <div id={owner._id} className="d-flex justify-content-between align-items-center border border-secondary py-2 border-left-0 border-right-0">
+      {censusTaker === owner.censusTaker._id?(<Link
+          to={!owner.used?`/edit-owner/${owner._id}`:null}
+        >
+  <div className="d-flex flex-row align-items-center ">
         <div className="image">
           <img src="https://i.imgur.com/vxEWOFl.png" alt="" width={40} />
         </div>
@@ -30,12 +39,16 @@ const OwnerDetails = ({ owner }) => {
           </span>
         </div>
       </div>
-      <div className="dots">
-        {censusTaker === owner.censusTaker._id?(<Link
-          to={`/edit-owner/${owner._id}`}
-        >
-          <FaUserEdit />
-        </Link>):null}
+      </Link>):null} 
+      <div>
+      {!owner.used && censusTaker === owner.censusTaker._id ? (
+               <button
+               onClick={handleClick}
+               className="btn btn-danger delete-button"
+             >
+               <FaTrash />
+             </button>
+        ) : null}
       </div>
     </div>
   );

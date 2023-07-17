@@ -5,11 +5,11 @@ import { updateCurrentPage, updateSearchCurrentPage} from "../redux/redux";
 const SquarePaging = (pagination) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.pagination);
-  const isSearch = state[0].isSearch[pagination.index];
+  let isSearch = state[0].isSearch[pagination.index];
   const totalPage = state[0].totalPage[pagination.index];
-  console.log("the total page is ", totalPage);
-  const currentPage = isSearch?state[0].searchCurrentPage[pagination.index]:state[0].currentPage[pagination.index];
- 
+ let currentPage = 1;
+  currentPage = isSearch?state[0].searchCurrentPage[pagination.index]:state[0].currentPage[pagination.index];
+  console.log("the total page is ", totalPage, currentPage, isSearch);
   const generatePageLinks = () => {
     const links = [];
     if (totalPage === 1) {

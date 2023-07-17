@@ -9,33 +9,31 @@ import {
   updateIsSearch,
   setTotalPage,
   updateSearchCurrentPage,
+  updateCurrentPage,
   setNavbar,
+  setOwnerSearchResult,
+
 } from "../redux/redux";
 
 const OwnerListPage = () => {
-  const { loadOwners, loadOwnersName, loadLocationsName} = useLoader();
+  const { loadOwners, loadOwnersName, loadProperties, loadLands, loadLocationsName} = useLoader();
   const locationsName = useSelector((state) =>state.location[1].locationsName);
   const ownersName = useSelector((state)=>state.owner[1].ownersName);
   const owners = useSelector((state) => state.owner[0].owners);
   const navbar = useSelector((state) => state.navbar);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
-  const [searchResult, setSearchResult] = useState(owners);
+  const searchResult = useSelector((state) => state.owner[2].searchResult);
+  const isSearch = paginationIndex[0].isSearch[1];
+  const totalPage = paginationIndex[0].totalPage[1];
+  const currentPage = paginationIndex[0].currentPage[1];
+  const searchResultCurrentPage = paginationIndex[0].searchCurrentPage[1];
   const [isLoading, setIsLoading] = useState(null);
   //set the total of the page
-  if (searchResult) {
-    dispatch(setTotalPage({ index: 1, subjectLength: searchResult.length }));
-  }
-  if (paginationIndex[0].currentPage[1] !== 1) {
-    // scroll to top of the page
-    const element = document.getElementById("prodisplay");
-    if (element) {
-      element.scrollIntoView();
-    }
-  }
   //search states and filter it
   const searchStates = async (searchText) => {
     //get matches to current text input
+    dispatch(updateIsSearch({ index: 1, isSearch: true }));
     let matches = owners.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
@@ -44,27 +42,18 @@ const OwnerListPage = () => {
         (state.phone2 ? state.phone2.match(regex) : "")
       );
     });
-    if (searchText.length !== 0) {
+    if (searchText.length !== 0 && matches.length !== 0) {
       dispatch(updateSearchCurrentPage({ index: 1, newSearchCurrentPage: 1 }));
-      dispatch(updateIsSearch({ index: 1, isSearch: true }));
-      setSearchResult(matches);
+      dispatch(setOwnerSearchResult(matches));
       dispatch(setTotalPage({ index: 1, subjectLength: matches.length }));
     }
-    if (searchText.length === 0) {
+    if (!searchText) {
       dispatch(updateIsSearch({ index: 1, isSearch: false }));
-      setSearchResult(owners);
+      dispatch(setOwnerSearchResult(null));
       dispatch(setTotalPage({ index: 1, subjectLength: owners.length }));
     }
-    if (matches.length === 0) {
-      setSearchResult(null);
-      dispatch(updateIsSearch({ index: 1, isSearch: false }));
-    }
-    if (paginationIndex[0].currentPage[1] !== 1) {
-      // scroll to top of the page
-      const element = document.getElementById("prodisplay");
-      if (element) {
-        element.scrollIntoView();
-      }
+    if (matches.length === 0 && isSearch && searchText.length !== 0) {
+      dispatch(setOwnerSearchResult(null));
     }
   };
 
@@ -75,7 +64,7 @@ const OwnerListPage = () => {
       dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
     }
   };
-  const handleBlur = () => {
+  const handleBlur = (e) => {
     if (!navbar) {
       dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
     }
@@ -84,23 +73,77 @@ const OwnerListPage = () => {
   useEffect(() => {
     const pageLoader = async () => {
       const ownersPreoad = await loadOwners();
-      if(locationsName.length <0 ){
+      if(locationsName.length ===0 ){
         await loadLocationsName();
       }
-      if(ownersName.length <0 ){
+      if(ownersName.length ===0 ){
         await loadOwnersName();
       }
       if (ownersPreoad) {
         setIsLoading(null);
       }
-      setSearchResult(ownersPreoad);
     };
-    if (!owners.length) {
+    if (!owners) {
       setIsLoading(true);
       pageLoader();
     }
-  }, [loadOwners, owners, paginationIndex, dispatch, ownersName, locationsName, loadLocationsName, loadOwnersName]);
-
+    if(owners  && owners.length >= 0){
+  setIsLoading(false)
+    }
+  }, [loadOwners, owners, loadProperties, loadLands, paginationIndex, dispatch, ownersName, locationsName, loadLocationsName, loadOwnersName]);
+  useEffect(() => {
+    if (searchResult) {
+      dispatch(setTotalPage({ index: 1, subjectLength: searchResult.length }));
+      if (totalPage !== 0) {
+        if (searchResultCurrentPage > totalPage) {
+          console.log("the total page uhgg is", totalPage);
+          console.log("totueiu", currentPage, totalPage);
+          dispatch(
+            updateSearchCurrentPage({
+              index: 1,
+              newSearchCurrentPage: totalPage,
+            })
+          );
+        }
+      }
+    }
+    if (!searchResult && owners && owners.length !== 0) {
+      console.log(owners.length);
+      dispatch(setTotalPage({ index: 1, subjectLength: owners.length }));
+      if (totalPage > 0) {
+        if (currentPage > totalPage) {
+          console.log("the total page uhgg is", totalPage);
+          console.log("totueiu", currentPage, totalPage);
+          dispatch(updateCurrentPage({ index: 1, newCurrentPage: totalPage }));
+        }
+      }
+    }
+    if (!isSearch) {
+      if (paginationIndex[0].currentPage[1] !== 1) {
+        const element = document.getElementById("prodisplay");
+        if (element) {
+          element.scrollIntoView();
+        }
+      }
+    }
+    if (isSearch) {
+      if (paginationIndex[0].searchCurrentPage[1] !== 1) {
+        const element = document.getElementById("prodisplay");
+        if (element) {
+          element.scrollIntoView();
+        }
+      }
+    }
+  }, [
+    dispatch,
+    searchResult,
+    searchResultCurrentPage,
+    totalPage,
+    currentPage,
+    paginationIndex,
+    owners,
+    isSearch
+  ])
   return (
     <>
       <style
@@ -116,11 +159,11 @@ const OwnerListPage = () => {
               <input
                 className="form-control auto-input"
                 placeholder="🔍 Nom ou téléphone complet"
-                id="owner-input"
+                id="search-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
                 onFocus={handleInputFocus}
-                onBlur={handleBlur}
+                onBlur={(e)=>handleBlur(e)}
               />
               <Link to="/create-owner">
                 <center>
@@ -142,27 +185,44 @@ const OwnerListPage = () => {
                 />
               </div>
             )}
-            {!searchResult ? (
+             {!searchResult && isSearch && (
               <div className="mt-4 ml-3">
                 <h6>Aucun résultat trouvé</h6>
               </div>
-            ) : (
-              <div>
-                {searchResult &&
-                  searchResult
-                    .slice(
-                      paginationIndex[1].startIndex[1],
-                      paginationIndex[1].endIndex[1]
-                    )
-                    .map((owner) => (
-                      <OwnerDetails key={owner._id} owner={owner} />
-                    ))}
-                <hr></hr>
-                {searchResult && (
-                  <SquarePaging index={1} linkKey="/owner-list" />
-                )}
-              </div>
             )}
+           <div>
+              {searchResult &&
+                isSearch &&
+                searchResult
+                  .slice(
+                    paginationIndex[1].startIndex[1],
+                    paginationIndex[1].endIndex[1]
+                  )
+                  .map((owner) => (
+                    <OwnerDetails key={owner._id} owner={owner} />
+                  ))}
+              <hr></hr>
+              {searchResult && isSearch && (
+                <SquarePaging index={1} linkKey="/owner-list" />
+              )}
+            </div>
+
+            <div>
+              {owners &&
+                !isSearch &&
+                owners
+                  .slice(
+                    paginationIndex[1].startIndex[1],
+                    paginationIndex[1].endIndex[1]
+                  )
+                  .map((owner) => (
+                    <OwnerDetails key={owner._id}   owner={owner} />
+                  ))}
+              <hr></hr>
+              {owners && !isSearch && (
+                <SquarePaging index={1} linkKey="/owner-list" />
+              )}
+            </div>
           </div>
         </div>
       </div>

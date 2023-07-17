@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 const AddingPage = () => {
   const dispatch = useDispatch();
-  const [disabledPriceInput, setDisabledPriceInput] = useState(false);
+  const [disabledPriceInput, setDisabledPriceInput] = useState(true);
   const { loadOwnersName, loadQuartersName, loadLocationsName } = useLoader();
   const {
     addProperty,
@@ -330,6 +330,7 @@ const AddingPage = () => {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
+                checked={disabledPriceInput?true:false}
                 onClick={(e) => {
                   setDisabledPriceInput(true);
                 }}
@@ -348,6 +349,7 @@ const AddingPage = () => {
                 onClick={(e) => {
                   setDisabledPriceInput(false);
                 }}
+                checked={disabledPriceInput?false:true}
                 defaultChecked=""
               />
               <label className="form-check-label" htmlFor="flexRadioDefault2">

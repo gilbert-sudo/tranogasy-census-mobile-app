@@ -18,7 +18,7 @@ const PropertyEditingPage = () => {
   const dispatch = useDispatch();
   const [match, params] = useRoute("/edit-land/:landId");
   const landId = match ? params.landId : null;
-  const lands = useSelector((state) => state.lands);
+  const lands = useSelector((state) => state.lands.lands);
   const property = lands.find((land) => land._id === landId);
   const [disabledPriceInput, setDisabledPriceInput] = useState(
     property.type === "rent" ? true : false

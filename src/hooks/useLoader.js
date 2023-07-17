@@ -9,11 +9,10 @@ import {
   setLocation as setLocationList,
   setQuartersName,
   setLocationsName,
-  setOwnersName
+  setOwnersName,
 } from "../redux/redux";
 
 export const useLoader = () => {
-  //redux
   const dispatch = useDispatch();
   const [location, setLocation] = useLocation();
 
@@ -30,7 +29,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
-     
+
       if (response.ok) {
         dispatch(setLikedPropreties(json));
       }
@@ -54,8 +53,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
-      
-      
+
       if (response.ok) {
         dispatch(setBooking(json));
       }
@@ -78,8 +76,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
-      
-     
+
       if (response.ok) {
         dispatch(setOwnersName(json));
         return json;
@@ -103,8 +100,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
-      
-      
+
       if (response.ok) {
         dispatch(setOwner(json));
         return json;
@@ -128,8 +124,7 @@ export const useLoader = () => {
         }
       );
       const json = await response.json();
-      
-     
+
       if (response.ok) {
         dispatch(setQuartersName(json));
         return json;
@@ -142,18 +137,14 @@ export const useLoader = () => {
   };
   const loadLocationsName = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3600/api/location/names`,
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "aplication/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3600/api/location/names`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "aplication/json",
+        },
+      });
       const json = await response.json();
-      
-      
+
       if (response.ok) {
         dispatch(setLocationsName(json));
         return json;
@@ -167,18 +158,14 @@ export const useLoader = () => {
 
   const loadLocations = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3600/api/location`,
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "aplication/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3600/api/location`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "aplication/json",
+        },
+      });
       const json = await response.json();
-      
-      
+
       if (response.ok) {
         dispatch(setLocationList(json));
         return json;
@@ -190,22 +177,23 @@ export const useLoader = () => {
     }
   };
 
-  const loadProperties = async () => {
+  const loadProperties = async (censusTaker) => {
     try {
-      const response = await fetch(
-        `http://localhost:3600/api/properties`,
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "aplication/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3600/api/properties`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "aplication/json",
+        },
+      });
       const json = await response.json();
-      
-     
+
       if (response.ok) {
-        dispatch(setProperties(json));
+        let properties = json.filter(
+          (property) =>
+            property.censusTaker._id === censusTaker &&
+            (property.status === "pending" || property.status === "canceled")
+        );
+        dispatch(setProperties(properties));
         return json;
       }
     } catch (error) {
@@ -214,22 +202,23 @@ export const useLoader = () => {
       setLocation("/nosignal");
     }
   };
-  const loadLands = async () => {
+  const loadLands = async (censusTaker) => {
     try {
-      const response = await fetch(
-        `http://localhost:3600/api/lands`,
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "aplication/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3600/api/lands`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "aplication/json",
+        },
+      });
       const json = await response.json();
-      
-     
+
       if (response.ok) {
-        dispatch(setLands(json));
+        let properties = json.filter(
+          (property) =>
+            property.censusTaker._id === censusTaker &&
+            (property.status === "pending" || property.status === "canceled")
+        );
+        dispatch(setLands(properties));
         return json;
       }
     } catch (error) {
