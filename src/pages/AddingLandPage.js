@@ -274,6 +274,7 @@ const AddingLandPage = () => {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
+                checked={disabledPriceInput?true:false}
                 onClick={(e) => {
                   setDisabledPriceInput(true);
                 }}
@@ -289,10 +290,11 @@ const AddingLandPage = () => {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault2"
+                checked={disabledPriceInput?false:true}
                 onClick={(e) => {
                   setDisabledPriceInput(false);
                 }}
-                defaultChecked=""
+                defaultChecked="flexRadioDefault2"
               />
               <label className="form-check-label" htmlFor="flexRadioDefault2">
                 Vente

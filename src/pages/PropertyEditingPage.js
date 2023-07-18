@@ -17,7 +17,7 @@ const PropertyEditingPage = () => {
   const dispatch = useDispatch();
   const [match, params] = useRoute("/edit-property/:propertyId");
   const propertyId = match ? params.propertyId : null;
-  const properties = useSelector((state) => state.properties);
+  const properties = useSelector((state) => state.properties.properties);
   const property = properties.find((property) => property._id === propertyId);
   const [disabledPriceInput, setDisabledPriceInput] = useState(
     property.type === "rent" ? true : false

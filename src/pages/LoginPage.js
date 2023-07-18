@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaLock, FaEyeSlash, FaEye, FaPhoneAlt } from "react-icons/fa";
 import { useLogin } from "../hooks/useLogin";
-
+import Swal from 'sweetalert2';
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -13,6 +13,19 @@ const LoginPage = () => {
     console.log(phoneNumber, password);
     login(phoneNumber, password);
   };
+  useEffect(()=>{
+    if(isLoading){
+       // Display the alert
+    Swal.fire({
+      title: "Chargement",
+      text: "S'il vous plaît, patientez...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    }
+  }, [isLoading])
 
   return (
     <>

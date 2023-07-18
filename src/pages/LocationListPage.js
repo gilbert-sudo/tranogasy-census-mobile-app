@@ -8,60 +8,47 @@ import {
   setNavbar,
   updateIsSearch,
   updateSearchCurrentPage,
+  setLocationSearchResult,
   setUser,
   setLoader,
+  updateCurrentPage
 } from "../redux/redux";
 import { Link } from "wouter";
 import { MdAddLocationAlt } from "react-icons/md";
 const LocationListPage = () => {
   const user = useSelector((state) => state.user);
-  const { loadLocations } = useLoader();
+  const { loadLocations, loadLands, loadProperties } = useLoader();
   const locations = useSelector((state) => state.location[0].locations);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResult, setSearchResult] = useState(locations);
+  const searchResult = useSelector((state) => state.location[2].searchResult);
+  const isSearch = paginationIndex[0].isSearch[2];
+  const totalPage = paginationIndex[0].totalPage[2];
+  const currentPage = paginationIndex[0].currentPage[2];
+  const searchResultCurrentPage = paginationIndex[0].searchCurrentPage[2];
   const navbar = useSelector((state) => state.navbar);
-
-  //set the total of the page
-  if (searchResult) {
-    dispatch(setTotalPage({ index: 2, subjectLength: searchResult.length }));
-  }
-  if (paginationIndex[0].currentPage[2] !== 1) {
-    // scroll to top of the page
-    const element = document.getElementById("prodisplay");
-    if (element) {
-      element.scrollIntoView();
-    }
-  }
   //search states and filter it
   const searchStates = async (searchText) => {
+    dispatch(updateIsSearch({ index: 2, isSearch: true }));
     //get matches to current text input
     let matches = locations.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return state.address.match(regex) || state.locationLink.match(regex);
     });
-    if (searchText.length !== 0) {
+    if (searchText.length !== 0 && matches.length !== 0) {
       dispatch(updateSearchCurrentPage({ index: 2, newSearchCurrentPage: 1 }));
-      dispatch(updateIsSearch({ index: 2, isSearch: true }));
-      setSearchResult(matches);
+      dispatch(setLocationSearchResult(matches));
       dispatch(setTotalPage({ index: 2, subjectLength: matches.length }));
     }
-    if (searchText.length === 0) {
+    if (!searchText) {
       dispatch(updateIsSearch({ index: 2, isSearch: false }));
-      setSearchResult(locations);
-      dispatch(setTotalPage({ index: 2, subjectLength: locations.length }));
+      dispatch(setLocationSearchResult(null));
+      dispatch(setTotalPage({ index: 2, subjectLength:locations.length }));
     }
-    if (matches.length === 0) {
-      setSearchResult(null);
-      dispatch(updateIsSearch({ index: 2, isSearch: false }));
-    }
-    if (paginationIndex[0].currentPage[2] !== 1) {
-      // scroll to top of the page
-      const element = document.getElementById("prodisplay");
-      if (element) {
-        element.scrollIntoView();
-      }
+
+    if (matches.length === 0 && isSearch && searchText.length !== 0) {
+      dispatch(setLocationSearchResult(null));
     }
   };
 
@@ -78,20 +65,72 @@ const LocationListPage = () => {
       if (locationsPreLoad) {
         setIsLoading(null);
       }
-      setSearchResult(locationsPreLoad);
     };
-    if (!locations.length) {
+    if (!locations) {
       setIsLoading(true);
       pageLoader();
     }
+    if(locations && locations.length >= 0){
+      setIsLoading(false)
+    }
   }, [
     loadLocations,
+    loadLands,
+    loadProperties,
     locations,
     navbar,
     setIsLoading,
     paginationIndex,
     dispatch,
     user,
+  ]);
+  useEffect(() => {
+    if (searchResult) {
+      dispatch(setTotalPage({ index: 2, subjectLength: searchResult.length }));
+      if (totalPage !== 0) {
+        if (searchResultCurrentPage > totalPage) {
+          dispatch(
+            updateSearchCurrentPage({
+              index: 2,
+              newSearchCurrentPage: totalPage,
+            })
+          );
+        }
+      }
+    }
+    if (!searchResult && locations && locations.length !== 0) {
+      dispatch(setTotalPage({ index: 2, subjectLength: locations.length }));
+      if (totalPage !== 0) {
+        if (currentPage > totalPage) {
+          dispatch(updateCurrentPage({ index: 2, newCurrentPage: totalPage }));
+        }
+      }
+    }
+    if (!isSearch) {
+      if (paginationIndex[0].currentPage[2] !== 1) {
+        const element = document.getElementById("prodisplay");
+        if (element) {
+          element.scrollIntoView();
+        }
+      }
+    }
+    if (isSearch) {
+      if (paginationIndex[0].searchCurrentPage[2] !== 1) {
+        const element = document.getElementById("prodisplay");
+        if (element) {
+          element.scrollIntoView();
+        }
+      }
+    }
+  }, [
+    dispatch,
+    searchResult,
+    searchResultCurrentPage,
+    totalPage,
+    currentPage,
+    paginationIndex,
+    locations,
+    isSearch
   ]);
   //handle the vabar visibility
 
@@ -105,7 +144,6 @@ const LocationListPage = () => {
       dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
     }
   };
-  console.log(searchResult);
   return (
     <>
       <style
@@ -121,7 +159,7 @@ const LocationListPage = () => {
               <input
                 className="form-control auto-input"
                 placeholder="🔍 Entrer une adresse"
-                id="owner-input"
+                id="search-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
                 onFocus={handleInputFocus}
@@ -147,27 +185,44 @@ const LocationListPage = () => {
                 />
               </div>
             )}
-            {!searchResult ? (
+           {!searchResult && isSearch && (
               <div className="mt-4 ml-3">
                 <h6>Aucun résultat trouvé</h6>
               </div>
-            ) : (
-              <div>
-                {searchResult &&
-                  searchResult
-                    .slice(
-                      paginationIndex[1].startIndex[2],
-                      paginationIndex[1].endIndex[2]
-                    )
-                    .map((location) => (
-                      <LocationDetails key={location._id} location={location}/>
-                    ))}
-                <hr></hr>
-                {searchResult && (
-                  <SquarePaging index={2} linkKey="/location-list" />
-                )}
-              </div>
             )}
+           <div>
+              {searchResult &&
+                isSearch &&
+                searchResult
+                  .slice(
+                    paginationIndex[1].startIndex[2],
+                    paginationIndex[1].endIndex[2]
+                  )
+                  .map((location) => (
+                    <LocationDetails key={location._id}  location={location} />
+                  ))}
+              <hr></hr>
+              {searchResult && isSearch && (
+                <SquarePaging index={2} linkKey="/location-list" />
+              )}
+            </div>
+
+            <div>
+              {locations &&
+                !isSearch &&
+                locations
+                  .slice(
+                    paginationIndex[1].startIndex[2],
+                    paginationIndex[1].endIndex[2]
+                  )
+                  .map((location) => (
+                    <LocationDetails key={location._id}  location={location} />
+                  ))}
+              <hr></hr>
+              {locations && !isSearch && (
+                <SquarePaging index={2} linkKey="/location-list" />
+              )}
+              </div>
           </div>
         </div>
       </div>

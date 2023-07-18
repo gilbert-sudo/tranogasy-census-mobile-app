@@ -58,10 +58,10 @@ export const { setGoogleLogin } = googleLoginSlice.actions;
 //owner slice
 const ownerSlice = createSlice({
   name: "owner",
-  initialState: [{owners:[]}, {ownersName:[]}],
+  initialState: [{owners:null}, {ownersName:[]}, {searchResult:null}],
   reducers: {
     setOwner: (state, action) => {
-       state[0].owners = [...action.payload];
+       state[0].owners = action.payload;
     },
     setOwnersName: (state, action) => {
       state[1].ownersName = [...action.payload];
@@ -69,6 +69,17 @@ const ownerSlice = createSlice({
     addOwner: (state, action) => {
       state[0].owners.push(action.payload);
       state[1].ownersName = []
+    },
+    setOwnerSearchResult: (state, action) =>{
+    state[2].searchResult = action.payload
+    },
+    deleteOneOwnerById: (state, action) =>{
+      if(state[0].owners.length){
+        state[0].owners = state[0].owners.filter((property) => property._id !== action.payload);
+      }
+     if(state[2].searchResult){
+      state[2].searchResult = state[2].searchResult.filter((property) => property._id !== action.payload);
+     }
     },
     updateOneOwnerById: (state, action) => {
       state[0].owners = state[0].owners.map((owner) => {
@@ -89,7 +100,7 @@ const ownerSlice = createSlice({
     },
   },
 });
-export const { setOwner, setOwnersName, addOwner, updateOneOwnerById } = ownerSlice.actions;
+export const { setOwner, setOwnerSearchResult,  setOwnersName, addOwner,deleteOneOwnerById, updateOneOwnerById } = ownerSlice.actions;
 //paginnations
 const paginationSlice = createSlice({
   name: "pagination",
@@ -175,13 +186,24 @@ export const { setTopProperties } = topPropertiesSlice.actions;
 
 const landSlice = createSlice({
   name: "lands",
-  initialState: [],
+  initialState: {lands:null, searchResult: null},
   reducers: {
     pushLand: (state, action) => {
-      state.push(action.payload);
+      state.lands.push(action.payload);
     },
     setLands: (state, action) => {
-      return action.payload;
+      state.lands = action.payload;
+    },
+    setLandsSearchResult: (state, action) =>{
+      state.searchResult = action.payload;
+    },
+    deleteOneLandById: (state, action) =>{
+      if(state.lands.length){
+        state.lands = state.lands.filter((property) => property._id !== action.payload);
+      }
+     if(state.searchResult){
+      state.searchResult = state.searchResult.filter((property) => property._id !== action.payload);
+     }
     },
     updateOneLandById: (state, action) => {
       return state.map((land) => {
@@ -214,19 +236,30 @@ const landSlice = createSlice({
   },
 });
 
-export const { pushLand, setLands, updateOneLandById } = landSlice.actions;
+export const { pushLand, setLands, setLandsSearchResult, deleteOneLandById, updateOneLandById } = landSlice.actions;
 
 
 //properties
 const propertiesSlice = createSlice({
   name: "properties",
-  initialState: [],
+  initialState: {properties:null, searchResult:null},
   reducers: {
     pushProperty: (state, action) => {
-      state.push(action.payload);
+      state.properties.push(action.payload);
+    },
+    setSearchResult: (state, action) =>{
+      state.searchResult = action.payload
     },
     setProperties: (state, action) => {
-      return action.payload;
+      state.properties = action.payload;
+    },
+    deleteOnePropertyById: (state, action) =>{
+      if(state.properties.length){
+        state.properties = state.properties.filter((property) => property._id !== action.payload);
+      }
+     if(state.searchResult){
+      state.searchResult = state.searchResult.filter((property) => property._id !== action.payload);
+     }
     },
     updateOnePropertyById: (state, action) => {
       return state.map((property) => {
@@ -260,7 +293,7 @@ const propertiesSlice = createSlice({
   },
 });
 
-export const { pushProperty, setProperties, updateOnePropertyById } =
+export const { pushProperty, setSearchResult, setProperties,deleteOnePropertyById, updateOnePropertyById } =
   propertiesSlice.actions;
 
 //liked properties
@@ -307,18 +340,29 @@ export const { setBooking, addBooking, deleteBooking } = bookingSlice.actions;
 //owner slice
 const locationSlice = createSlice({
   name: "location",
-  initialState: [{locations:[]}, {locationsName: []}],
+  initialState: [{locations:null}, {locationsName: []}, {searchResult: null}],
   reducers: {
     setLocation: (state, action) => {
-     state[0].locations = [...action.payload];
+     state[0].locations = action.payload;
     },
     setLocationsName:(state, action) =>{
       state[1].locationsName = [...action.payload]
     },
+    setLocationSearchResult: (state, action) =>{
+      state[2].searchResult = action.payload
+      },
     addLocation: (state, action) => {
       state[0].locations = [...state[0].locations, action.payload];
       console.log("the update location state is", state[0].locations);
       state[1].locationsName = [];
+    },
+    deleteOneLocationById: (state, action) =>{
+      if(state[0].locations.length){
+        state[0].locations = state[0].locations.filter((location) => location._id !== action.payload);
+      }
+     if(state[2].searchResult){
+      state[2].searchResult = state[2].searchResult.filter((location) => location._id !== action.payload);
+     }
     },
     updateOneLocationById: (state, action) => {
       state[0].locations = state[0].locations.map((location) => {
@@ -335,7 +379,7 @@ const locationSlice = createSlice({
     },
   },
 });
-export const { setLocation, setLocationsName, addLocation, updateOneLocationById } =
+export const { setLocation, setLocationsName,setLocationSearchResult, addLocation,deleteOneLocationById, updateOneLocationById } =
   locationSlice.actions;
 
   

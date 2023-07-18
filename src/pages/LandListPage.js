@@ -8,32 +8,29 @@ import SquarePaging from "../components/SquarePaging";
 import {
   updateIsSearch,
   setTotalPage,
+  setNavbar,
   updateSearchCurrentPage,
+  updateCurrentPage,
+  setLandsSearchResult
 } from "../redux/redux";
-const PropertyListPage = () => {
+const LandListPage = () => {
   const dispatch = useDispatch();
+  const navbar = useSelector((state) => state.navbar);
   const { loadLands, loadOwnersName, loadQuartersName } = useLoader();
-  const globalLands= useSelector((state) => state.lands);
-  const censusTaker = useSelector((state) => state.user._id);
-  const lands = globalLands.filter((land)=> land.censusTaker._id === censusTaker);
+  const censusTaker = useSelector((state) =>state.user._id);
+  const lands= useSelector((state) => state.lands.lands);
   const ownersName = useSelector((state)=>state.owner[1].ownersName);
   const quartersName = useSelector((state) =>state.quarter[1].quartersName);
   const paginationIndex = useSelector((state) => state.pagination);
-  const [searchResult, setSearchResult] = useState(lands);
   const [isLoading, setIsLoading] = useState(null);
-  //set the total of the page
-  if (searchResult) {
-    dispatch(setTotalPage({ index: 3, subjectLength: searchResult.length }));
-  }
-  if (paginationIndex[0].currentPage[3] !== 1) {
-    // scroll to top of the page
-    const element = document.getElementById("prodisplay");
-    if (element) {
-      element.scrollIntoView();
-    }
-  }
+  const searchResult = useSelector((state) => state.lands.searchResult);
+  const isSearch =paginationIndex[0].isSearch[3];
+  const totalPage = paginationIndex[0].totalPage[3];
+  const currentPage = paginationIndex[0].currentPage[3];
+  const searchResultCurrentPage = paginationIndex[0].searchCurrentPage[3];
   //search states and filter it
   const searchStates = async (searchText) => {
+    dispatch(updateIsSearch({ index: 3, isSearch: true }));
     //get matches to current text input
     let matches = lands.filter((state) => {
       const regex = new RegExp(`^${searchText}`, "gi");
@@ -41,48 +38,82 @@ const PropertyListPage = () => {
         state.landNumber.toString().match(regex)
       );
     });
-    if (searchText.length !== 0) {
+    if (searchText.length !== 0 && matches.length !== 0) {
       dispatch(updateSearchCurrentPage({ index: 3, newSearchCurrentPage: 1 }));
-      dispatch(updateIsSearch({ index: 3, isSearch: true }));
-      setSearchResult(matches);
+     dispatch(setLandsSearchResult(matches));
       dispatch(setTotalPage({ index: 3, subjectLength: matches.length }));
     }
-    if (searchText.length === 0) {
+    if (!searchText) {
       dispatch(updateIsSearch({ index: 3, isSearch: false }));
-      setSearchResult(lands);
+      dispatch(setLandsSearchResult(null));
       dispatch(setTotalPage({ index: 3, subjectLength: lands.length }));
     }
-    if (matches.length === 0) {
-      setSearchResult(null);
-      dispatch(updateIsSearch({ index: 3, isSearch: false }));
-    }
-    if (paginationIndex[0].currentPage[3] !== 1) {
-      // scroll to top of the page
-      const element = document.getElementById("prodisplay");
-      if (element) {
-        element.scrollIntoView();
-      }
+    if (matches.length === 0 && isSearch && searchText.length !== 0) {
+      dispatch(setLandsSearchResult(null))
     }
   };
   useEffect(() => {
     const pageLoader = async () => {
-      const landsPreload = await loadLands();
+      const landsPreload = await loadLands(censusTaker);
       if (landsPreload) {
         setIsLoading(null);
       }
-      setSearchResult(landsPreload);
-      if(ownersName.length <0 ){
+      if(ownersName.length === 0 ){
         await loadOwnersName();
       }
-      if(quartersName.length <0 ){
+      if(quartersName.length  === 0 ){
         await loadQuartersName();
       }
     };
-    if (!lands.length) {
+    if (!lands && censusTaker) {
       setIsLoading(true);
       pageLoader();
     }
-  }, [loadLands, lands, paginationIndex, dispatch, ownersName, quartersName, loadQuartersName, loadOwnersName]);
+      if(lands && lands.length >= 0){
+        setIsLoading(false);
+      }
+  }, [censusTaker, loadLands, lands, paginationIndex, dispatch, ownersName, quartersName, loadQuartersName, loadOwnersName]);
+  
+  const handleInputFocus = () => {
+    if (navbar) {
+      dispatch(setNavbar(false)); // Hide the div when input is focused and it's currently visible
+    }
+  };
+  const handleBlur = (e) => {
+    if (!navbar) {
+      dispatch(setNavbar(true)); // show the div when input is focused and it's currently visible
+    }
+  };
+  useEffect(() => {
+    if (searchResult) {
+      dispatch(setTotalPage({ index: 3, subjectLength: searchResult.length }));
+      if(totalPage !== 0){
+      if(searchResultCurrentPage > totalPage){
+        dispatch(updateSearchCurrentPage({index: 3, newSearchCurrentPage:totalPage}));
+      }}
+    }
+    if(!searchResult && lands && lands.length !== 0){
+      dispatch(setTotalPage({index: 3, subjectLength: lands.length}));
+      if(totalPage !== 0){
+      if(currentPage > totalPage){
+        dispatch(updateCurrentPage({index: 3, newCurrentPage:totalPage}));
+      }
+    }}
+    if(!isSearch){
+    if (paginationIndex[0].currentPage[3] !== 1) {
+      const element = document.getElementById("prodisplay");
+      if (element) {
+        element.scrollIntoView();
+      }
+    }}
+    if(isSearch){
+      if (paginationIndex[0].searchCurrentPage[3] !== 1) {
+        const element = document.getElementById("prodisplay");
+        if (element) {
+          element.scrollIntoView();
+        }}
+    }
+  }, [dispatch, searchResult, isSearch, searchResultCurrentPage, totalPage, currentPage, paginationIndex, lands]);
   return (
     <>
       <style
@@ -106,10 +137,12 @@ const PropertyListPage = () => {
             <div className="d-flex mb-2">
               <input
                 className="form-control auto-input"
-                placeholder="🔍 Entrer un numéro de maiso"
-                id="owner-input"
+                placeholder="🔍 Entrer un numéro de terrain"
+                id="search-input"
                 style={{ width: "100%" }} // add style prop
                 onInput={(e) => searchStates(e.target.value)}
+                onFocus={handleInputFocus}
+                onBlur={(e)=>handleBlur(e)}
               />
               <Link to="/addingLandPage">
                 <center>
@@ -131,34 +164,57 @@ const PropertyListPage = () => {
                 />
               </div>
             )}
-            {!searchResult ? (
+            {!searchResult && isSearch && (
               <div className="mt-4 ml-3">
                 <h6>Aucun résultat trouvé</h6>
               </div>
-            ) : (
-              <div>
-                {searchResult &&
-                  searchResult
-                    .slice(
-                      paginationIndex[1].startIndex[3],
-                      paginationIndex[1].endIndex[3]
-                    )
-                    .map((property) => (
-                      <PropertyDetails
-                        key={property._id}
-                        property={property}
-                        type="land"
-                      />
-                    ))}
-                <hr></hr>
-                {searchResult && <SquarePaging index={3} linkKey="/land" />}
-              </div>
             )}
+           <div>
+              {searchResult &&
+                isSearch &&
+                searchResult
+                  .slice(
+                    paginationIndex[1].startIndex[3],
+                    paginationIndex[1].endIndex[3]
+                  )
+                  .map((property) => (
+                    <PropertyDetails
+                      key={property._id}
+                      property={property}
+                      type="lands"
+                    />
+                  ))}
+              <hr></hr>
+              {searchResult && isSearch && (
+                <SquarePaging index={3} linkKey="/property" />
+              )}
+            </div>
+
+            <div>
+              {lands &&
+                !isSearch &&
+                lands
+                  .slice(
+                    paginationIndex[1].startIndex[3],
+                    paginationIndex[1].endIndex[3]
+                  )
+                  .map((property) => (
+                    <PropertyDetails
+                      key={property._id}
+                      property={property}
+                      type="lands"
+                    />
+                  ))}
+              <hr></hr>
+              {lands && !isSearch && (
+                <SquarePaging index={3} linkKey="/land" />
+              )}
+            </div>
+          </div>
           </div>
         </div>
-      </div>
     </>
   );
 };
 
-export default PropertyListPage;
+export default LandListPage;

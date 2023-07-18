@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/redux";
 import { useLocation } from "wouter";
-
+import Swal from "sweetalert2";
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -54,13 +54,12 @@ export const useLogin = () => {
             setError("Vous vous êtes connecté(e) maintenant!");
             localStorage.setItem("user", JSON.stringify(json));
             setIsLoading(false);
+            Swal.close();
             setClient(json.censusTaker);
             setLocation("/property");
             console.log(location);
           }
         } catch (error) {
-          setBootstrap("alert alert-danger");
-          setError("Une erreur s'est produite lors de l'envoi du message.");
           setIsLoading(false);
           setLocation("/nosignal");
         }

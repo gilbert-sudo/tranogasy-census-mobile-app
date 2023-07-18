@@ -54,7 +54,7 @@ const LocationCreationPage = () => {
   return (
     <div className="bg-white widget border mt-5 rounded">
       <h3 className="h4 text-black widget-title mb-3">
-        Inserer un nouveau location
+        Ajouter un nouveau location
       </h3>
       <form action="" className="form-contact-agent" onSubmit={handleSubmit}>
         <div className="form-group">
