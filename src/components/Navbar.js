@@ -4,8 +4,8 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { MdNotListedLocation } from "react-icons/md";
 
 //redux store
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setTotalPage,setLandsSearchResult, setLocationSearchResult, setSearchResult, setOwnerSearchResult, updateIsSearch } from "../redux/redux";
 /**
  * `Utility components
  */
@@ -26,7 +26,46 @@ const ShowNavbar = (isActive) => {
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   const navbar = useSelector((state) => state.navbar);
-  console.log(navbar);
+  const dispatch = useDispatch();
+  const locationSearchResult =  useSelector((state)  => state.location[2].searchResult);
+  const landsSearchResult = useSelector((state)  => state.lands.searchResult);
+  const houseSearchResult  = useSelector((state)=> state.properties.searchResult);
+  const ownerSearchResult = useSelector((state) => state.owner[2].searchResult);
+  const pagination = useSelector((state) =>state.pagination);
+  const isOwnerSearch = pagination[0].isSearch[1];
+  const isLandSearch = pagination[0].isSearch[3];
+  const isHouseSearch = pagination[0].isSearch[0];
+  const isLocationSearch = pagination[0].isSearch[2];
+  const owners = useSelector((state) => state.owner[0].owners);
+  const locations = useSelector((state) => state.location[0].locations);
+  const properties = useSelector((state) => state.properties.properties);
+  const lands= useSelector((state) => state.lands.lands);
+  const handleClick = async () => {
+    const searchInput = document.getElementById("search-input");
+    if(searchInput !== null){
+      searchInput.value = "";
+    }
+    if(locationSearchResult && isLocationSearch){
+    dispatch(setLocationSearchResult(null));
+    dispatch(updateIsSearch({index:2, isSearch:false}));
+    dispatch(setTotalPage({ index: 2, subjectLength: locations.length }));
+  }
+  if(ownerSearchResult && isOwnerSearch){
+    dispatch(setOwnerSearchResult(null));
+    dispatch(updateIsSearch({index:1, isSearch:false}));
+    dispatch(setTotalPage({ index: 1, subjectLength: owners.length }));
+  }
+  if(landsSearchResult && isLandSearch){
+    dispatch(setLandsSearchResult(null));
+    dispatch(updateIsSearch({index:3, isSearch:false}));
+    dispatch(setTotalPage({ index: 3, subjectLength: lands.length }));
+  }
+  if(houseSearchResult && isHouseSearch){
+    dispatch(setSearchResult(null));
+    dispatch(updateIsSearch({index:0, isSearch:false}))
+    dispatch(setTotalPage({ index: 0, subjectLength: properties.length }));
+    console.log("the total page uhgg is", properties);
+  }}
   return (
     <>
       {/*=============== HEADER ===============*/}
@@ -39,7 +78,7 @@ const Navbar = () => {
             </Link>
             <div className="nav__menu" id="nav-menu" style={ShowNavbar(navbar)}>
               <ul className="nav__list">
-                <li className="nav__item mt-3">
+                <li className="nav__item mt-3" onClick={handleClick}>
                     <Link
                       to="/property"
                       className="nav__link"
@@ -50,7 +89,7 @@ const Navbar = () => {
                     </Link>
                 </li>
 
-                <li className="nav__item mt-3">
+                <li className="nav__item mt-3"  onClick={handleClick}>
                   <Link
                     to="/owner-list"
                     className="nav__link"
@@ -61,7 +100,7 @@ const Navbar = () => {
                   </Link>
                 </li>
 
-                <li className="nav__item mt-3">
+                <li className="nav__item mt-3"  onClick={handleClick}>
                   <Link
                     to="/adding"
                     className="nav__link"
@@ -71,7 +110,7 @@ const Navbar = () => {
                     <span className="nav__name">Ajouter</span>
                   </Link>
                 </li>
-                <li className="nav__item mt-3">
+                <li className="nav__item mt-3"  onClick={handleClick}>
                   <Link
                     to="/location-list"
                     className="nav__link"
@@ -81,7 +120,7 @@ const Navbar = () => {
                     <span className="nav__name">Location</span>
                   </Link>
                 </li>
-                <li className="nav__item mt-3">
+                <li className="nav__item mt-3"  onClick={handleClick}>
                   {user && (
                     <Link
                       to="/user"

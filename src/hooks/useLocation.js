@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addLocation, updateOneLocationById } from "../redux/redux";
+import { addLocation, deleteOneLocationById, updateOneLocationById } from "../redux/redux";
 import { useLocation as useLocationFromWouter} from "wouter";
+import Swal from "sweetalert2";
 export const useLocation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [msgError, setMsgError] = useState(null);
-  const [setLocation] = useLocationFromWouter();
+  const [,setLocation] = useLocationFromWouter();
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetLocationInput, setResetLocationInput] = useState(false); // new state
   const censusTaker = useSelector((state) => state.user._id);
@@ -119,9 +120,70 @@ export const useLocation = () => {
           return [];
         }
   };
+
+  
+  const deleteLocation= async (locationId) => {
+    setIsLoading(true);
+    Swal.fire({
+      text: "En êtes-vous sûr?",
+      showCancelButton: true,
+      confirmButtonText: '<span class="bold-text">OK</span>',
+      cancelButtonText: 'Annuler',
+      customClass: {
+        confirmButton: 'btn btn-secondary',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false,
+      didRender: () => {
+        const confirmButton = Swal.getConfirmButton();
+        // Set styles for the buttons
+        confirmButton.style.marginRight = '100px'; // Adjust the value as per your spacing requirements
+      }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(
+            `http://localhost:3600/api/location/${locationId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          );
+          const json = await response.json();
+  
+          if (response.ok) {
+            setBootstrap(null);
+            setMsgError(null);
+            setIsLoading(false);
+            dispatch(deleteOneLocationById(locationId));
+            // Show success message after deletion
+            Swal.fire(
+              'Supprimé!',
+              'location supprimé avec succès',
+              'success'
+            );
+          }
+          if (!response.ok) {
+            setBootstrap("alert alert-danger");
+            setMsgError(json.message);
+            setIsLoading(false);
+          }
+        } catch (error) {
+          setIsLoading(false);
+          setLocation("/nosignal");
+          console.log(error);
+          return [];
+        }
+      }
+    })
+  };
   return {
     createLocation,
     updateLocation,
+    deleteLocation,
     isLoading,
     msgError,
     bootstrapClassname,
