@@ -16,7 +16,7 @@ export const useProperty = () => {
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetPropertyInput, setResetPropertyInput] = useState(false);
   const dispatch = useDispatch();
-  const [setLocation] = useLocation();
+  const [,setLocation] = useLocation();
   // const censusTaker = useSelector((state) => state.user._id);
   //add house function
   const addProperty = async (
@@ -97,7 +97,6 @@ export const useProperty = () => {
           setIsLoading(false);
           setResetPropertyInput(true);
           dispatch(pushProperty(json));
-          console.log("the pushed is ", json);
         }
         if (!response.ok) {
           setBootstrap("alert alert-danger");
@@ -169,7 +168,7 @@ export const useProperty = () => {
               area,
               type,
               owner,
-              censusTaker,
+              censusTaker
             }),
           }
         );
@@ -248,11 +247,13 @@ export const useProperty = () => {
             setBootstrap("alert alert-danger");
             setMsgError(json.message);
             setIsLoading(false);
+            Swal.close();
           }
         } catch (error) {
           setIsLoading(false);
           setLocation("/nosignal");
           console.log(error);
+          Swal.close();
           return [];
         }
       }
@@ -362,11 +363,13 @@ export const useProperty = () => {
           setBootstrap("alert alert-danger");
           setMsgError(json.message);
           setIsLoading(false);
+          Swal.close();
         }
       } catch (error) {
         setIsLoading(false);
         setLocation("/nosignal");
         console.log(error);
+        Swal.close();
         return [];
       }
     }
@@ -454,11 +457,13 @@ export const useProperty = () => {
           setBootstrap("alert alert-danger");
           setMsgError(json.message);
           setIsLoading(false);
+          Swal.close();
         }
       } catch (error) {
         setIsLoading(false);
         setLocation("/nosignal");
         console.log(error);
+        Swal.close();
         return [];
       }
     }

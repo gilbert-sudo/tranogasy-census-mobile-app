@@ -116,11 +116,11 @@ const AddingPage = () => {
 
   useEffect(() => {
     const pageLoader = async () => {
-      if (!ownersName.length) {
+      if (ownersName.length===0) {
         await loadOwnersName();
-      } else if (!quartersName.length) {
+      } else if (quartersName.length===0) {
         await loadQuartersName();
-      } else if (!locationsName.length) {
+      } else if (locationsName.length===0) {
         await loadLocationsName();
       }
     };
@@ -324,39 +324,37 @@ const AddingPage = () => {
             </div>
           </div>
           <div className="form-group">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault"
-                id="flexRadioDefault1"
-                checked={disabledPriceInput?true:false}
-                onClick={(e) => {
-                  setDisabledPriceInput(true);
-                }}
-              />
-
-              <label className="form-check-label" htmlFor="flexRadioDefault1">
-                Location
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault"
-                id="flexRadioDefault2"
-                onClick={(e) => {
-                  setDisabledPriceInput(false);
-                }}
-                checked={disabledPriceInput?false:true}
-                defaultChecked=""
-              />
-              <label className="form-check-label" htmlFor="flexRadioDefault2">
-                Vente
-              </label>
-            </div>
-          </div>
+  <div className="form-check">
+    <input
+      className="form-check-input"
+      type="radio"
+      name="flexRadioDefault"
+      id="flexRadioDefault1"
+      checked={disabledPriceInput} // Check the state value directly
+      onClick={() => {
+        setDisabledPriceInput(true);
+      }}
+    />
+    <label className="form-check-label" htmlFor="flexRadioDefault1">
+      Location
+    </label>
+  </div>
+  <div className="form-check">
+    <input
+      className="form-check-input"
+      type="radio"
+      name="flexRadioDefault"
+      id="flexRadioDefault2"
+      checked={!disabledPriceInput} // Check the opposite of the state value
+      onClick={() => {
+        setDisabledPriceInput(false);
+      }}
+    />
+    <label className="form-check-label" htmlFor="flexRadioDefault2">
+      Vente
+    </label>
+  </div>
+</div>
           {!disabledPriceInput ? (
             <div className="form-group">
               <label htmlFor="price">

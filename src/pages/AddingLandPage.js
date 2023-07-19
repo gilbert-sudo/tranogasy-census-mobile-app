@@ -107,9 +107,9 @@ const AddingLandPage = () => {
 
   useEffect(() => {
     const pageLoader = async () => {
-      if (!ownersName.length) {
+      if (ownersName.length === 0) {
       await loadOwnersName();
-      } else if (!quartersName.length) {
+      } else if (quartersName.length === 0) {
       await loadQuartersName();
       } 
     };

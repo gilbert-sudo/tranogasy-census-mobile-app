@@ -10,7 +10,6 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(phoneNumber, password);
     login(phoneNumber, password);
   };
   useEffect(()=>{

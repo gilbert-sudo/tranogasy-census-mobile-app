@@ -37,8 +37,8 @@ const LocationDetails = ({ location}) => {
         >
           <strong className="mb-1">{location.address}</strong>{" "}
         </div>
-        {censusTaker === location.censusTaker._id ? (
-          <Link to={!location.used?`/edit-location/${location._id}`:null}>
+        {censusTaker === location.censusTaker._id && !location.used? (
+          <Link to={`/edit-location/${location._id}`}>
             <center>
             <button
               className="btn btn-success edit-button"
