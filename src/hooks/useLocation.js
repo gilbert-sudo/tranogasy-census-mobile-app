@@ -58,11 +58,13 @@ export const useLocation = () => {
             setBootstrap(bootstrapClass);
             setMsgError(result.message);
             setIsLoading(false);
+            Swal.close();
           }
         } catch (error) {
           setIsLoading(false);
           setLocation("/nosignal");
           console.log(error);
+          Swal.close();
           return [];
         }
   };
@@ -112,11 +114,13 @@ export const useLocation = () => {
             setBootstrap(bootstrapClass);
             setMsgError(result.message);
             setIsLoading(false);
+            Swal.close();
           }
         } catch (error) {
           setIsLoading(false);
           setLocation("/nosignal");
           console.log(error);
+          Swal.close();
           return [];
         }
   };

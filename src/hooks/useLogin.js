@@ -63,6 +63,7 @@ export const useLogin = () => {
         } catch (error) {
           setIsLoading(false);
           setLocation("/nosignal");
+          Swal.close();
         }
       }
     } else {
