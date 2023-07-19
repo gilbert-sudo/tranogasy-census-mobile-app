@@ -43,9 +43,10 @@ export const useLogin = () => {
           const json = await response.json();
 
           if (!response.ok) {
-            setError(json.error);
-            setIsLoading(false);
             setBootstrap("alert alert-danger");
+            setError(json.error);
+            Swal.close();
+            setIsLoading(false);
           }
 
           if (response.ok) {
@@ -114,6 +115,7 @@ export const useLogin = () => {
     loginWithFacebookID,
     login,
     isLoading,
+    setIsLoading,
     error,
     bootstrapClassname,
     client,

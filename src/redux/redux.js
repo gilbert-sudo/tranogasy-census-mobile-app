@@ -68,20 +68,36 @@ const ownerSlice = createSlice({
    },
     addOwner: (state, action) => {
       state[0].owners.push(action.payload);
-      state[1].ownersName = []
+      state[1].ownersName.push({id:action.payload._id, name:action.payload.fullName})
     },
     setOwnerSearchResult: (state, action) =>{
     state[2].searchResult = action.payload
     },
     deleteOneOwnerById: (state, action) =>{
-      if(state[0].owners.length){
-        state[0].owners = state[0].owners.filter((property) => property._id !== action.payload);
+      if(state[0].owners){
+        state[0].owners = state[0].owners.filter((owner) => owner._id !== action.payload);
+      }
+      if(state[1].ownersName.length>0){
+        state[1].ownersName = state[1].ownersName.filter((ownersName) => ownersName.id !== action.payload);
       }
      if(state[2].searchResult){
-      state[2].searchResult = state[2].searchResult.filter((property) => property._id !== action.payload);
+      state[2].searchResult = state[2].searchResult.filter((owner) => owner._id !== action.payload);
      }
     },
-    updateOneOwnerById: (state, action) => {
+    updateOneOwnerById: (state, action) => {   
+      if(state[1].ownersName.length>0){
+        state[1].ownersName = state[1].ownersName.map((ownersName) => {
+          if (ownersName.id === action.payload._id) {
+            return {
+              ...ownersName,
+              name: action.payload.address
+            };
+          } else {
+            return ownersName;
+          }
+        });
+    }
+      if(state[0].owners){
       state[0].owners = state[0].owners.map((owner) => {
         if (owner._id === action.payload._id) {
           return {
@@ -97,6 +113,24 @@ const ownerSlice = createSlice({
           return owner;
         }
       });
+    }
+    if(state[2].searchResult){
+      state[2].searchResult = state[2].searchResult.map((owner) => {
+        if (owner._id === action.payload._id) {
+          return {
+            ...owner,
+            fullName: action.payload.fullName,
+            location:action.payload.location,
+            phone1: action.payload.phone1,
+            phone2: action.payload.phone2,
+            censusTaker:action.payload.censusTaker,
+            property:action.payload.property
+          };
+        } else {
+          return owner;
+        }
+      });
+    }
     },
   },
 });
@@ -198,7 +232,7 @@ const landSlice = createSlice({
       state.searchResult = action.payload;
     },
     deleteOneLandById: (state, action) =>{
-      if(state.lands.length){
+      if(state.lands){
         state.lands = state.lands.filter((property) => property._id !== action.payload);
       }
      if(state.searchResult){
@@ -206,32 +240,62 @@ const landSlice = createSlice({
      }
     },
     updateOneLandById: (state, action) => {
-      return state.map((land) => {
-        if (land._id === action.payload._id) {
-          return {
-            ...land,
-            title: action.payload.title,
-            description: action.payload.description,
-            location: action.payload.location,
-            city: action.payload.city,
-            price: action.payload.price,
-            rent: action.payload.rent,
-            squarePerMeter: action.payload.squarePerMeter,
-            area: action.payload.area,
-            propertyNumber: action.payload.propertyNumber,
-            features: action.payload.features,
-            images: action.payload.images,
-            type: action.payload.type,
-            owner: action.payload.owner,
-            status: action.payload.status,
-            created_at: action.payload.created_at,
-            updated_at: action.payload.update_at,
-            censusTaker: action.payload.censusTaker,
-          };
-        } else {
-          return land;
-        }
-      });
+      if(state.lands){
+        state.lands = state.lands.map((land) => {
+          if (land._id === action.payload._id) {
+            return {
+              ...land,
+              title: action.payload.title,
+              description: action.payload.description,
+              location: action.payload.location,
+              city: action.payload.city,
+              price: action.payload.price,
+              rent: action.payload.rent,
+              squarePerMeter: action.payload.squarePerMeter,
+              area: action.payload.area,
+              propertyNumber: action.payload.propertyNumber,
+              features: action.payload.features,
+              images: action.payload.images,
+              type: action.payload.type,
+              owner: action.payload.owner,
+              status: action.payload.status,
+              created_at: action.payload.created_at,
+              updated_at: action.payload.update_at,
+              censusTaker: action.payload.censusTaker,
+            };
+          } else {
+            return land;
+          }
+        });
+      }
+      if(state.searchResult){
+        state.searchResult = state.searchResult.map((land) => {
+          if (land._id === action.payload._id) {
+            return {
+              ...land,
+              title: action.payload.title,
+              description: action.payload.description,
+              location: action.payload.location,
+              city: action.payload.city,
+              price: action.payload.price,
+              rent: action.payload.rent,
+              squarePerMeter: action.payload.squarePerMeter,
+              area: action.payload.area,
+              propertyNumber: action.payload.propertyNumber,
+              features: action.payload.features,
+              images: action.payload.images,
+              type: action.payload.type,
+              owner: action.payload.owner,
+              status: action.payload.status,
+              created_at: action.payload.created_at,
+              updated_at: action.payload.update_at,
+              censusTaker: action.payload.censusTaker,
+            };
+          } else {
+            return land;
+          }
+        });
+       }
     },
   },
 });
@@ -262,33 +326,64 @@ const propertiesSlice = createSlice({
      }
     },
     updateOnePropertyById: (state, action) => {
-      return state.map((property) => {
-        if (property._id === action.payload._id) {
-          return {
-            ...property,
-            title: action.payload.title,
-            description: action.payload.description,
-            address: action.payload.address,
-            city: action.payload.city,
-            price: action.payload.price,
-            rent: action.payload.rent,
-            bedrooms: action.payload.bedrooms,
-            bathrooms: action.payload.bathrooms,
-            area: action.payload.area,
-            propertyNumber: action.payload.propertyNumber,
-            features: action.payload.features,
-            images: action.payload.images,
-            type: action.payload.type,
-            owner: action.payload.owner,
-            status: action.payload.status,
-            created_at: action.payload.created_at,
-            updated_at: action.payload.update_at,
-            censusTaker: action.payload.censusTaker,
-          };
-        } else {
-          return property;
-        }
-      });
+      if(state.properties){
+       state.properties =  state.properties.map((property) => {
+          if (property._id === action.payload._id) {
+            return {
+              ...property,
+              title: action.payload.title,
+              description: action.payload.description,
+              address: action.payload.address,
+              city: action.payload.city,
+              price: action.payload.price,
+              rent: action.payload.rent,
+              bedrooms: action.payload.bedrooms,
+              bathrooms: action.payload.bathrooms,
+              area: action.payload.area,
+              propertyNumber: action.payload.propertyNumber,
+              features: action.payload.features,
+              images: action.payload.images,
+              type: action.payload.type,
+              owner: action.payload.owner,
+              status: action.payload.status,
+              created_at: action.payload.created_at,
+              updated_at: action.payload.update_at,
+              censusTaker: action.payload.censusTaker,
+            };
+          } else {
+            return property;
+          }
+        });
+      }
+      if(state.searchResult){
+        state.searchResult =  state.searchResult.map((property) => {
+          if (property._id === action.payload._id) {
+            return {
+              ...property,
+              title: action.payload.title,
+              description: action.payload.description,
+              address: action.payload.address,
+              city: action.payload.city,
+              price: action.payload.price,
+              rent: action.payload.rent,
+              bedrooms: action.payload.bedrooms,
+              bathrooms: action.payload.bathrooms,
+              area: action.payload.area,
+              propertyNumber: action.payload.propertyNumber,
+              features: action.payload.features,
+              images: action.payload.images,
+              type: action.payload.type,
+              owner: action.payload.owner,
+              status: action.payload.status,
+              created_at: action.payload.created_at,
+              updated_at: action.payload.update_at,
+              censusTaker: action.payload.censusTaker,
+            };
+          } else {
+            return property;
+          }
+        });
+       }
     },
   },
 });
@@ -353,18 +448,32 @@ const locationSlice = createSlice({
       },
     addLocation: (state, action) => {
       state[0].locations = [...state[0].locations, action.payload];
-      console.log("the update location state is", state[0].locations);
-      state[1].locationsName = [];
+      state[1].locationsName.push({id:action.payload._id, name:action.payload.name});
     },
     deleteOneLocationById: (state, action) =>{
       if(state[0].locations.length){
         state[0].locations = state[0].locations.filter((location) => location._id !== action.payload);
+      }
+      if(state[1].locationsName.length>0){
+        state[1].locationsName= state[1].locationsName.filter((locationName) => locationName.id !== action.payload);
       }
      if(state[2].searchResult){
       state[2].searchResult = state[2].searchResult.filter((location) => location._id !== action.payload);
      }
     },
     updateOneLocationById: (state, action) => {
+      if(state[1].locationsName.length>0){
+      state[1].locationsName =  state[1].locationsName.map((locationName) => {
+        if (locationName.id === action.payload._id) {
+          return {
+            ...locationName,
+            name: action.payload.address,
+          };
+        } else {
+          return locationName
+        }
+      });}
+      if(state[0].locations){
       state[0].locations = state[0].locations.map((location) => {
         if (location._id === action.payload._id) {
           return {
@@ -375,7 +484,20 @@ const locationSlice = createSlice({
         } else {
           return location;
         }
+      });}
+      if(state[2].searchResult){
+      state[2].searchResult = state[2].searchResult.map((location) => {
+        if (location._id === action.payload._id) {
+          return {
+            ...location,
+            address: action.payload.address,
+            locationLink: action.payload.locationLink,
+          };
+        } else {
+          return location;
+        }
       });
+    }
     },
   },
 });

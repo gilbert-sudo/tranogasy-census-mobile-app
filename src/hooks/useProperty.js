@@ -16,7 +16,7 @@ export const useProperty = () => {
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetPropertyInput, setResetPropertyInput] = useState(false);
   const dispatch = useDispatch();
-  const [setLocation] = useLocation();
+  const [,setLocation] = useLocation();
   // const censusTaker = useSelector((state) => state.user._id);
   //add house function
   const addProperty = async (
@@ -169,7 +169,7 @@ export const useProperty = () => {
               area,
               type,
               owner,
-              censusTaker,
+              censusTaker
             }),
           }
         );

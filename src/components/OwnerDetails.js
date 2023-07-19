@@ -20,8 +20,8 @@ const OwnerDetails = ({owner }) => {
       }
   return (
     <div id={owner._id} className="d-flex justify-content-between align-items-center border border-secondary py-2 border-left-0 border-right-0">
-      {censusTaker === owner.censusTaker._id?(<Link
-          to={!owner.used?`/edit-owner/${owner._id}`:null}
+      {censusTaker === owner.censusTaker._id && !owner.used?(<Link
+          to={`/edit-owner/${owner._id}`}
         >
   <div className="d-flex flex-row align-items-center ">
         <div className="image">
@@ -39,7 +39,22 @@ const OwnerDetails = ({owner }) => {
           </span>
         </div>
       </div>
-      </Link>):null} 
+      </Link>):( <div className="d-flex flex-row align-items-center ">
+        <div className="image">
+          <img src="https://i.imgur.com/vxEWOFl.png" alt="" width={40} />
+        </div>
+        <div className="d-flex flex-column line-height ml-2">
+          <span className="font-weight-bold">{owner.fullName}</span>
+          <span className="ml-3">Tél : {owner.phone1}</span>
+          <span className="ml-3">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {owner.phone2}
+          </span>
+          <span className="d-flex flex-row align-items-center l-now">
+            <small className="live" />
+            Ajouté le: {formattedDate}
+          </span>
+        </div>
+      </div>)} 
       <div>
       {!owner.used && censusTaker === owner.censusTaker._id ? (
                <button
