@@ -6,17 +6,19 @@ import {
   pushLand,
   updateOneLandById,
   updateOnePropertyById,
+  updateOneLocationById,
+  updateOneOwnerById,
   deleteOneLandById,
-  deleteOnePropertyById
+  deleteOnePropertyById,
 } from "../redux/redux";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 export const useProperty = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [msgError, setMsgError] = useState(null);
   const [bootstrapClassname, setBootstrap] = useState(null);
   const [resetPropertyInput, setResetPropertyInput] = useState(false);
   const dispatch = useDispatch();
-  const [,setLocation] = useLocation();
+  const [, setLocation] = useLocation();
   // const censusTaker = useSelector((state) => state.user._id);
   //add house function
   const addProperty = async (
@@ -60,7 +62,7 @@ export const useProperty = () => {
       area === undefined ||
       type === undefined
     ) {
-      setBootstrap("alert alert-danger");
+      setBootstrap("alert alert-danger mt-2");
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
@@ -97,9 +99,13 @@ export const useProperty = () => {
           setIsLoading(false);
           setResetPropertyInput(true);
           dispatch(pushProperty(json));
+          dispatch(updateOneOwnerById(json.owner));
+          dispatch(
+            updateOneLocationById({ toUsed: true, address: json.address })
+          );
         }
         if (!response.ok) {
-          setBootstrap("alert alert-danger");
+          setBootstrap("alert alert-danger mt-2");
           setMsgError(json.message);
           setIsLoading(false);
         }
@@ -141,7 +147,7 @@ export const useProperty = () => {
       area === undefined ||
       type === undefined
     ) {
-      setBootstrap("alert alert-danger");
+      setBootstrap("alert alert-danger mt-2");
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
@@ -168,7 +174,7 @@ export const useProperty = () => {
               area,
               type,
               owner,
-              censusTaker
+              censusTaker,
             }),
           }
         );
@@ -180,10 +186,41 @@ export const useProperty = () => {
           setMsgError(null);
           setIsLoading(false);
           setResetPropertyInput(true);
-          dispatch(updateOnePropertyById(json));
+          dispatch(updateOnePropertyById(json.populatedProperty));
+          dispatch(updateOneOwnerById(json.populatedProperty.owner));
+          dispatch(updateOneOwnerById(json.unusedOwner));
+          console.log(json.unusedOwner);
+          dispatch(updateOneLocationById(json.unusedLocation));
+          dispatch(
+            updateOneLocationById({
+              toUsed: true,
+              address: json.populatedProperty.address,
+            })
+          );
+          if(json.populatedProperty.type === "rent"){
+            setLocation("/houseForRent");
+          }
+          else if(json.populatedProperty.type === "sale"){
+            setLocation("/houseForSale")
+          }
         }
         if (!response.ok) {
-          setBootstrap("alert alert-danger");
+          if (response.update === false) {
+            dispatch(updateOnePropertyById(json.populatedProperty));
+          
+          if(json.populatedProperty.type === "rent"){
+            setLocation("/houseForRent");
+          }  else if(json.populatedProperty.type === "sale"){
+            setLocation("/houseForSale");
+          }
+            Swal.fire(
+              "Action refusé!",
+              "Propriété accèpté par l'Administrateur",
+              "danger"
+            );
+            return;
+          }
+          setBootstrap("alert alert-danger mt-2");
           setMsgError(json.message);
           setIsLoading(false);
         }
@@ -201,17 +238,17 @@ export const useProperty = () => {
       text: "En êtes-vous sûr?",
       showCancelButton: true,
       confirmButtonText: '<span class="bold-text">OK</span>',
-      cancelButtonText: 'Annuler',
+      cancelButtonText: "Annuler",
       customClass: {
-        confirmButton: 'btn btn-secondary',
-        cancelButton: 'btn btn-danger'
+        confirmButton: "btn btn-secondary",
+        cancelButton: "btn btn-danger",
       },
       buttonsStyling: false,
       didRender: () => {
         const confirmButton = Swal.getConfirmButton();
         // Set styles for the buttons
-        confirmButton.style.marginRight = '100px'; // Adjust the value as per your spacing requirements
-      }
+        confirmButton.style.marginRight = "100px"; // Adjust the value as per your spacing requirements
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -226,25 +263,48 @@ export const useProperty = () => {
             }
           );
           const json = await response.json();
-  
+
           if (response.ok) {
             setBootstrap(null);
             setMsgError(null);
             setIsLoading(false);
-            if(propertyType === "properties"){
-            dispatch(deleteOnePropertyById(propertyId));
-          }else if(propertyType === "lands"){
-            dispatch(deleteOneLandById(propertyId))
-          }
+            if (propertyType === "properties") {
+              dispatch(deleteOnePropertyById(propertyId));
+              dispatch(updateOneOwnerById(json.updatedOwner));
+              dispatch(
+                updateOneLocationById({
+                  toUsed: json.updateLocation.used,
+                  address: json.updatedLocation.address,
+                })
+              );
+            } else if (propertyType === "lands") {
+              dispatch(deleteOneLandById(propertyId));
+              dispatch(updateOneOwnerById(json));
+            }
             // Show success message after deletion
-            Swal.fire(
-              'Supprimé!',
-              'Propriété supprimé avec succès',
-              'success'
-            );
+            Swal.fire("Supprimé!", "Propriété supprimé avec succès", "success");
           }
           if (!response.ok) {
-            setBootstrap("alert alert-danger");
+            if (propertyType === "lands" && json.update === false) {
+              dispatch(updateOneLandById(json.populatedProperty));
+              setLocation("/land");
+              Swal.fire(
+                "Action refusé!",
+                "Propriété accèpté par l'Administrateur",
+                "danger"
+              );
+              return;
+            } else if (propertyType === "properties" && json.update === false) {
+              dispatch(updateOnePropertyById(json.populatedProperty));
+              setLocation("/property-list");
+              Swal.fire(
+                "Action refusé!",
+                "Propriété accèpté par l'Administrateur",
+                "danger"
+              );
+              return;
+            }
+            setBootstrap("alert alert-danger mt-2");
             setMsgError(json.message);
             setIsLoading(false);
             Swal.close();
@@ -258,7 +318,6 @@ export const useProperty = () => {
         }
       }
     });
-    
 
     // const swalWithBootstrapButtons = Swal.mixin({
     //   customClass: {
@@ -267,7 +326,7 @@ export const useProperty = () => {
     //   },
     //   buttonsStyling: false
     // });
-  
+
     // swalWithBootstrapButtons.fire({
     //   title: 'Are you sure?',
     //   text: "You won't be able to revert this!",
@@ -278,11 +337,11 @@ export const useProperty = () => {
     //   reverseButtons: true
     // }).then(async (result) => {
     //   if (result.isConfirmed) {
-     
+
     //   }
     // });
   };
-  
+
   //add land function
   const addLand = async (
     title,
@@ -322,7 +381,7 @@ export const useProperty = () => {
       area === undefined ||
       type === undefined
     ) {
-      setBootstrap("alert alert-danger");
+      setBootstrap("alert alert-danger mt-2");
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
@@ -358,9 +417,13 @@ export const useProperty = () => {
           setIsLoading(false);
           setResetPropertyInput(true);
           dispatch(pushLand(json));
+          dispatch(updateOneOwnerById(json.owner));
+          dispatch(
+            updateOneLocationById({ toUsed: true, address: json.address })
+          );
         }
         if (!response.ok) {
-          setBootstrap("alert alert-danger");
+          setBootstrap("alert alert-danger mt-2");
           setMsgError(json.message);
           setIsLoading(false);
           Swal.close();
@@ -413,7 +476,7 @@ export const useProperty = () => {
       area === undefined ||
       type === undefined
     ) {
-      setBootstrap("alert alert-danger");
+      setBootstrap("alert alert-danger mt-2");
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
@@ -452,9 +515,31 @@ export const useProperty = () => {
           setIsLoading(false);
           setResetPropertyInput(true);
           dispatch(updateOneLandById(json));
+          dispatch(updateOneOwnerById(json.populatedLand.owner));
+          dispatch(updateOneOwnerById(json.unusedOwner));
+          if(json.populatedLand.type === "rent"){
+            setLocation("/houseForRent");
+          }
+          else if(json.populatedLand.type === "sale"){
+            setLocation("/houseForSale")
+          }
         }
         if (!response.ok) {
-          setBootstrap("alert alert-danger");
+          if (response.update === false) {
+            dispatch(updateOneLandById(json.populatedProperty));
+            if(json.populatedProperty.type === "rent"){
+              setLocation("/landForRent");
+            }  else if(json.populatedProperty.type === "sale"){
+              setLocation("/landForSale");
+            }
+            Swal.fire(
+              "Action refusé!",
+              "Propriété accèpté par l'Administrateur",
+              "danger"
+            );
+            return;
+          }
+          setBootstrap("alert alert-danger mt-2");
           setMsgError(json.message);
           setIsLoading(false);
           Swal.close();

@@ -72,6 +72,7 @@ const AddingLandPage = () => {
   //handle the property form submiting
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     // fetch the owner's id
     const owner = getDocId("owner-input", ownersName);
     // fetch the quarter's id
@@ -84,7 +85,15 @@ const AddingLandPage = () => {
     // fetch the address
     if ((owner && city) !== undefined) {
       const squarePerMeter = price;
-      addLand(
+      Swal.fire({
+        title: "Insertion",
+        text: "S'il vous plaît, patientez...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+     await addLand(
         title,
         description,
         location,
@@ -97,6 +106,7 @@ const AddingLandPage = () => {
         owner,
         censusTaker
       );
+      Swal.close()
     } else{
       setMsgError(null);
       setBootstrap(null);
@@ -106,6 +116,7 @@ const AddingLandPage = () => {
   };
 
   useEffect(() => {
+    console.log(ownersName);
     const pageLoader = async () => {
       if (ownersName.length === 0) {
       await loadOwnersName();

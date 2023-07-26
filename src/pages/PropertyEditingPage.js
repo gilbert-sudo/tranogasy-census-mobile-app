@@ -63,15 +63,6 @@ const PropertyEditingPage = () => {
   const [documentIdError, setDocumentIdError] = useState("");
   const [checked, setChecked] = useState(false);
   const links = useSelector((state) => state.pagination);
-  const resetAllInputs = () => {
-    setTitle("");
-    setDescription("");
-    setBedrooms("");
-    setArea("");
-    setBathrooms("");
-    setPrice("0");
-    setRent("0");
-  };
 
   //get the autocomplete id value
   const getDocId = (inputClassName, data) => {
@@ -112,7 +103,15 @@ const PropertyEditingPage = () => {
     }
     if ((owner && city && address) !== undefined) {
       const addressName = document.getElementById("address-input").value;
-      updateProperty(
+      Swal.fire({
+        title: "Modification",
+        text: "S'il vous plaît, patientez...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      await updateProperty(
         propertyId,
         title,
         description,
@@ -127,25 +126,25 @@ const PropertyEditingPage = () => {
         owner,
         censusTaker
       );
+      Swal.close();
     }else{
       setMsgError(null);
       setBootstrap(null);
-      setDocErrorClass("alert alert-danger");
+      setDocErrorClass("alert alert-danger mt-2");
       setDocumentIdError("veuillez selectionner un propriètaire, addresse ou quartier suggéré ");
     }
   };
   useEffect(() => {
     const pageLoader = async () => {
-      if (!ownersName.length) {
+      if (ownersName.length === 0) {
       await loadOwnersName();
-      } else if (!quartersName.length) {
+      } else if (quartersName.length === 0) {
       await loadQuartersName();
-      } else if (!locationsName.length) {
+      } else if (!locationsName.length === 0) {
       await loadLocationsName();
       }
     };
     if (resetPropertyInput) {
-      resetAllInputs();
       Swal.fire({
         icon: "success",
         title: "succès",
@@ -210,7 +209,6 @@ const PropertyEditingPage = () => {
               </Link>
             </label>
             <AutocompleteInput
-            reset ={resetPropertyInput}
               className="form-control auto-input"
               placeholder="Nom complet"
               inputId="owner-input"
@@ -260,7 +258,6 @@ const PropertyEditingPage = () => {
               </Link>
             </label>
             <AutocompleteInput
-             reset={resetPropertyInput}
               className="form-control auto-input"
               placeholder="Une adresse exacte"
               inputId="address-input"
@@ -274,7 +271,6 @@ const PropertyEditingPage = () => {
             <label>Quartier</label>
             <div className="input-group">
               <AutocompleteInput
-                reset={resetPropertyInput}
                 className="form-control auto-input"
                 placeholder="Nom du quartier"
                 inputId="quarter-input"

@@ -60,7 +60,16 @@ const OwnerCreation = () => {
       // fetch the location's id 
     const locationId = getDocId("address-input", locationsName);
       if(locationId !== undefined){
-      createOwner(fullname, locationId, phone1, phone2);
+        Swal.fire({
+          title: "Insertion",
+          text: "S'il vous plaît, patientez...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+      await createOwner(fullname, locationId, phone1, phone2);
+      Swal.close();
     }
   };
   useEffect(() => {

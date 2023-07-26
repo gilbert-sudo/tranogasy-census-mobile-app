@@ -57,14 +57,6 @@ const PropertyEditingPage = () => {
   const [documentIdError, setDocumentIdError] = useState("");
   const [checked, setChecked] = useState(false);
   const links = useSelector((state) => state.pagination);
-  const resetAllInputs = () => {
-    setTitle("");
-    setDescription("");
-    setArea("");
-    setPrice("0");
-    setRent("0");
-    setLocation("")
-  };
   //get the autocomplete id value
   const getDocId = (inputClassName, data) => {
     const inputValue = document.getElementById(inputClassName).value;
@@ -102,7 +94,15 @@ const PropertyEditingPage = () => {
     }
     if ((owner && city) !== undefined) {
       const squarePerMeter = price;
-      updateLand(
+      Swal.fire({
+        title: "Modification",
+        text: "S'il vous plaît, patientez...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      await updateLand(
         landId,
         title,
         description,
@@ -115,6 +115,7 @@ const PropertyEditingPage = () => {
         owner,
         censusTaker
       );
+      Swal.close();
     } else{
       setMsgError(null);
       setBootstrap(null);
@@ -131,7 +132,6 @@ const PropertyEditingPage = () => {
       } 
     };
     if (resetPropertyInput) {
-      resetAllInputs();
       Swal.fire({
         icon: "success",
         title: "succès",
@@ -195,7 +195,6 @@ const PropertyEditingPage = () => {
               </Link>
             </label>
             <AutocompleteInput
-             reset ={resetPropertyInput}
               className="form-control auto-input"
               placeholder="Nom complet"
               inputId="owner-input"
@@ -235,7 +234,7 @@ const PropertyEditingPage = () => {
             ></textarea>
           </div>
           <div className="form-group hidden">
-            <label htmlFor="phone">location</label>
+            <label htmlFor="phone">localisation</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
@@ -256,7 +255,6 @@ const PropertyEditingPage = () => {
             <label>Quartier</label>
             <div className="input-group">
               <AutocompleteInput
-                reset={resetPropertyInput}
                 className="form-control auto-input"
                 placeholder="Nom du quartier"
                 inputId="quarter-input"

@@ -65,14 +65,14 @@ const LandListPage = () => {
         await loadQuartersName();
       }
     };
-    if (!lands && censusTaker) {
+    if (!lands && censusTaker && !isLoading) {
       setIsLoading(true);
       pageLoader();
     }
-      if(lands && lands.length >= 0){
+      if(lands && lands.length >= 0 && isLoading){
         setIsLoading(false);
       }
-  }, [censusTaker, loadLands, lands, paginationIndex, dispatch, ownersName, quartersName, loadQuartersName, loadOwnersName]);
+  }, [censusTaker, loadLands,isLoading, lands, paginationIndex, dispatch, ownersName, quartersName, loadQuartersName, loadOwnersName]);
   
   const handleInputFocus = () => {
     if (navbar) {

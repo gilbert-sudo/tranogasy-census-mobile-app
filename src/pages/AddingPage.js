@@ -90,7 +90,15 @@ const AddingPage = () => {
     }
     if ((city && owner && address) !== undefined) {
       const addressName = document.getElementById("address-input").value;
-      addProperty(
+      Swal.fire({
+        title: "Insertion",
+        text: "S'il vous plaît, patientez...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+     await addProperty(
         title,
         description,
         addressName,
@@ -104,6 +112,7 @@ const AddingPage = () => {
         owner,
         censusTaker
       );
+      Swal.close();
     } else {
       setMsgError(null);
       setBootstrap(null);
@@ -115,6 +124,8 @@ const AddingPage = () => {
   };
 
   useEffect(() => {
+    console.log(ownersName);
+
     const pageLoader = async () => {
       if (ownersName.length===0) {
         await loadOwnersName();
