@@ -12,7 +12,6 @@ const UserPage = () => {
   console.log(user);
   const censusTakerId = user._id;
   // Render the main content
-
   return (
     <>
       <meta charSet="utf-8" />
@@ -42,7 +41,7 @@ const UserPage = () => {
             />
             <div className="media-body">
               <div className="d-flex flex-row justify-content-between">
-                <h6 className="mt-2 mb-0">{user && user.username}</h6>
+                <h6 className="mt-2 mb-0">{user && (user.name+user.firstname)}</h6>
                 <i className="fas fa-angle-down mr-3 text-muted"> </i>
               </div>
               <p className="text-muted">
