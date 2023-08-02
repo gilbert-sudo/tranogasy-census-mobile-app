@@ -147,7 +147,7 @@ export const useProperty = () => {
       area === undefined ||
       type === undefined
     ) {
-      setBootstrap("alert alert-danger mt-2");
+      setBootstrap("alert alert-danger");
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
@@ -189,7 +189,6 @@ export const useProperty = () => {
           dispatch(updateOnePropertyById(json.populatedProperty));
           dispatch(updateOneOwnerById(json.populatedProperty.owner));
           dispatch(updateOneOwnerById(json.unusedOwner));
-          console.log(json.unusedOwner);
           dispatch(updateOneLocationById(json.unusedLocation));
           dispatch(
             updateOneLocationById({
@@ -197,30 +196,9 @@ export const useProperty = () => {
               address: json.populatedProperty.address,
             })
           );
-          if(json.populatedProperty.type === "rent"){
-            setLocation("/houseForRent");
-          }
-          else if(json.populatedProperty.type === "sale"){
-            setLocation("/houseForSale")
-          }
         }
         if (!response.ok) {
-          if (response.update === false) {
-            dispatch(updateOnePropertyById(json.populatedProperty));
-          
-          if(json.populatedProperty.type === "rent"){
-            setLocation("/houseForRent");
-          }  else if(json.populatedProperty.type === "sale"){
-            setLocation("/houseForSale");
-          }
-            Swal.fire(
-              "Action refusé!",
-              "Propriété accèpté par l'Administrateur",
-              "danger"
-            );
-            return;
-          }
-          setBootstrap("alert alert-danger mt-2");
+          setBootstrap("alert alert-danger");
           setMsgError(json.message);
           setIsLoading(false);
         }
@@ -263,7 +241,6 @@ export const useProperty = () => {
             }
           );
           const json = await response.json();
-
           if (response.ok) {
             setBootstrap(null);
             setMsgError(null);
@@ -508,30 +485,19 @@ export const useProperty = () => {
         );
 
         const json = await response.json();
-
+console.log(json);
         if (response.ok) {
           setBootstrap(null);
           setMsgError(null);
           setIsLoading(false);
           setResetPropertyInput(true);
-          dispatch(updateOneLandById(json));
+          dispatch(updateOneLandById(json.populatedLand));
           dispatch(updateOneOwnerById(json.populatedLand.owner));
           dispatch(updateOneOwnerById(json.unusedOwner));
-          if(json.populatedLand.type === "rent"){
-            setLocation("/houseForRent");
-          }
-          else if(json.populatedLand.type === "sale"){
-            setLocation("/houseForSale")
-          }
         }
         if (!response.ok) {
           if (response.update === false) {
             dispatch(updateOneLandById(json.populatedProperty));
-            if(json.populatedProperty.type === "rent"){
-              setLocation("/landForRent");
-            }  else if(json.populatedProperty.type === "sale"){
-              setLocation("/landForSale");
-            }
             Swal.fire(
               "Action refusé!",
               "Propriété accèpté par l'Administrateur",
