@@ -50,6 +50,10 @@ export const useOwner = () => {
       setIsLoading(false);
       return;
     }
+
+
+
+    
     const phoneNumberRegex = /^(03[2,3,4,8])(\d{7})$|^(3[2,3,4,8])(\d{7})$/;
     const phoneNumber1 = phone1;
     if (secondPhone) {

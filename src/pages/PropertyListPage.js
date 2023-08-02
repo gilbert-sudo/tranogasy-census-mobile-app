@@ -42,7 +42,7 @@ const PropertyListPage = () => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
         state.propertyNumber.toString().match(regex) ||
-        state.address.match(regex)
+        state.location.address.match(regex)
       );
     });
 

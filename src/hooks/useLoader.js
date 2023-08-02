@@ -190,7 +190,7 @@ export const useLoader = () => {
       if (response.ok) {
         let properties = json.filter(
           (property) =>
-            property.censusTaker._id === censusTaker &&
+            property.censusTaker && property.censusTaker._id === censusTaker &&
             (property.status === "pending" || property.status === "canceled")
         );
         dispatch(setProperties(properties));
@@ -215,7 +215,7 @@ export const useLoader = () => {
       if (response.ok) {
         let properties = json.filter(
           (property) =>
-            property.censusTaker._id === censusTaker &&
+           property.censusTaker && property.censusTaker._id === censusTaker &&
             (property.status === "pending" || property.status === "canceled")
         );
         dispatch(setLands(properties));

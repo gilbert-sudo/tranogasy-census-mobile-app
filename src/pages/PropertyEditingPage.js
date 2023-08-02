@@ -46,7 +46,7 @@ const PropertyEditingPage = () => {
     : ""
   );
   const [locationName, setLocationName] = useState(
-    property ? property.address : ""
+    property ? property.location.address : ""
   );
   const [title, setTitle] = useState(property ? property.title : "");
   const [description, setDescription] = useState(
@@ -102,7 +102,6 @@ const PropertyEditingPage = () => {
       type = "rent";
     }
     if ((owner && city && address) !== undefined) {
-      const addressName = document.getElementById("address-input").value;
       Swal.fire({
         title: "Modification",
         text: "S'il vous plaît, patientez...",
@@ -115,7 +114,7 @@ const PropertyEditingPage = () => {
         propertyId,
         title,
         description,
-        addressName,
+        address,
         city,
         price,
         rent,
@@ -261,7 +260,7 @@ const PropertyEditingPage = () => {
               className="form-control auto-input"
               placeholder="Une adresse exacte"
               inputId="address-input"
-              initialValue={property ? property.address : ""}
+              initialValue={property ? property.location.address : ""}
               onNameChange={handleLocationName}
               suggestions={locationsName}
               style={{ width: "100%" }} // add style prop
@@ -447,7 +446,7 @@ const PropertyEditingPage = () => {
                 (((property.owner ? property.owner.fullName : "") ===  ownerName) &&
                ((property? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
                 : "")  === quarterName) &&
-                ((property ? property.address : "") === locationName) &&
+                ((property ? property.location.address : "") === locationName) &&
                  property.title === title &&
                 property.area === area  &&
                  property.description === description &&

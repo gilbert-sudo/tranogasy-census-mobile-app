@@ -89,8 +89,7 @@ const AddingPage = () => {
       type = "rent";
     }
     if ((city && owner && address) !== undefined) {
-      const addressName = document.getElementById("address-input").value;
-      Swal.fire({
+       Swal.fire({
         title: "Insertion",
         text: "S'il vous plaît, patientez...",
         allowOutsideClick: false,
@@ -101,7 +100,7 @@ const AddingPage = () => {
      await addProperty(
         title,
         description,
-        addressName,
+        address,
         city,
         price,
         rent,
