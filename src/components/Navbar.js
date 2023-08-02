@@ -117,7 +117,7 @@ const Navbar = () => {
                     style={ActiveLink("/location-list", "/edit-location/:locationId")}
                   >
                     <MdNotListedLocation className="nav__icon" />
-                    <span className="nav__name">Location</span>
+                    <span className="nav__name">Loca</span>
                   </Link>
                 </li>
                 <li className="nav__item mt-3"  onClick={handleClick}>

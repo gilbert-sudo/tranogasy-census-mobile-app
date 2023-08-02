@@ -20,6 +20,7 @@ const OwnerListPage = () => {
   const locationsName = useSelector((state) =>state.location[1].locationsName);
   const ownersName = useSelector((state)=>state.owner[1].ownersName);
   const owners = useSelector((state) => state.owner[0].owners);
+  console.log(owners);
   const navbar = useSelector((state) => state.navbar);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
@@ -83,14 +84,14 @@ const OwnerListPage = () => {
         setIsLoading(null);
       }
     };
-    if (!owners) {
+    if (!owners && !isLoading) {
       setIsLoading(true);
       pageLoader();
     }
-    if(owners  && owners.length >= 0){
+    if(owners  && owners.length >= 0 && isLoading){
   setIsLoading(false)
     }
-  }, [loadOwners, owners, loadProperties, loadLands, paginationIndex, dispatch, ownersName, locationsName, loadLocationsName, loadOwnersName]);
+  }, [loadOwners, owners, isLoading, loadProperties, loadLands, paginationIndex, dispatch, ownersName, locationsName, loadLocationsName, loadOwnersName]);
   useEffect(() => {
     if (searchResult) {
       dispatch(setTotalPage({ index: 1, subjectLength: searchResult.length }));

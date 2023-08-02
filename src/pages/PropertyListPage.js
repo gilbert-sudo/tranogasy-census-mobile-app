@@ -42,7 +42,7 @@ const PropertyListPage = () => {
       const regex = new RegExp(`^${searchText}`, "gi");
       return (
         state.propertyNumber.toString().match(regex) ||
-        state.address.match(regex)
+        state.location.address.match(regex)
       );
     });
 
@@ -90,16 +90,17 @@ const PropertyListPage = () => {
       }
     };
 
-    if (!properties && censusTaker) {
+    if (!properties && censusTaker && !isLoading) {
       setIsLoading(true);
       pageLoader();
     }
-    if(properties && properties.length >= 0){
+    if(properties && properties.length >= 0 && isLoading){
         setIsLoading(false);
       }
     
   }, [
     loadProperties,
+    isLoading,
     properties,
     ownersName,
     locationsName,

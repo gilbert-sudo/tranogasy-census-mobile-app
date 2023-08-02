@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Link} from "wouter";
 import {useLocation} from "../hooks/useLocation";
 import Swal from 'sweetalert2';
+import { setLocation } from "../redux/redux";
 
 const LocationDetails = ({ location}) => {
   const censusTaker = useSelector((state) => state.user._id);
@@ -20,11 +21,17 @@ const LocationDetails = ({ location}) => {
         Swal.showLoading();
       },
     });
-
-    window.location.href = location.locationLink; // Redirect to location.locationLink
+  try{
+    window.location.href = location.locationLink;
+  }catch(error){
+    if(error){
+  setLocation("/location-list");
+  Swal.close();
+    }
   }
   return
   };
+}
   const handleClick = async () =>{
     deleteLocation(location._id)
     }

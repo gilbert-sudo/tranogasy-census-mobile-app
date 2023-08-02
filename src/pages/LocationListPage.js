@@ -66,15 +66,16 @@ const LocationListPage = () => {
         setIsLoading(null);
       }
     };
-    if (!locations) {
+    if (!locations && !isLoading) {
       setIsLoading(true);
       pageLoader();
     }
-    if(locations && locations.length >= 0){
+    if(locations && locations.length >= 0 && isLoading){
       setIsLoading(false)
     }
   }, [
     loadLocations,
+    isLoading,
     loadLands,
     loadProperties,
     locations,

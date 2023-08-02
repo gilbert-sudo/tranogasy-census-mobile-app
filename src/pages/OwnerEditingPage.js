@@ -38,12 +38,6 @@ const OwnerEditingPage = () => {
   const [documentIdError, setDocumentIdError] = useState("");
   // const owner = useSelector((state) => state.owner);
 
-  const resetAllInputs = () => {
-    setFullName("");
-    setPhone1("");
-    setPhone2("");
-  };
-
   //get the autocomplete id value
   const getDocId = (inputClassName, data) => {
     const inputValue = document.getElementById(inputClassName).value;
@@ -72,7 +66,16 @@ const OwnerEditingPage = () => {
     // fetch the location's id
     const locationId = getDocId("address-input", locationsName);
     if (locationId !== undefined) {
-      updateOwner(ownerId, fullname, locationId, phone1, phone2);
+      Swal.fire({
+        title: "Modification",
+        text: "S'il vous plaît, patientez...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      await updateOwner(ownerId, fullname, locationId, phone1, phone2);
+      Swal.close();
     } else{
       setMsgError(null);
       setBootstrap(null);
@@ -87,7 +90,6 @@ const OwnerEditingPage = () => {
         }
     };
     if (resetOwnerInput) {
-      resetAllInputs();
       Swal.fire({
         icon: "success",
         title: "succès",
@@ -155,7 +157,6 @@ const OwnerEditingPage = () => {
             </Link>
           </label>
           <AutocompleteInput
-            reset={resetOwnerInput}
             className="form-control auto-input"
             placeholder="Une adresse exacte"
             inputId="address-input"

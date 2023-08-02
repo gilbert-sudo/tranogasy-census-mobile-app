@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addOwner, updateOneOwnerById, deleteOneOwnerById} from "../redux/redux";
+import {
+  addOwner,
+  updateOneOwnerById,
+  deleteOneOwnerById,
+  updateOneLocationById,
+} from "../redux/redux";
 import { useLocation } from "wouter";
 import Swal from "sweetalert2";
 export const useOwner = () => {
@@ -10,14 +15,14 @@ export const useOwner = () => {
   const [resetOwnerInput, setResetOwnerInput] = useState(false); // new state
   const censusTaker = useSelector((state) => state.user._id);
   const dispatch = useDispatch();
-  const [,setLocation] = useLocation();
+  const [, setLocation] = useLocation();
   //redux
 
   const createOwner = async (fullName, locationId, phoneOne, secondPhone) => {
     setIsLoading(true);
     setMsgError(null);
     setResetOwnerInput(false);
-    let phone2 ="";
+    let phone2 = "";
     if (locationId === undefined) {
       setIsLoading(false);
       setBootstrap("alert alert-warning");
@@ -45,11 +50,15 @@ export const useOwner = () => {
       setIsLoading(false);
       return;
     }
+
+
+
+    
     const phoneNumberRegex = /^(03[2,3,4,8])(\d{7})$|^(3[2,3,4,8])(\d{7})$/;
     const phoneNumber1 = phone1;
-    if(secondPhone) {
+    if (secondPhone) {
       let phoneNumberTwo = secondPhone.toString();
-       var  phoneNumber2 = phone2 = phoneNumberTwo.replace(/\s/g, "");
+      var phoneNumber2 = (phone2 = phoneNumberTwo.replace(/\s/g, ""));
       if (!phoneNumberRegex.test(phone2)) {
         // Phone number has invalid length
         let msg = "votre seconde numéro de téléphone n'est pas validé.";
@@ -60,9 +69,7 @@ export const useOwner = () => {
         return;
       }
     }
-    if (
-      phoneNumberRegex.test(phoneNumber1) 
-    ) {
+    if (phoneNumberRegex.test(phoneNumber1)) {
       if (
         phoneNumber1.length === 10 ||
         phoneNumber1.length === 9 ||
@@ -92,6 +99,7 @@ export const useOwner = () => {
             setIsLoading(false);
             setResetOwnerInput(true);
             dispatch(addOwner(result.newOwner));
+            dispatch(updateOneLocationById(result.newOwner.location));
           }
           if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
@@ -133,7 +141,7 @@ export const useOwner = () => {
     setIsLoading(true);
     setMsgError(null);
     setResetOwnerInput(false);
-    let phoneNumber2="";
+    let phoneNumber2 = "";
     let phoneNumberOne = firstPhone.toString();
     if (!fullName.length || !phoneNumberOne.length) {
       setBootstrap("alert alert-warning");
@@ -158,8 +166,8 @@ export const useOwner = () => {
     const phone1 = phoneNumberOne.replace(/\s/g, "");
     const phoneNumberRegex = /^(03[2,3,4,8])(\d{7})$|^(3[2,3,4,8])(\d{7})$/;
     const phoneNumber1 = phone1;
-    
-    if(secondPhone) {
+
+    if (secondPhone) {
       let phoneNumberTwo = secondPhone.toString();
       var phone2 = phoneNumberTwo.replace(/\s/g, "");
       phoneNumber2 = phone2;
@@ -205,7 +213,9 @@ export const useOwner = () => {
             setIsLoading(false);
             setResetOwnerInput(true);
             dispatch(updateOneOwnerById(result.modifiedOwner));
-            console.log(result);
+            dispatch(updateOneLocationById(result.modifiedOwner.location));
+            dispatch(updateOneLocationById(result.unusedLocation));
+            console.log("the location unused is", result.unusedLocation);
           }
           if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
@@ -237,24 +247,23 @@ export const useOwner = () => {
     }
   };
 
-
-  const deleteOwner= async (ownerId) => {
+  const deleteOwner = async (ownerId) => {
     setIsLoading(true);
     Swal.fire({
       text: "En êtes-vous sûr?",
       showCancelButton: true,
       confirmButtonText: '<span class="bold-text">OK</span>',
-      cancelButtonText: 'Annuler',
+      cancelButtonText: "Annuler",
       customClass: {
-        confirmButton: 'btn btn-secondary',
-        cancelButton: 'btn btn-danger'
+        confirmButton: "btn btn-secondary",
+        cancelButton: "btn btn-danger",
       },
       buttonsStyling: false,
       didRender: () => {
         const confirmButton = Swal.getConfirmButton();
         // Set styles for the buttons
-        confirmButton.style.marginRight = '100px'; // Adjust the value as per your spacing requirements
-      }
+        confirmButton.style.marginRight = "100px"; // Adjust the value as per your spacing requirements
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -269,17 +278,18 @@ export const useOwner = () => {
             }
           );
           const json = await response.json();
-  
+
           if (response.ok) {
             setBootstrap(null);
             setMsgError(null);
             setIsLoading(false);
             dispatch(deleteOneOwnerById(ownerId));
+            dispatch(updateOneLocationById(json.unusedLocation));
             // Show success message after deletion
             Swal.fire(
-              'Supprimé!',
-              'Propriétaire supprimé avec succès',
-              'success'
+              "Supprimé!",
+              "Propriétaire supprimé avec succès",
+              "success"
             );
           }
           if (!response.ok) {
@@ -294,9 +304,9 @@ export const useOwner = () => {
           return [];
         }
       }
-    })
+    });
   };
-  
+
   return {
     createOwner,
     updateOwner,
@@ -307,5 +317,6 @@ export const useOwner = () => {
     resetOwnerInput,
     setResetOwnerInput,
     setMsgError,
-    setBootstrap,}
+    setBootstrap,
+  };
 };

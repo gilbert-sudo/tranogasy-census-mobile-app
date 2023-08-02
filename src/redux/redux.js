@@ -90,7 +90,7 @@ const ownerSlice = createSlice({
           if (ownersName.id === action.payload._id) {
             return {
               ...ownersName,
-              name: action.payload.address
+              name: action.payload.fullName
             };
           } else {
             return ownersName;
@@ -106,8 +106,8 @@ const ownerSlice = createSlice({
             location:action.payload.location,
             phone1: action.payload.phone1,
             phone2: action.payload.phone2,
+            used: action.payload.used,
             censusTaker:action.payload.censusTaker,
-            property:action.payload.property
           };
         } else {
           return owner;
@@ -123,8 +123,8 @@ const ownerSlice = createSlice({
             location:action.payload.location,
             phone1: action.payload.phone1,
             phone2: action.payload.phone2,
+            used: action.payload.used,
             censusTaker:action.payload.censusTaker,
-            property:action.payload.property
           };
         } else {
           return owner;
@@ -199,7 +199,6 @@ export const {
   updateSearchCurrentPage,
   updateIsSearch,
   setTotalPage,
-  setResetAgentInput,
   updateActiveLink,
 } = paginationSlice.actions;
 
@@ -223,6 +222,9 @@ const landSlice = createSlice({
   initialState: {lands:null, searchResult: null},
   reducers: {
     pushLand: (state, action) => {
+      if(!state.lands){
+        return action.payload
+      }
       state.lands.push(action.payload);
     },
     setLands: (state, action) => {
@@ -309,6 +311,9 @@ const propertiesSlice = createSlice({
   initialState: {properties:null, searchResult:null},
   reducers: {
     pushProperty: (state, action) => {
+      if(!state.properties){
+        return action.payload
+      }
       state.properties.push(action.payload);
     },
     setSearchResult: (state, action) =>{
@@ -333,7 +338,7 @@ const propertiesSlice = createSlice({
               ...property,
               title: action.payload.title,
               description: action.payload.description,
-              address: action.payload.address,
+              location: action.payload.location,
               city: action.payload.city,
               price: action.payload.price,
               rent: action.payload.rent,
@@ -362,7 +367,7 @@ const propertiesSlice = createSlice({
               ...property,
               title: action.payload.title,
               description: action.payload.description,
-              address: action.payload.address,
+              location: action.payload.location,
               city: action.payload.city,
               price: action.payload.price,
               rent: action.payload.rent,
@@ -448,7 +453,7 @@ const locationSlice = createSlice({
       },
     addLocation: (state, action) => {
       state[0].locations = [...state[0].locations, action.payload];
-      state[1].locationsName.push({id:action.payload._id, name:action.payload.name});
+      state[1].locationsName.push({id:action.payload._id, name:action.payload.address});
     },
     deleteOneLocationById: (state, action) =>{
       if(state[0].locations.length){
@@ -462,6 +467,36 @@ const locationSlice = createSlice({
      }
     },
     updateOneLocationById: (state, action) => {
+      if(action.payload.toUsed){
+        if(state[0].locations){
+          state[0].locations = state[0].locations.map((location) => {
+            if (location.address === action.payload.address) {
+              return {
+                ...location,
+                address: location.address,
+                used: action.payload.toUsed,
+                locationLink: location.locationLink,
+              };
+            } else {
+              return location;
+            }
+          });}
+          if(state[2].searchResult){
+          state[2].searchResult = state[2].searchResult.map((location) => {
+            if (location.address === action.payload.address) {
+              return {
+                ...location,
+                address: location.address,
+                used: action.payload.used,
+                locationLink: location.locationLink,
+              };
+            } else {
+              return location;
+            }
+          });
+        }
+        return
+      }
       if(state[1].locationsName.length>0){
       state[1].locationsName =  state[1].locationsName.map((locationName) => {
         if (locationName.id === action.payload._id) {
@@ -479,6 +514,7 @@ const locationSlice = createSlice({
           return {
             ...location,
             address: action.payload.address,
+            used: action.payload.used,
             locationLink: action.payload.locationLink,
           };
         } else {
@@ -491,6 +527,7 @@ const locationSlice = createSlice({
           return {
             ...location,
             address: action.payload.address,
+            used: action.payload.used,
             locationLink: action.payload.locationLink,
           };
         } else {

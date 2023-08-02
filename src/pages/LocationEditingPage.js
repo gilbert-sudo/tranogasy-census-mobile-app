@@ -25,11 +25,6 @@ const locations = useSelector(state => state.location[0].locations);
   const [addressLink, setAddressLink] = useState(locationLink);
   const [isValidReset, setIsValidReset] = useState(false);
   // const Location = useSelector((state) => state.Location);
-  const resetAllInputs = () => {
-    setAddress("");
-    setAddressLink("");
-  };
-
   const {
     updateLocation,
     isLoading,
@@ -42,12 +37,20 @@ const locations = useSelector(state => state.location[0].locations);
   } = useLocation();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    updateLocation(locationId, Address, addressLink);
+    Swal.fire({
+      title: "Modification",
+      text: "S'il vous plaît, patientez...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+   await updateLocation(locationId, Address, addressLink);
+   Swal.close();
     setIsValidReset(true);
   };
   useEffect(() => {
     if (resetLocationInput && isValidReset) {
-      resetAllInputs();
       setIsValidReset(false)
       Swal.fire({
         icon: "success",
@@ -69,7 +72,7 @@ const locations = useSelector(state => state.location[0].locations);
   return (
     <div className="bg-white widget border mt-5 rounded">
       <h3 className="h4 text-black widget-title mb-3">
-        Modifier ce location
+        Modifier ce localisation
       </h3>
       <form action="" className="form-contact-agent" onSubmit={handleSubmit}>
         <div className="form-group">
