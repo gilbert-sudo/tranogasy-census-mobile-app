@@ -28,12 +28,30 @@ export const useProperty = () => {
     city,
     price,
     rent,
-    bedrooms,
+    rooms,
     bathrooms,
     area,
     type,
     owner,
-    censusTaker
+    censusTaker,
+    floor,
+    kitchen,
+    toilet,
+    wifiAvailability,
+    parkingSpaceAvailable,
+    airConditionerAvailable,
+    smokeDetector,
+    toiletFacility,
+    kitchenFacilities,
+    surroundedByWalls,
+    electricityPowerJirama,
+    electricityPower,
+    waterPumpSupply,
+    waterPumpSupplyJirama,
+    securitySystem,
+    motoAccess,
+    carAccess,
+    waterWellSupply
   ) => {
     setIsLoading(true);
     console.log(
@@ -43,7 +61,7 @@ export const useProperty = () => {
       city,
       price,
       rent,
-      bedrooms,
+      rooms,
       bathrooms,
       area,
       type,
@@ -57,7 +75,7 @@ export const useProperty = () => {
       city === undefined ||
       price === undefined ||
       rent === undefined ||
-      bedrooms === undefined ||
+      rooms === undefined ||
       bathrooms === undefined ||
       area === undefined ||
       type === undefined
@@ -82,12 +100,30 @@ export const useProperty = () => {
             city,
             price,
             rent,
-            bedrooms,
+            rooms,
             bathrooms,
             area,
             type,
             owner,
             censusTaker,
+            floor,
+            kitchen,
+            toilet,
+            wifiAvailability,
+            parkingSpaceAvailable,
+            airConditionerAvailable,
+            smokeDetector,
+            toiletFacility,
+            kitchenFacilities,
+            surroundedByWalls,
+            electricityPowerJirama,
+            electricityPower,
+            waterPumpSupply,
+            waterPumpSupplyJirama,
+            securitySystem,
+            motoAccess,
+            carAccess,
+            waterWellSupply
           }),
         });
 
@@ -98,6 +134,7 @@ export const useProperty = () => {
           setMsgError(null);
           setIsLoading(false);
           setResetPropertyInput(true);
+          console.log(json);
           dispatch(pushProperty(json));
           dispatch(updateOneOwnerById(json.owner));
           dispatch(
@@ -127,12 +164,31 @@ export const useProperty = () => {
     city,
     price,
     rent,
-    bedrooms,
+    rooms,
     bathrooms,
     area,
     type,
     owner,
-    censusTaker
+    censusTaker,
+    floor,
+    kitchen,
+    toilet,
+    wifiAvailability,
+    parkingSpaceAvailable,
+    airConditionerAvailable,
+    smokeDetector,
+    toiletFacility,
+    kitchenFacilities,
+    surroundedByWalls,
+    electricityPowerJirama,
+    electricityPower,
+    waterPumpSupply,
+    waterPumpSupplyJirama,
+    securitySystem,
+    motoAccess,
+    carAccess,
+    waterWellSupply,
+    featureId
   ) => {
     setIsLoading(true);
     if (
@@ -142,7 +198,7 @@ export const useProperty = () => {
       city === undefined ||
       price === undefined ||
       rent === undefined ||
-      bedrooms === undefined ||
+      rooms === undefined ||
       bathrooms === undefined ||
       area === undefined ||
       type === undefined
@@ -169,12 +225,31 @@ export const useProperty = () => {
               city,
               price,
               rent,
-              bedrooms,
+              rooms,
               bathrooms,
               area,
               type,
               owner,
               censusTaker,
+              floor,
+              kitchen,
+              toilet,
+              wifiAvailability,
+              parkingSpaceAvailable,
+              airConditionerAvailable,
+              smokeDetector,
+              toiletFacility,
+              kitchenFacilities,
+              surroundedByWalls,
+              electricityPowerJirama,
+              electricityPower,
+              waterPumpSupply,
+              waterPumpSupplyJirama,
+              securitySystem,
+              motoAccess,
+              carAccess,
+              waterWellSupply,
+              featureId
             }),
           }
         );
@@ -210,7 +285,7 @@ export const useProperty = () => {
       }
     }
   };
-  const deleteProperty = async (propertyId, propertyType) => {
+  const deleteProperty = async (propertyId, propertyType, admin = null) => {
     setIsLoading(true);
     Swal.fire({
       text: "En êtes-vous sûr?",
@@ -231,7 +306,7 @@ export const useProperty = () => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `http://localhost:3600/api/${propertyType}/${propertyId}`,
+            `http://localhost:3600/api/${propertyType}/${propertyId}/${admin}`,
             {
               method: "DELETE",
               headers: {
@@ -247,10 +322,11 @@ export const useProperty = () => {
             setIsLoading(false);
             if (propertyType === "properties") {
               dispatch(deleteOnePropertyById(propertyId));
+              console.log(json);
               dispatch(updateOneOwnerById(json.updatedOwner));
               dispatch(
                 updateOneLocationById({
-                  toUsed: json.updateLocation.used,
+                  toUsed: json.updatedLocation.used,
                   address: json.updatedLocation.address,
                 })
               );
@@ -485,7 +561,7 @@ export const useProperty = () => {
         );
 
         const json = await response.json();
-console.log(json);
+        console.log(json);
         if (response.ok) {
           setBootstrap(null);
           setMsgError(null);

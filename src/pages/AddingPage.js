@@ -7,7 +7,13 @@ import AutocompleteInput from "../components/AutocompleteInput";
 import { Link } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonShelter, faShower } from "@fortawesome/free-solid-svg-icons";
-import { FaGripHorizontal, FaMoneyBill } from "react-icons/fa";
+import {
+  FaGripHorizontal,
+  FaMoneyBill,
+  FaToilet,
+} from "react-icons/fa";
+import {FaKitchenSet} from "react-icons/fa6";
+import { GrStackOverflow } from "react-icons/gr";
 import { GiPayMoney } from "react-icons/gi";
 import { MdTitle } from "react-icons/md";
 import { useSelector } from "react-redux";
@@ -34,23 +40,56 @@ const AddingPage = () => {
   const locationsName = useSelector((state) => state.location[1].locationsName);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [bedrooms, setBedrooms] = useState("");
+  const [rooms, setRooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [area, setArea] = useState("");
   const [price, setPrice] = useState("");
   const [rent, setRent] = useState("");
+  const [toilet, setToilets] = useState("");
+  const [kitchen,setKitchens] = useState("");
+  const [floor, setFloors] = useState("");
+  const [motoAccess, setMotoAccess] = useState(false);
+  const [carAccess, setCarAccess] = useState(false);
+  const [parkingSpaceAvailable, setParkingSpaceAvailable] = useState(false);
+  const [waterPumpSupply, setWaterPumpSupply] = useState(false);
+  const [electricityPower, setElectricityPower] = useState(false);
+  const [securitySystem, setSecuritySystem] = useState(false);
+  const [waterPumpSupplyJirama, setWaterPumpSupplyJirama] = useState(false);
+  const [surroundedByWalls, setSurroundedByWalls] = useState(false);
+  const [electricityPowerJirama, setElectricityPowerJirama] = useState(false);
+  const [kitchenFacilities, setKitchenFacilities] = useState(false);
+  const [toiletFacility, setToiletFacility] = useState(false);
+  const [wifiAvailability, setWifiAvailability] = useState(false);
+  const [airConditionerAvailable,setAirConditionerAvailable] = useState(false);
+  const [smokeDetector,setSmokeDetector] =useState(false);
   const [docErrorClass, setDocErrorClass] = useState("");
+  const [waterWellSupply,setWaterWellSupply] = useState(false);
   const [documentIdError, setDocumentIdError] = useState("");
   const links = useSelector((state) => state.pagination);
   const resetAllInputs = () => {
     setTitle("");
     setDescription("");
-    setBedrooms("");
+    setRooms("");
     setArea("");
     setBathrooms("");
     setArea("");
     setPrice("");
     setRent("");
+    setWaterPumpSupply(false);
+    setAirConditionerAvailable(false);
+    setFloors("");
+    setAirConditionerAvailable(false);
+    setToiletFacility(false);
+    setElectricityPower(false);
+    setElectricityPowerJirama(false);
+    setSecuritySystem(false);
+    setSurroundedByWalls(false);
+    setSmokeDetector(false);
+    setKitchenFacilities(false);
+    setKitchens(false);
+  setWaterPumpSupply(false);
+  setWaterPumpSupplyJirama(false);
+  setWaterWellSupply(false)
   };
   //get the autocomplete id value
   const getDocId = (inputClassName, data) => {
@@ -104,12 +143,30 @@ const AddingPage = () => {
         city,
         price,
         rent,
-        bedrooms,
+        rooms,
         bathrooms,
         area,
         type,
         owner,
-        censusTaker
+        censusTaker,
+        floor,
+        kitchen,
+        toilet,
+        wifiAvailability,
+        parkingSpaceAvailable,
+        airConditionerAvailable,
+        smokeDetector,
+        toiletFacility,
+        kitchenFacilities,
+        surroundedByWalls,
+        electricityPowerJirama,
+        electricityPower,
+        waterPumpSupply,
+        waterPumpSupplyJirama,
+        securitySystem,
+        motoAccess,
+        carAccess,
+        waterWellSupply
       );
       Swal.close();
     } else {
@@ -284,10 +341,10 @@ const AddingPage = () => {
               </div>
               <input
                 type="number"
-                id="bedrooms"
+                id="rooms"
                 className="form-control"
-                value={bedrooms}
-                onChange={(e) => setBedrooms(e.target.value)}
+                value={rooms}
+                onChange={(e) => setRooms(e.target.value)}
                 required="ON"
               />
             </div>
@@ -306,6 +363,60 @@ const AddingPage = () => {
                 className="form-control"
                 value={bathrooms}
                 onChange={(e) => setBathrooms(e.target.value)}
+                required="ON"
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bathrooms">Nombre de toillette</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <FaToilet/>
+                </span>
+              </div>
+              <input
+                type="number"
+                id="toilet"
+                className="form-control"
+                value={toilet}
+                onChange={(e) => {setToilets(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}}
+                required="ON"
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bathrooms">Nombre d'etage</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <GrStackOverflow/>
+                </span>
+              </div>
+              <input
+                type="number"
+                id="floor"
+                className="form-control"
+                value={floor}
+                onChange={(e) => {setFloors(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}}
+                required="ON"
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bathrooms">Nombre de cuisine</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <FaKitchenSet/>
+                </span>
+              </div>
+              <input
+                type="number"
+                id="kitchens"
+                className="form-control"
+                value={kitchen}
+                onChange={(e) => {setKitchens(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}}
                 required="ON"
               />
             </div>
@@ -332,6 +443,159 @@ const AddingPage = () => {
                 required="ON"
               />
             </div>
+          </div>
+          <div>
+            <label>les caractéristiques</label>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={wifiAvailability}
+              onChange={(e) => setWifiAvailability(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">disponibilité Wifi</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="airConditionner"
+              className="ml-2 mr-2"
+              checked={airConditionerAvailable}
+              onChange={(e) => setAirConditionerAvailable(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">climatiseur</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="smokeDetector"
+              className="ml-2 mr-2"
+              checked={smokeDetector}
+              onChange={(e) => setSmokeDetector(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">detécteur de fumée</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={carAccess}
+              onChange={(e) => setCarAccess(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">accès voiture</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={motoAccess}
+              onChange={(e) => setMotoAccess(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">accès moto</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={parkingSpaceAvailable}
+              onChange={(e) => setParkingSpaceAvailable(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">disponibilité parking</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={waterWellSupply}
+              onChange={(e) => setWaterWellSupply(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">  eau avec puit</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={waterPumpSupply}
+              onChange={(e) => setWaterPumpSupply(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">Pompe à eau sans JIRAMA</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={waterPumpSupplyJirama}
+              onChange={(e) => setWaterPumpSupplyJirama(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">Pompe à eau avec JIRAMA</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={electricityPower}
+              onChange={(e) => setElectricityPower(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">Electricité sans JIRAMA</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={electricityPowerJirama}
+              onChange={(e) => setElectricityPowerJirama(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">Electricité avec JIRAMA</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={securitySystem}
+              onChange={(e) => setSecuritySystem(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">système de sécurité</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={surroundedByWalls}
+              onChange={(e) => setSurroundedByWalls(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">cloturé par un mur</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={kitchenFacilities}
+              onChange={(e) => setKitchenFacilities(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">cuisine comfortable</label>
+          </div>
+          <div className="form-group">
+            <input
+              type="checkbox"
+              id="wifiAvailability"
+              className="ml-2 mr-2"
+              checked={toiletFacility}
+              onChange={(e) => setToiletFacility(e.target.checked)}
+            />
+            <label htmlFor="wifiAvailability">comfortable toilette</label>
+          </div>
           </div>
           <div className="form-group">
   <div className="form-check">
