@@ -5,10 +5,12 @@ import { useLoader } from "../hooks/useLoader";
 import { useProperty } from "../hooks/useProperty";
 import Swal from "sweetalert2";
 import AutocompleteInput from "../components/AutocompleteInput";
-import { Link, useRoute} from "wouter";
+import { Link, useRoute } from "wouter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonShelter, faShower } from "@fortawesome/free-solid-svg-icons";
-import { FaGripHorizontal, FaMoneyBill } from "react-icons/fa";
+import { FaGripHorizontal, FaMoneyBill, FaToilet } from "react-icons/fa";
+import { FaKitchenSet } from "react-icons/fa6";
+import { GrStackOverflow } from "react-icons/gr";
 import { GiPayMoney } from "react-icons/gi";
 import { MdTitle } from "react-icons/md";
 import { useSelector } from "react-redux";
@@ -19,6 +21,7 @@ const PropertyEditingPage = () => {
   const propertyId = match ? params.propertyId : null;
   const properties = useSelector((state) => state.properties.properties);
   const property = properties.find((property) => property._id === propertyId);
+  console.log(property);
   const [disabledPriceInput, setDisabledPriceInput] = useState(
     property.type === "rent" ? true : false
   );
@@ -31,19 +34,19 @@ const PropertyEditingPage = () => {
     isLoading,
     setMsgError,
     setResetPropertyInput,
-    setBootstrap
+    setBootstrap,
   } = useProperty();
   const ownersName = useSelector((state) => state.owner[1].ownersName);
-  const quartersName= useSelector((state) => state.quarter[1].quartersName);
-  const locationsName= useSelector((state) => state.location[1].locationsName);
+  const quartersName = useSelector((state) => state.quarter[1].quartersName);
+  const locationsName = useSelector((state) => state.location[1].locationsName);
   const censusTaker = useSelector((state) => state.user._id);
   const [ownerName, setOwnerName] = useState(
     property.owner ? property.owner.fullName : ""
   );
   const [quarterName, setQuarterName] = useState(
     property
-    ? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
-    : ""
+      ? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
+      : ""
   );
   const [locationName, setLocationName] = useState(
     property ? property.location.address : ""
@@ -52,7 +55,7 @@ const PropertyEditingPage = () => {
   const [description, setDescription] = useState(
     property ? property.description : ""
   );
-  const [bedrooms, setBedrooms] = useState(property ? property.bedrooms : "");
+  const [rooms, setRooms] = useState(property ? property.rooms : "");
   const [bathrooms, setBathrooms] = useState(
     property ? property.bathrooms : ""
   );
@@ -62,8 +65,55 @@ const PropertyEditingPage = () => {
   const [docErrorClass, setDocErrorClass] = useState("");
   const [documentIdError, setDocumentIdError] = useState("");
   const [checked, setChecked] = useState(false);
+  const [toilet, setToilets] = useState(property ? property.toilet : null);
+  const [kitchen, setKitchens] = useState(property ? property.kitchen : null);
+  const [wifiAvailability, setWifiAvailability] = useState(
+    property ? property.features.wifiAvailability : null
+  );
+  const [floor, setFloors] = useState(property ? property.floor : null);
+  const [motoAccess, setMotoAccess] = useState(
+    property ? property.features.motoAccess : false
+  );
+  const [carAccess, setCarAccess] = useState(
+    property ? property.features.carAccess : false
+  );
+  const [parkingSpaceAvailable, setParkingSpaceAvailable] = useState(
+    property ? property.features.parkingSpaceAvailable : false
+  );
+  const [waterPumpSupply, setWaterPumpSupply] = useState(
+    property ? property.features.electricityPower : false
+  );
+  const [electricityPower, setElectricityPower] = useState(
+    property ? property.features.securitySystem : false
+  );
+  const [securitySystem, setSecuritySystem] = useState(
+    property ? property.features.securitySystem : false
+  );
+  const [waterPumpSupplyJirama, setWaterPumpSupplyJirama] = useState(
+    property ? property.features.waterPumpSupplyJirama :false
+  );
+  const [surroundedByWalls, setSurroundedByWalls] = useState(
+    property ? property.features.surroundedByWalls : false
+  );
+  const [electricityPowerJirama, setElectricityPowerJirama] = useState(
+    property ? property.features.electricityPowerJirama : false
+  );
+  const [kitchenFacilities, setKitchenFacilities] = useState(
+    property ? property.features.kitchenFacilities : false
+  );
+  const [toiletFacility, setToiletFacility] = useState(
+    property ? property.features.toiletFacility : false
+  );
+  const [airConditionerAvailable, setAirConditionerAvailable] = useState(
+    property ? property.features.airConditionerAvailable : false
+  );
+  const [smokeDetector, setSmokeDetector] = useState(
+    property ? property.features.smokeDetectorsAvailable : false
+  );
   const links = useSelector((state) => state.pagination);
-
+  const [waterWellSupply, setWaterWellSupply] = useState(
+    property ? property.features.waterWellSupply :false
+  );
   //get the autocomplete id value
   const getDocId = (inputClassName, data) => {
     const inputValue = document.getElementById(inputClassName).value;
@@ -71,18 +121,18 @@ const PropertyEditingPage = () => {
       const documentId = data.filter(
         (document) => document.name === inputValue
       );
-      if(documentId && documentId.length){
+      if (documentId && documentId.length) {
         setMsgError(null);
         setBootstrap(null);
         setDocErrorClass(null);
         setDocumentIdError(null);
-          return documentId[0].id;
+        return documentId[0].id;
       } else {
-        return undefined
+        return undefined;
       }
-    }else{
+    } else {
       return undefined;
-    } 
+    }
   };
 
   //handle the property form submiting
@@ -118,29 +168,50 @@ const PropertyEditingPage = () => {
         city,
         price,
         rent,
-        bedrooms,
+        rooms,
         bathrooms,
         area,
         type,
         owner,
-        censusTaker
+        censusTaker,
+        floor,
+        kitchen,
+        toilet,
+        wifiAvailability,
+        parkingSpaceAvailable,
+        airConditionerAvailable,
+        smokeDetector,
+        toiletFacility,
+        kitchenFacilities,
+        surroundedByWalls,
+        electricityPowerJirama,
+        electricityPower,
+        waterPumpSupply,
+        waterPumpSupplyJirama,
+        securitySystem,
+        motoAccess,
+        carAccess,
+        waterWellSupply,
+        property.features._id
       );
       Swal.close();
-    }else{
+    } else {
       setMsgError(null);
       setBootstrap(null);
       setDocErrorClass("alert alert-danger mt-2");
-      setDocumentIdError("veuillez selectionner un propriètaire, addresse ou quartier suggéré ");
+      setDocumentIdError(
+        "veuillez selectionner un propriètaire, addresse ou quartier suggéré "
+      );
     }
   };
   useEffect(() => {
     const pageLoader = async () => {
       if (ownersName.length === 0) {
-      await loadOwnersName();
+        await loadOwnersName();
       } else if (quartersName.length === 0) {
-      await loadQuartersName();
+        await loadQuartersName();
       } else if (!locationsName.length === 0) {
-      await loadLocationsName();
+        await loadLocationsName();
       }
     };
     if (resetPropertyInput) {
@@ -153,13 +224,13 @@ const PropertyEditingPage = () => {
         if (result.isConfirmed) {
           setResetPropertyInput(false);
         }
-      })
+      });
     }
-    if(document.getElementById("btnValidate").disabled){
+    if (document.getElementById("btnValidate").disabled) {
       setDocErrorClass(null);
       setDocumentIdError(null);
       setMsgError(null);
-      setBootstrap(null)
+      setBootstrap(null);
     }
     pageLoader();
   }, [
@@ -175,7 +246,7 @@ const PropertyEditingPage = () => {
     quartersName,
     loadLocationsName,
     resetPropertyInput,
-    setResetPropertyInput
+    setResetPropertyInput,
   ]);
   const handleOwnerName = (Name) => {
     setOwnerName(Name);
@@ -273,9 +344,11 @@ const PropertyEditingPage = () => {
                 className="form-control auto-input"
                 placeholder="Nom du quartier"
                 inputId="quarter-input"
-                initialValue={property
-                  ? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
-                  : ""}
+                initialValue={
+                  property
+                    ? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
+                    : ""
+                }
                 onNameChange={handleQuarterName}
                 suggestions={quartersName}
                 style={{ width: "100%" }} // add style prop
@@ -292,10 +365,12 @@ const PropertyEditingPage = () => {
               </div>
               <input
                 type="number"
-                id="bedrooms"
+                id="rooms"
                 className="form-control"
-                value={bedrooms}
-                onChange={(e) => setBedrooms(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}
+                value={rooms}
+                onChange={(e) =>
+                  setRooms(parseInt(e.target.value.trim().replace(/\s+/g, " ")))
+                }
                 required="ON"
               />
             </div>
@@ -313,7 +388,77 @@ const PropertyEditingPage = () => {
                 id="bathrooms"
                 className="form-control"
                 value={bathrooms}
-                onChange={(e) => {setBathrooms(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}}
+                onChange={(e) => {
+                  setBathrooms(
+                    parseInt(e.target.value.trim().replace(/\s+/g, " "))
+                  );
+                }}
+                required="ON"
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bathrooms">Nombre de toillette</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <FaToilet />
+                </span>
+              </div>
+              <input
+                type="number"
+                id="toilet"
+                className="form-control"
+                value={toilet}
+                onChange={(e) => {
+                  setToilets(
+                    parseInt(e.target.value.trim().replace(/\s+/g, " "))
+                  );
+                }}
+                required="ON"
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bathrooms">Nombre d'etage</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <GrStackOverflow />
+                </span>
+              </div>
+              <input
+                type="number"
+                id="floor"
+                className="form-control"
+                value={floor}
+                onChange={(e) => {
+                  setFloors(
+                    parseInt(e.target.value.trim().replace(/\s+/g, " "))
+                  );
+                }}
+                required="ON"
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="bathrooms">Nombre de cuisine</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">
+                  <FaKitchenSet />
+                </span>
+              </div>
+              <input
+                type="number"
+                id="kitchens"
+                className="form-control"
+                value={kitchen}
+                onChange={(e) => {
+                  setKitchens(
+                    parseInt(e.target.value.trim().replace(/\s+/g, " "))
+                  );
+                }}
                 required="ON"
               />
             </div>
@@ -336,9 +481,164 @@ const PropertyEditingPage = () => {
                 id="area"
                 className="form-control"
                 value={area}
-                onChange={(e) => setArea(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}
+                onChange={(e) =>
+                  setArea(parseInt(e.target.value.trim().replace(/\s+/g, " ")))
+                }
                 required="ON"
               />
+            </div>
+          </div>{" "}
+          <div>
+            <label>les caractéristiques</label>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={wifiAvailability}
+                onChange={(e) => setWifiAvailability(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">disponibilité Wifi</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="airConditionner"
+                className="ml-2 mr-2"
+                checked={airConditionerAvailable}
+                onChange={(e) => setAirConditionerAvailable(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">climatiseur</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="smokeDetector"
+                className="ml-2 mr-2"
+                checked={smokeDetector}
+                onChange={(e) => setSmokeDetector(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">detécteur de fumée</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={carAccess}
+                onChange={(e) => setCarAccess(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">accès voiture</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={motoAccess}
+                onChange={(e) => setMotoAccess(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">accès moto</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={parkingSpaceAvailable}
+                onChange={(e) => setParkingSpaceAvailable(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">disponibilité parking</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={waterWellSupply}
+                onChange={(e) => setWaterWellSupply(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability"> eau avec puit</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={waterPumpSupply}
+                onChange={(e) => setWaterPumpSupply(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">Pompe à eau sans JIRAMA</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={waterPumpSupplyJirama}
+                onChange={(e) => setWaterPumpSupplyJirama(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">Pompe à eau avec JIRAMA</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={electricityPower}
+                onChange={(e) => setElectricityPower(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">Electricité sans JIRAMA</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={electricityPowerJirama}
+                onChange={(e) => setElectricityPowerJirama(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">Electricité avec JIRAMA</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={securitySystem}
+                onChange={(e) => setSecuritySystem(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">système de sécurité</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={surroundedByWalls}
+                onChange={(e) => setSurroundedByWalls(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">cloturé par un mur</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={kitchenFacilities}
+                onChange={(e) => setKitchenFacilities(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">cuisine comfortable</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="checkbox"
+                id="wifiAvailability"
+                className="ml-2 mr-2"
+                checked={toiletFacility}
+                onChange={(e) => setToiletFacility(e.target.checked)}
+              />
+              <label htmlFor="wifiAvailability">comfortable toilette</label>
             </div>
           </div>
           <div className="form-group">
@@ -352,9 +652,9 @@ const PropertyEditingPage = () => {
                 id="flexRadioDefault1"
                 onClick={(e) => {
                   setDisabledPriceInput(true);
-                  if(property.type !== "rent"){
+                  if (property.type !== "rent") {
                     setChecked(true);
-                  }else{
+                  } else {
                     setChecked(false);
                   }
                 }}
@@ -374,9 +674,9 @@ const PropertyEditingPage = () => {
                 id="flexRadioDefault2"
                 onClick={(e) => {
                   setDisabledPriceInput(false);
-                  if(property.type !== "sale"){
+                  if (property.type !== "sale") {
                     setChecked(true);
-                  }else{
+                  } else {
                     setChecked(false);
                   }
                 }}
@@ -406,7 +706,11 @@ const PropertyEditingPage = () => {
                   id="price"
                   className="form-control"
                   value={price}
-                  onChange={(e) => setPrice(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}
+                  onChange={(e) =>
+                    setPrice(
+                      parseInt(e.target.value.trim().replace(/\s+/g, " "))
+                    )
+                  }
                   required="ON"
                 />
               </div>
@@ -430,39 +734,64 @@ const PropertyEditingPage = () => {
                   id="rent"
                   className="form-control"
                   value={rent}
-                  onChange={(e) => setRent(parseInt(e.target.value.trim().replace(/\s+/g, " ")))}
+                  onChange={(e) =>
+                    setRent(
+                      parseInt(e.target.value.trim().replace(/\s+/g, " "))
+                    )
+                  }
                   required="ON"
                 />
               </div>
             </div>
           )}
-
           <div className="form-group">
             <button
               id="btnValidate"
               type="submit"
               className="btn btn-primary"
               disabled={
-                (((property.owner ? property.owner.fullName : "") ===  ownerName) &&
-               ((property? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
-                : "")  === quarterName) &&
-                ((property ? property.location.address : "") === locationName) &&
-                 property.title === title &&
-                property.area === area  &&
-                 property.description === description &&
-                 property.bathrooms === bathrooms &&
-                 property.bedrooms === bedrooms &&
-                 property.rent  === rent &&
-                property.price ===  price && !checked 
-                  ?true
-                  : false) || isLoading 
+                ((property.owner ? property.owner.fullName : "") ===
+                  ownerName &&
+                (property
+                  ? `${property.city.quarter} ${property.city.district} ${property.city.reference} Arr`
+                  : "") === quarterName &&
+                (property ? property.location.address : "") === locationName &&
+                property.title === title &&
+                property.area === area &&
+                property.description === description &&
+                property.bathrooms === bathrooms &&
+                property.rooms === rooms &&
+                property.rent === rent &&
+                property.price === price &&
+                property.toilet === toilet &&
+                property.floor === floor &&
+                property.kitchen === kitchen &&
+                property.features.airConditionerAvailable ===
+                  airConditionerAvailable &&
+                  property.features.wifiAvailability === wifiAvailability &&
+                property.features.waterPumpSupply === waterPumpSupply &&
+                property.features.waterWellSupply === waterWellSupply &&
+                property.features.waterPumpSupplyJirama ===
+                  waterPumpSupplyJirama &&
+                property.features.electricityPower === electricityPower &&
+                property.features.electricityPowerJirama ===
+                  electricityPowerJirama &&
+                property.features.securitySystem === securitySystem &&
+                property.features.surroundedByWalls === surroundedByWalls &&
+                property.features.carAccess === carAccess &&
+                property.features.motoAccess === motoAccess &&
+                property.features.kitchenFacilities === kitchenFacilities && property.features.toiletFacility=== toiletFacility &&
+                property.features.smokeDetectorsAvailable === smokeDetector && property.features.parkingSpaceAvailable === parkingSpaceAvailable &&
+                !checked
+                  ? true
+                  : false) || isLoading
               }
             >
               sauvegarder
             </button>
           </div>
         </form>
-        {(msgError || documentIdError)  && (
+        {(msgError || documentIdError) && (
           <div className={bootstrapClassname || docErrorClass}>
             {msgError || documentIdError}
           </div>
