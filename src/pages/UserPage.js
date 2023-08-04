@@ -9,7 +9,6 @@ const UserPage = () => {
 
   //redux
   const user = useSelector((state) => state.user);
-  console.log(user);
   const censusTakerId = user._id;
   // Render the main content
   return (

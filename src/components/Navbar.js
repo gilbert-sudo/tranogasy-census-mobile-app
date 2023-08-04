@@ -64,7 +64,6 @@ const Navbar = () => {
     dispatch(setSearchResult(null));
     dispatch(updateIsSearch({index:0, isSearch:false}))
     dispatch(setTotalPage({ index: 0, subjectLength: properties.length }));
-    console.log("the total page uhgg is", properties);
   }}
   return (
     <>

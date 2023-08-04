@@ -7,7 +7,6 @@ const NoInternetPage = () => {
 
   function refreshPage() {
     setLocation("/property");
-    console.log(location);
   }
 
   return (

@@ -58,7 +58,6 @@ export const useLogin = () => {
             Swal.close();
             setClient(json.censusTaker);
             setLocation("/property");
-            console.log(location);
           }
         } catch (error) {
           setIsLoading(false);

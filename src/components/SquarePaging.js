@@ -9,7 +9,6 @@ const SquarePaging = (pagination) => {
   const totalPage = state[0].totalPage[pagination.index];
  let currentPage = 1;
   currentPage = isSearch?state[0].searchCurrentPage[pagination.index]:state[0].currentPage[pagination.index];
-  console.log("the total page is ", totalPage, currentPage, isSearch);
   const generatePageLinks = () => {
     const links = [];
     if (totalPage === 1) {

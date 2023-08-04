@@ -34,8 +34,6 @@ export const useLoader = () => {
         dispatch(setLikedPropreties(json));
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -58,8 +56,6 @@ export const useLoader = () => {
         dispatch(setBooking(json));
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -82,8 +78,6 @@ export const useLoader = () => {
         return json;
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -106,8 +100,6 @@ export const useLoader = () => {
         return json;
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -130,8 +122,6 @@ export const useLoader = () => {
         return json;
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -150,8 +140,6 @@ export const useLoader = () => {
         return json;
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -171,8 +159,6 @@ export const useLoader = () => {
         return json;
       }
     } catch (error) {
-      console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -198,7 +184,6 @@ export const useLoader = () => {
       }
     } catch (error) {
       console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };
@@ -223,7 +208,6 @@ export const useLoader = () => {
       }
     } catch (error) {
       console.log(error);
-      console.log(location);
       setLocation("/nosignal");
     }
   };

@@ -75,6 +75,8 @@ const AddingPage = () => {
     setArea("");
     setPrice("");
     setRent("");
+    setToilets("");
+    setKitchens("");
     setWaterPumpSupply(false);
     setAirConditionerAvailable(false);
     setFloors("");
@@ -180,8 +182,6 @@ const AddingPage = () => {
   };
 
   useEffect(() => {
-    console.log(ownersName);
-
     const pageLoader = async () => {
       if (ownersName.length===0) {
         await loadOwnersName();
@@ -368,7 +368,7 @@ const AddingPage = () => {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="bathrooms">Nombre de toillette</label>
+            <label htmlFor="bathrooms">Nombre de toilette</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">

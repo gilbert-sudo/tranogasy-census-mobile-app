@@ -101,7 +101,6 @@ export const useLocation = () => {
           );
 
           const result = await response.json();
-          console.log(result);
           if (response.ok) {
             setBootstrap(null);
             setMsgError(null);

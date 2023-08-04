@@ -116,8 +116,6 @@ const PropertyListPage = () => {
       dispatch(setTotalPage({ index: 0, subjectLength: searchResult.length }));
       if (totalPage !== 0) {
         if (searchResultCurrentPage > totalPage) {
-          console.log("the total page uhgg is", totalPage);
-          console.log("totueiu", currentPage, totalPage);
           dispatch(
             updateSearchCurrentPage({
               index: 0,
@@ -131,8 +129,6 @@ const PropertyListPage = () => {
       dispatch(setTotalPage({ index: 0, subjectLength: properties.length }));
       if (totalPage !== 0) {
         if (currentPage > totalPage) {
-          console.log("the total page uhgg is", totalPage);
-          console.log("totueiu", currentPage, totalPage);
           dispatch(updateCurrentPage({ index: 0, newCurrentPage: totalPage }));
         }
       }
