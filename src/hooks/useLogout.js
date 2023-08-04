@@ -5,7 +5,6 @@ import { useLocation } from "wouter";
 export const useLogout = () => {
   const dispatch = useDispatch();
   const [location, setLocation] = useLocation();
-  console.log(location);
 
   const logout = () => {
     //remove user from localStorage

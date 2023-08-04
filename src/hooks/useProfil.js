@@ -106,7 +106,6 @@ export const useProfil = () => {
           );
 
           const result = await response.json();
-          console.log(result);
           if (response.ok) {
             let bootstrapClass = "alert alert-success";
             setBootstrap(bootstrapClass);

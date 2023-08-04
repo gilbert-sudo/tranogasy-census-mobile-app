@@ -304,6 +304,14 @@ export const useProperty = () => {
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "suppression",
+          text: "S'il vous plaît, patientez...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         try {
           const response = await fetch(
             `http://localhost:3600/api/${propertyType}/${propertyId}/${admin}`,
@@ -317,12 +325,12 @@ export const useProperty = () => {
           );
           const json = await response.json();
           if (response.ok) {
+            Swal.close();
             setBootstrap(null);
             setMsgError(null);
             setIsLoading(false);
             if (propertyType === "properties") {
               dispatch(deleteOnePropertyById(propertyId));
-              console.log(json);
               dispatch(updateOneOwnerById(json.updatedOwner));
               dispatch(
                 updateOneLocationById({
@@ -410,19 +418,6 @@ export const useProperty = () => {
     censusTaker
   ) => {
     setIsLoading(true);
-    console.log(
-      title,
-      description,
-      location,
-      city,
-      price,
-      rent,
-      squarePerMeter,
-      area,
-      type,
-      owner,
-      censusTaker
-    );
     if (
       title === undefined ||
       description === undefined ||
@@ -506,18 +501,7 @@ export const useProperty = () => {
     censusTaker
   ) => {
     setIsLoading(true);
-    console.log(
-      title,
-      description,
-      location,
-      city,
-      rent,
-      squarePerMeter,
-      area,
-      type,
-      owner,
-      censusTaker
-    );
+  
     if (
       title === undefined ||
       description === undefined ||
@@ -533,7 +517,6 @@ export const useProperty = () => {
       setMsgError("Veuilléz remplir toutes les champs correctemment");
       setIsLoading(false);
     } else {
-      console.log("the type is ", type);
       title.trim().replace(/\s+/g, " ");
       description.trim().replace(/\s+/g, " ");
       try {
@@ -561,7 +544,6 @@ export const useProperty = () => {
         );
 
         const json = await response.json();
-        console.log(json);
         if (response.ok) {
           setBootstrap(null);
           setMsgError(null);

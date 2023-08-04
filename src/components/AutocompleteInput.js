@@ -95,8 +95,6 @@ class AutocompleteInput extends React.Component {
     if (this.props.onNameChange) {
       this.props.onNameChange(suggestion.name);
     }
-    // Do whatever you want with the selected suggestion
-    console.log("Selected suggestion:", suggestion);
   };
 
   getSelectedSuggestionId = () => {

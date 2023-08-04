@@ -21,7 +21,6 @@ const PropertyEditingPage = () => {
   const propertyId = match ? params.propertyId : null;
   const properties = useSelector((state) => state.properties.properties);
   const property = properties.find((property) => property._id === propertyId);
-  console.log(property);
   const [disabledPriceInput, setDisabledPriceInput] = useState(
     property.type === "rent" ? true : false
   );
@@ -56,9 +55,7 @@ const PropertyEditingPage = () => {
     property ? property.description : ""
   );
   const [rooms, setRooms] = useState(property ? property.rooms : "");
-  const [bathrooms, setBathrooms] = useState(
-    property ? property.bathrooms : ""
-  );
+
   const [area, setArea] = useState(property ? property.area : "");
   const [price, setPrice] = useState(property ? property.price : "");
   const [rent, setRent] = useState(property ? property.rent : "");
@@ -70,6 +67,7 @@ const PropertyEditingPage = () => {
   const [wifiAvailability, setWifiAvailability] = useState(
     property ? property.features.wifiAvailability : null
   );
+  const [bathrooms, setBathrooms] = useState(property?property.bathrooms:null);
   const [floor, setFloors] = useState(property ? property.floor : null);
   const [motoAccess, setMotoAccess] = useState(
     property ? property.features.motoAccess : false
@@ -84,7 +82,7 @@ const PropertyEditingPage = () => {
     property ? property.features.electricityPower : false
   );
   const [electricityPower, setElectricityPower] = useState(
-    property ? property.features.securitySystem : false
+    property ? property.features.electricityPower : false
   );
   const [securitySystem, setSecuritySystem] = useState(
     property ? property.features.securitySystem : false
@@ -145,7 +143,6 @@ const PropertyEditingPage = () => {
     const city = getDocId("quarter-input", quartersName);
     // fetch the address
     const address = getDocId("address-input", locationsName);
-    console.log("the info is ", owner, address, city);
     var type = "sale";
     //get the property type
     if (disabledPriceInput) {
@@ -385,7 +382,7 @@ const PropertyEditingPage = () => {
               </div>
               <input
                 type="number"
-                id="bathrooms"
+                id="rooms"
                 className="form-control"
                 value={bathrooms}
                 onChange={(e) => {
@@ -398,7 +395,7 @@ const PropertyEditingPage = () => {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="bathrooms">Nombre de toillette</label>
+            <label htmlFor="toilet">Nombre de toilette</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
@@ -420,7 +417,7 @@ const PropertyEditingPage = () => {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="bathrooms">Nombre d'etage</label>
+            <label htmlFor="floor">Nombre d'etage</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
@@ -442,7 +439,7 @@ const PropertyEditingPage = () => {
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="bathrooms">Nombre de cuisine</label>
+            <label htmlFor="kitchens">Nombre de cuisine</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
@@ -523,122 +520,122 @@ const PropertyEditingPage = () => {
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="carAccess"
                 className="ml-2 mr-2"
                 checked={carAccess}
                 onChange={(e) => setCarAccess(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">accès voiture</label>
+              <label htmlFor="carAccess">accès voiture</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="motoAccess"
                 className="ml-2 mr-2"
                 checked={motoAccess}
                 onChange={(e) => setMotoAccess(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">accès moto</label>
+              <label htmlFor="motoAccess">accès moto</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="parking"
                 className="ml-2 mr-2"
                 checked={parkingSpaceAvailable}
                 onChange={(e) => setParkingSpaceAvailable(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">disponibilité parking</label>
+              <label htmlFor="parking">disponibilité parking</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="waterWell"
                 className="ml-2 mr-2"
                 checked={waterWellSupply}
                 onChange={(e) => setWaterWellSupply(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability"> eau avec puit</label>
+              <label htmlFor="waterWell"> eau avec puit</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="waterPump"
                 className="ml-2 mr-2"
                 checked={waterPumpSupply}
                 onChange={(e) => setWaterPumpSupply(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">Pompe à eau sans JIRAMA</label>
+              <label htmlFor="waterPump">Pompe à eau sans JIRAMA</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="waterPumpJirama"
                 className="ml-2 mr-2"
                 checked={waterPumpSupplyJirama}
                 onChange={(e) => setWaterPumpSupplyJirama(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">Pompe à eau avec JIRAMA</label>
+              <label htmlFor="waterPumpJirama">Pompe à eau avec JIRAMA</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="electricityPower"
                 className="ml-2 mr-2"
                 checked={electricityPower}
                 onChange={(e) => setElectricityPower(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">Electricité sans JIRAMA</label>
+              <label htmlFor="electricityPower">Electricité sans JIRAMA</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="electricityJirama"
                 className="ml-2 mr-2"
                 checked={electricityPowerJirama}
                 onChange={(e) => setElectricityPowerJirama(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">Electricité avec JIRAMA</label>
+              <label htmlFor="electricityJirama">Electricité avec JIRAMA</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="securitySystem"
                 className="ml-2 mr-2"
                 checked={securitySystem}
                 onChange={(e) => setSecuritySystem(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">système de sécurité</label>
+              <label htmlFor="securitySystem">système de sécurité</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="surroundedByWalls"
                 className="ml-2 mr-2"
                 checked={surroundedByWalls}
                 onChange={(e) => setSurroundedByWalls(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">cloturé par un mur</label>
+              <label htmlFor="surroundedByWalls">cloturé par un mur</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="kitchenFacility"
                 className="ml-2 mr-2"
                 checked={kitchenFacilities}
                 onChange={(e) => setKitchenFacilities(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">cuisine comfortable</label>
+              <label htmlFor="kitchenFacility">cuisine comfortable</label>
             </div>
             <div className="form-group">
               <input
                 type="checkbox"
-                id="wifiAvailability"
+                id="toiletFacility"
                 className="ml-2 mr-2"
                 checked={toiletFacility}
                 onChange={(e) => setToiletFacility(e.target.checked)}
               />
-              <label htmlFor="wifiAvailability">comfortable toilette</label>
+              <label htmlFor="toiletFacility">comfortable toilette</label>
             </div>
           </div>
           <div className="form-group">

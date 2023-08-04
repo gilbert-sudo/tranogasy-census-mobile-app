@@ -20,7 +20,6 @@ const OwnerListPage = () => {
   const locationsName = useSelector((state) =>state.location[1].locationsName);
   const ownersName = useSelector((state)=>state.owner[1].ownersName);
   const owners = useSelector((state) => state.owner[0].owners);
-  console.log(owners);
   const navbar = useSelector((state) => state.navbar);
   const dispatch = useDispatch();
   const paginationIndex = useSelector((state) => state.pagination);
@@ -97,8 +96,6 @@ const OwnerListPage = () => {
       dispatch(setTotalPage({ index: 1, subjectLength: searchResult.length }));
       if (totalPage !== 0) {
         if (searchResultCurrentPage > totalPage) {
-          console.log("the total page uhgg is", totalPage);
-          console.log("totueiu", currentPage, totalPage);
           dispatch(
             updateSearchCurrentPage({
               index: 1,
@@ -109,12 +106,9 @@ const OwnerListPage = () => {
       }
     }
     if (!searchResult && owners && owners.length !== 0) {
-      console.log(owners.length);
       dispatch(setTotalPage({ index: 1, subjectLength: owners.length }));
       if (totalPage > 0) {
         if (currentPage > totalPage) {
-          console.log("the total page uhgg is", totalPage);
-          console.log("totueiu", currentPage, totalPage);
           dispatch(updateCurrentPage({ index: 1, newCurrentPage: totalPage }));
         }
       }

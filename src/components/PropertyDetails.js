@@ -2,7 +2,6 @@
 import { Link } from "wouter";
 import { FaTrash } from "react-icons/fa";
 import { useProperty } from "../hooks/useProperty";
-import Swal from "sweetalert2";
 function PropertyDetails({ property, type }) {
   const { deleteProperty } = useProperty();
   const date = new Date(property.created_at);
@@ -15,16 +14,7 @@ function PropertyDetails({ property, type }) {
     .toString()
     .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
   const handleClick = async () => {
-    Swal.fire({
-      title: "suppression",
-      text: "S'il vous plaît, patientez...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     await deleteProperty(property._id, type);
-    Swal.close();
   };
   return (
     <div>

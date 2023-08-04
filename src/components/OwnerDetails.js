@@ -18,7 +18,6 @@ const OwnerDetails = ({owner }) => {
     const handleClick = async () =>{
       deleteOwner(owner._id)
       }
-      console.log("the owner used is", owner.used);
   return (
     <div id={owner._id} className="d-flex justify-content-between align-items-center border border-secondary py-2 border-left-0 border-right-0">
       {censusTaker === owner.censusTaker._id && !owner.used?(<Link

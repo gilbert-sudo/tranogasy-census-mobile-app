@@ -215,7 +215,6 @@ export const useOwner = () => {
             dispatch(updateOneOwnerById(result.modifiedOwner));
             dispatch(updateOneLocationById(result.modifiedOwner.location));
             dispatch(updateOneLocationById(result.unusedLocation));
-            console.log("the location unused is", result.unusedLocation);
           }
           if (!response.ok) {
             let bootstrapClass = "alert alert-danger";
